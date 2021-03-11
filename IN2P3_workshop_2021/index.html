@@ -5,8 +5,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 		<title>Template Presentation</title>
-		<meta name="description" content="A basic template to start a new talk">
-		<meta name="author" content="YOUR NAME HERE">
+		<meta name="description" content="Presentation for the IN2P3 workshop">
+		<meta name="author" content="Denise Lanzieri">
 
 		<link rel="stylesheet" href="reveal.js/dist/reset.css">
 		<link rel="stylesheet" href="reveal.js/dist/reveal.css">
@@ -18,25 +18,288 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
+
+				<div class="reveal">
+		<div class="slides">
+			<section data-background-image="assets/lsst_stills_0009_crop.jpg">
+				<div class="container">
+					<div class="title" style="border-radius: 20px; background-color:rgba(0, 0, 0, 0.4);">
+						<h1> Automatically Differentiable Physics for Maximizing the Information Gain of Cosmological Surveys </h1>
+					</div>
+				</div>
+				<hr>
+				<div style="border-radius: 20px; background-color:rgba(0, 0, 0, 0);">
+					<div class="container">
+						<div class="col">
+							<div align="left" style="margin-left: 70px; font-size: 50%;">
+								<h2> Denise Lanzieri</h2>
+								<br>
+								<img src="assets/CosmoStatDarkBK.png" class="plain"></img>
+								<br>
+							</div>
+						</div>
+
+						<div class="col">
+							<br>
+							<br>
+							<br>
+							<br>
+							<img src="assets/logo_cnrs.png" class="plain" height="150"></img>
+						</div>
+
+						<div class="col">
+							<br>
+
+							<br>
+							<br>
+							<img src="assets/aim.png" class="plain" height="150"></img>
+						</div>
+					</div>
+					<div> slides at <a href="https://github.com/dlanzieri/talks/IN2P3_workshop_2021">github.com/dlanzieri/talks/IN2P3_workshop_2021</a> </div>
+				</div>
+			</section>
+
+
+			<section data-background-image="assets/WMAP_timeline_large.jpg">
+				<h3 class='slide-title' style="position:absolute;top:0;"> the $\Lambda$CDM view of the viewse </h3>
+				<br> <br>
+				<div class="container">
+					<div class="col" style="flex: 0 0 40em;">
+
+					</div>
+					<div class="col">
+
+						<img class="plain" data-src="assets/Euclid.png" style="width: 300px" />
+
+						<img class="plain" data-src="assets/wfirstlogo.png" style="width: 300px" />
+
+						<img class="plain" data-src="assets/vrro.png" style="width: 300px" />
+					</div>
+				</div>
+				<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
+			</section>
+
+				<section>
+					<h3 class='slide-title'>Weak gravitational lensing</h3>
+					<img data-src="assets/lensing.jpg" class="plain"  style="width: 500px" />
+					<div class='container'>A gravitational lens is a distribution of matter creating a gravitational field that distorts and magnifies the light from distant galaxies that are behind it but in the same line of sight.
+					</div>
+				</section>
+
+				<!-- <section>
+					<h3 class='slide-title'>What's the idea?</h3>
+					<ul> <li>How explore the  whole map? </li>
+						<ul> <li> Image data reduction </li>
+						</ul>
+						<li>How maximize the information gain? </li>
+							<ul> <li> 2 point correlation function </li>
+							</ul>
+					</ul>
+					</div>
+				</section> -->
+
+
+				<section class="inverted" data-background="#000">
+							<h2>How do we simulate the Universe in a fast and differentiable way?</h2>
+						</section>
+
+
+
+				<section>
+		<h3 class='slide-title'>the Fast Particle-Mesh scheme for N-body simulations</h3>
+		<b>The idea</b>: approximate gravitational forces by estimating densities on a grid.
+
+		<div class='container'>
+			<div class='col'>
+				<ul>
+					<li>The numerical scheme:
+						<br>
+						<br>
+						<ul>
+							<li class="fragment" data-fragment-index="1"> Estimate the density of particles on a mesh<br>
+								=> compute gravitational forces by FFT
+							</li>
+
+							<br>
+
+							<li class="fragment" data-fragment-index="2"> Interpolate forces at particle positions
+							</li>
+
+							<br>
+
+							<li class="fragment" data-fragment-index="3"> Update particle velocity and positions, and iterate
+							</li>
+						</ul>
+					</li>
+					<br>
+
+					<li class='fragment'> Fast and simple, at the cost of approximating short range interactions.
+					</li>
+
+				</ul>
+			</div>
+
+			<div class='col'>
+
+				<div style="position:relative; width:550px; height:550px; margin:0 auto;">
+					<img class="fragment current-visible plain" data-src="assets/particle_positions_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="0" />
+					<img class="fragment current-visible plain" data-src="assets/particle_density_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="1" />
+					<img class="fragment current-visible plain" data-src="assets/particle_positions_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="2" />
+					<img class="fragment  plain" data-src="assets/particle_positions_1.png" style="position:absolute;top:0;left:0;" data-fragment-index="3" />
+
+				</div>
+
 			</div>
 		</div>
 
-		<script src="reveal.js/dist/reveal.js"></script>
-		<script src="reveal.js/plugin/notes/notes.js"></script>
-		<script src="reveal.js/plugin/markdown/markdown.js"></script>
-		<script src="reveal.js/plugin/highlight/highlight.js"></script>
-		<script>
-			// More info about initialization & config:
-			// - https://revealjs.com/initialization/
-			// - https://revealjs.com/config/
-			Reveal.initialize({
-				hash: true,
+		<div class="fragment"> $\Longrightarrow$ Only a series of FFTs and interpolations.</div>
+	</section>
 
-				// Learn about plugins: https://revealjs.com/plugins/
-				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
-			});
-		</script>
-	</body>
-</html>
+
+
+
+
+
+						</div>
+					</div>
+
+					<style>
+						/* .reveal .slides {
+							border: 5px solid red;
+							min-height: 100%;
+							width: 128mm;
+							height: 96mm;
+						} */
+
+						.reveal .block {
+							background-color: #191919;
+							margin-left: 20px;
+							margin-right: 20px;
+							text-align: left;
+							padding-bottom: 0.1em;
+						}
+
+						.reveal .block-title {
+							background-color: #333333;
+							padding: 8px 35px 8px 14px;
+							color: #FFAA7F;
+							font-weight: bold;
+						}
+
+						.reveal .block-content {
+							padding: 8px 35px 8px 14px;
+						}
+
+						.reveal .slide-title {
+							border-left: 5px solid white;
+							text-align: left;
+							margin-left: 20px;
+							padding-left: 20px;
+						}
+
+						.reveal .alert {
+							color: #FFAA7F;
+							font-weight: bold;
+						}
+
+						.reveal .inverted {
+							filter: invert(100%);
+						}
+
+						/*
+					/* .reveal .alert {
+					padding:8px 35px 8px 14px; margin-bottom:18px;
+					text-shadow:0 1px 0 rgba(255,255,255,1);
+					border:5px solid #FFAA7F;
+					-webkit-border-radius: 14px; -moz-border-radius: 14px;
+					border-radius:14px
+					background-position: 10px 10px;
+					background-repeat: no-repeat;
+					background-size: 38px;
+					padding-left: 30px; /* 55px; if icon
+					}
+					.reveal .alert-block {padding-top:14px; padding-bottom:14px}
+					.reveal .alert-block > p, .alert-block > ul {margin-bottom:1em}
+					/*.reveal .alert li {margin-top: 1em}
+					.reveal .alert-block p+p {margin-top:5px} */
+					</style>
+
+
+					<script src="reveal.js/dist/reveal.js"></script>
+					<script src="reveal.js/plugin/notes/notes.js"></script>
+					<script src="reveal.js/plugin/markdown/markdown.js"></script>
+					<script src="reveal.js/plugin/highlight/highlight.js"></script>
+					<script src="reveal.js/plugin/math/math.js"></script>
+					<script>
+						// More info about initialization & config:
+						// - https://revealjs.com/initialization/
+						// - https://revealjs.com/config/
+						Reveal.initialize({
+							controls: false,
+
+							//center: false,
+							hash: true,
+
+							// Visibility rule for backwards navigation arrows; "faded", "hidden"
+							// or "visible"
+							controlsBackArrows: 'hidden',
+
+							// Display a presentation progress bar
+							progress: true,
+
+							// Display the page number of the current slide
+							slideNumber: true,
+
+							transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+							// The "normal" size of the presentation, aspect ratio will be preserved
+							// when the presentation is scaled to fit different resolutions. Can be
+							// specified using percentage units.
+							width: 1280,
+							height: 720,
+
+							// Factor of the display size that should remain empty around the content
+							margin: 0.1,
+
+							// Bounds for smallest/largest possible scale to apply to content
+							minScale: 0.2,
+							maxScale: 1.5,
+
+
+							// Learn about plugins: https://revealjs.com/plugins/
+							plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath],
+
+							dependencies: [{
+									src: 'reveal.js/plugin/markdown/marked.js'
+								},
+								{
+									src: 'reveal.js/plugin/markdown/markdown.js'
+								},
+								{
+									src: 'reveal.js/plugin/notes/notes.js',
+									async: true
+								},
+								{
+									src: 'reveal.js/plugin/math/math.js',
+									async: true
+								},
+								{
+									src: 'reveal.js/plugin/reveal.js-d3/reveald3.js'
+								},
+								{
+									src: 'reveal.js/plugin/reveal.js-plugins/chart/Chart.min.js'
+								},
+								{
+									src: 'reveal.js/plugin/reveal.js-plugins/chart/csv2chart.js'
+								},
+								{
+									src: 'reveal.js/plugin/highlight/highlight.js',
+									async: true
+								},
+							]
+
+						});
+					</script>
+				</body>
+
+				</html>
