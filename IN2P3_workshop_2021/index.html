@@ -13,14 +13,15 @@ avalable<!doctype html>
 		<link rel="stylesheet" href="reveal.js/dist/theme/darkenergy.css">
 
 		<!-- Theme used for syntax highlighted code -->
-		<link rel="stylesheet" href="plugin/highlight/monokai.css" id="highlight-theme">
+		<link rel="stylesheet" href="reveal.js/plugin/highlight/monokai.css" id="highlight-theme">
+		<!-- <link rel="stylesheet" href="plugin/highlight/monokai.css" id="highlight-theme"> -->
 	</head>
 	<body>
 		<div class="reveal">
 			<div class="slides">
 
-				<div class="reveal">
-		<div class="slides">
+				<!-- <div class="reveal">
+		<div class="slides"> -->
 			<section data-background-image="assets/lsst_stills_0009_crop.jpg">
 				<div class="container">
 					<div class="title" style="border-radius: 20px; background-color:rgba(0, 0, 0, 0.4);">
@@ -55,13 +56,13 @@ avalable<!doctype html>
 							<img src="assets/aim.png" class="plain" height="150"></img>
 						</div>
 					</div>
-					<div> slides at <a href="https://github.com/dlanzieri/talks/IN2P3_workshop_2021">github.com/dlanzieri/talks/IN2P3_workshop_2021</a> </div>
+					<div> slides at <a href="https://dlanzieri.github.io/talks/IN2P3_workshop_2021/">github.com/dlanzieri/talks/IN2P3_workshop_2021</a> </div>
 				</div>
 			</section>
 
 
 			<section data-background-image="assets/WMAP_timeline_large.jpg">
-				<h3 class='slide-title' style="position:absolute;top:0;"> the $\Lambda$CDM view of the viewse </h3>
+				<h3 class='slide-title' style="position:absolute;top:0;"> the $\Lambda$CDM view of the Universe </h3>
 				<br> <br>
 				<div class="container">
 					<div class="col" style="flex: 0 0 40em;">
@@ -80,66 +81,74 @@ avalable<!doctype html>
 			</section>
 
 				<section  data-background-color="black">
+
 					<h2 class='slide-title'>
-						Gravitational lensing</h2>
-						<img class="plain" data-src="assets/lensing.jpg" style="width: 500px" />
+						Weak Gravitational lensing</h2>
+						<img class="plain" data-src="assets/lensing.jpg" style="width: 700px"   />
 					<!-- <h2 class="col">A gravitational lens is a distribution of matter creating a gravitational field that distorts and magnifies the light from distant galaxies that are behind it but in the same line of sight.
 					</h2> -->
 
-						<div class="block-content">
+						<!-- <div class="block-content">
 							A <b class="alert">gravitational lens</b> is a distribution of matter creating a gravitational field that distorts and magnifies the light from distant galaxies that are behind it but in the same line of sight.
 						<br>
 						<br>
 					<b class="alert">	Weak lensing </b> regime $\Longrightarrow$ small distortions in the shape of background
 						 galaxies images that can not be
 						detected on individual galaxies, but only statistically
-				</div>
+				</div> -->
 				</section>
 
 
 				<section>
-			<h2 class='slide-title'>  Vast amounts of data produced by upcoming surveys  </h2>
+			<h2 class='slide-title'> 2 Point Statistics: A Suboptimal Measure </h2>
  <h3>  How do we make the most of the available data?</h3>
 			<div class='container'>
 
 				<div class='col'>
 
 					<div style="position:relative; width:480px; height:30px; margin:0 auto;">
-						<div class="fragment current-visible" style="position:absolute;top:0;" data-fragment-index="1"> The 2D lensing converge map at $z=1$ </div>
-						<div class="fragment" style="position:absolute;top:0;" data-fragment-index="2">HSC Y1 constraints on $(S_8, \Omega_m)$</div>
+					<div class="fragment current-visible" style="position:absolute;top:0;" data-fragment-index="2">HSC cosmic shear power spectrum</div>
+						<div class="fragment" style="position:absolute;top:0;" data-fragment-index="3">HSC Y1 constraints on $(S_8, \Omega_m)$</div>
 					</div>
 					<div style="position:relative; width:480px; height:300px; margin:0 auto;">
 						<div class="fragment current-visible" style="position:absolute;top:0;left:0;" data-fragment-index="0">
 							<img class="plain" data-src="assets/alonso_g1.png" />
 							<img class="plain" data-src="assets/alonso_g2.png" />
 						</div>
-						<img class="fragment current-visible plain" data-src="assets/kmap.png" style="position:absolute;top:0;left:0;" data-fragment-index="1" />
-						<img class="fragment  plain" data-src="assets/hsc_constraints.png" style="position:absolute;top:0;left:0;" data-fragment-index="2" />
+						<div class="fragment current-visible" style="position:absolute;top:0;left:0;" data-fragment-index="1">
+							<img class="plain" data-src="assets/alonso_g1.png" />
+							<img class="plain" data-src="assets/alonso_g2.png" />
+						</div>
+						<img class="fragment current-visible plain" data-src="assets/hsc_correlation_function.png" style="position:absolute;top:0;left:0;" data-fragment-index="2" />
+						<img class="fragment  plain" data-src="assets/hsc_constraints.png" style="position:absolute;top:0;left:0;" data-fragment-index="3" />
 					</div>
-					<div class="fragment current-visible" data-fragment-index="1" style="float:right; font-size: 20px">(Bohma, Feng, et al. 2020)</div>
-					<div class="fragment" data-fragment-index="2" style="float:right; font-size: 20px">(Hikage,..., <b>Lanusse</b>, et al. 2018)</div>
+
+					<div class="fragment" data-fragment-index="3" style="float:right; font-size: 20px">(Hikage,..., <b>Lanusse</b>, et al. 2018)</div>
 				</div>
 
 				<div class='col'>
+						<li class="fragment" data-fragment-index="0"> Standard Weak lensing analysis: </li>
 					<ul>
 						<br>
-						<li class="fragment" data-fragment-index="0"> Traditional weak lensing tracer of dark matter:
-							<ul>
-								<li >	Mass Mapping from Weak Lensing <b class="alert">Shear $\gamma$</b>,
-								<br> i.e. distortions of observed galaxy images</li>
-								<li class="fragment" data-fragment-index="1">	Mass Mapping from Weak Lensing <b class="alert"> convergence $\kappa$</b>,
+
+
+								<li class="fragment" data-fragment-index="0"> <b class="alert">Shear $\gamma$</b> </li>
+								<!-- <br> distortions of observed galaxy images</li> -->
+								<!-- <li class="fragment" data-fragment-index="1">	Mass Mapping from Weak Lensing <b class="alert"> convergence $\kappa$</b>,
 								 <br> i.e. the change in angular size
-								  <!-- (dimension-less surface-mass density)  -->
-								</li>
-						</ul>
-						</li>
+
+								</li> -->
+
 						<br>
-						<li class="fragment" data-fragment-index="2"> Traditional analysis techniques
-							<ul>
+						<li class="fragment" data-fragment-index="1"> Data reduction </li>
+
+						<br>
+						<li class="fragment" data-fragment-index="2">  <b class="alert">Power spectrum</b>
+							<!-- <ul>
 								<li  >  Compute <b class="alert">summary statistics</b> based on 2pt statistics of the lensing signal, <br>e.g. the <b>power spectrum</b>
 
 									</li>
-							</ul>
+							</ul> -->
 						</li>
 					</ul>
 				</div>
@@ -150,7 +159,7 @@ avalable<!doctype html>
 					Main limitation: 	The lensing convergence field is inherently and significantly non-Gaussian
 				</div>
 				<div class="block-content">
-					The two-point statistics do not fully capture the <b>non-Gaussian</b> information encoded in the <b>filamentary features</b> of the matter distribution
+					The two-point statistics do not fully capture the <b>non-Gaussian</b> information encoded in the <b>peaks </b> of the matter distribution
 					<br>
 					<br>
 					<div class="fragment"> $\Longrightarrow$ We are dismissing most of the information! </div>
@@ -173,14 +182,14 @@ avalable<!doctype html>
 		<div class='col'>
 
 			<div style="position:relative; width:500px; height:40px; ">
-				<div class="fragment current-visible" style="position:absolute;top:0;" data-fragment-index="0">Cosmological constraints from the combination of different summart statistics</div>
-				<div class="fragment" style="position:absolute;top:0;" data-fragment-index="1">Cosmological constraints from the combination of different summart statistics</div>
+				<div class="fragment " style="position:absolute;top:0;" data-fragment-index="0">Cosmological constraints from the combination of different summart statistics</div>
+				<!-- <div class="fragment" style="position:absolute;top:0;" data-fragment-index="1">Cosmological constraints from the combination of different summart statistics</div> -->
 			</div>
 			<div style="position:relative; width:780px; height:555px; margin:0 auto;">
-				<img class="fragment current-visible plain" data-src="assets/Virgi_compa.png" style="position:absolute;top:0;left:0;" data-fragment-index="0" />
-				<img class="fragment  plain" data-src="assets/Virgi_compa.png" style="position:absolute;top:0;left:0;" data-fragment-index="1" />
+				<img class="fragment plain" data-src="assets/Virg1.png" style="position:absolute;top:0;left:0;" data-fragment-index="0" />
+				<!-- <img class="fragment  plain" data-src="assets/Virgi_compa.png" style="position:absolute;top:0;left:0;" data-fragment-index="1" /> -->
 			</div>
-			<div class="fragment" data-fragment-index="0" style="float:right; font-size: 20px">(<b>Ajani</b>, et al. 2021)</div>
+			<div class="fragment" data-fragment-index="0" style="float:right; font-size: 20px">(<b>Ajani</b>, et al. 2020)</div>
 		</div>
 
 		<div class='col'>
@@ -217,10 +226,12 @@ avalable<!doctype html>
 		</div>
 		<div class='col'>
 			<ul>
-				<li> Use Fisher matrix formalism to estimate errors for cosmological parameter measurements. </li>
+				<li> Use Fisher matrix to estimate the information content extracted with a given statistic </li>
 				<br>
-				<li > Derivative of summary statistics respect to the cosmological parameters.
+				<li class="fragment" data-fragment-index="1" > Derivative of summary statistics respect to the cosmological parameters.
 				 <br>e.g. the $\Omega_c$, $\sigma_8$ </li>
+				 <br>
+				 <li class="fragment" data-fragment-index="2"> Estimate derivative with final differences</li>
 				<!-- <br>
 				<li class="fragment" data-fragment-index="0"> How we can do that?  <br> $\Longrightarrow$  <b class="alert">Build a full differentiable model of the Universe</b>
 				</li> -->
@@ -229,17 +240,65 @@ avalable<!doctype html>
 		</div>
 		<br>
 		<br>
-		<div >
+		<!-- <div >
 			<div class="fragment" data-fragment-index="2">
 				<h3>	How can we do that? 	<h3>
 					<div >
 			<b class="alert">	Building a full differentiable model of the Universe </b>
 			</div>
 			</div>
-		</div>
+		</div> -->
 		</section>
 
 
+		<section>
+		<h2 class='slide-title'>  Numerical Differentiation  </h2>
+		<div class='container'>
+		<div class='col'>
+
+\[\begin{equation}
+		\left.\frac{df(x)}{dx}\right|_{x_1} \approx \frac{f(x_1+h)-f(x_1)}{h}
+		\end{equation} \]
+
+</div>
+<div style="position:relative; width:450px; height:450px; margin:0 auto;">
+	<div class='col'>
+<img  data-src="assets/finite.png" style="position:absolute;top:0;left:0;" />
+</div>
+</div>
+</div>
+
+
+<div class='container'>
+	<ul>
+<b class="alert">	Flaws </b> :
+	<br>
+	<li>It’s numerically very unstable</li>
+	<br>
+	<li>It’s very expensive in term of simulation time</li>
+		<br>
+	<li>Computes an approximation</li>
+		<br>
+</ul>
+<div class='col'>
+		<div class="fragment" data-fragment-index="0" style="position:relative; width:450px; height:250px; margin:0 auto;">
+		 Different approach :
+				<div >
+	<h3>	<b class="alert">	Automatic Differentiation </b> <h3>
+		</div>
+		</div>
+	</div>
+</div>
+
+
+	</section>
+
+
+		<section>
+			<h3 class='slide-title'>Cosmological N-Body Simulations</h3>
+			<img data-src="assets/evolvingLSS.jpg" class="plain" /><br>
+
+		</section>
 
 				<section class="inverted" data-background="#000">
 							<h2>How do we simulate the Universe in a fast and differentiable way?</h2>
@@ -247,7 +306,7 @@ avalable<!doctype html>
 
 
 				<section>
-		<h3 class='slide-title'>the Flow Particle-Mesh scheme for N-body simulations</h3>
+		<h3 class='slide-title'>The Particle-Mesh scheme for N-body simulations</h3>
 		<b>The idea</b>: approximate gravitational forces by estimating densities on a grid.
 
 		<div class='container'>
@@ -331,8 +390,7 @@ avalable<!doctype html>
 							<ul>
 								<li> Seamless interfacing with deep learning components
 								</li>
-								<li> <b class="alert">Mesh TensorFlow</b> implementation for distribution on supercomputers
-								</li>
+
 							</ul>
 						</div>
 
@@ -345,6 +403,8 @@ avalable<!doctype html>
 					<!--We can have a link to the project, an showcase an iframe with the
 								small simulation running on the right-->
 				</section>
+
+
 
 
 
@@ -397,19 +457,24 @@ avalable<!doctype html>
 			</li>
 			<br>
 			<li class="fragment" data-fragment-index="1">
-				Weak lensing statistics :  <br> $\Longrightarrow$  <b class="alert"> Angular Power Spectrum $C_\ell$</b>
+				<b class="alert"> Angular Power Spectrum $C_\ell$</b>
 			 </li>
 			<br>
 			<li class="fragment" data-fragment-index="2" >
 				The Jacobian:
 							\[\begin{equation}
-							 \frac{dC_l}{d\Omega_c} , 	 \frac{dC_l}{d\sigma_8}
-					\end{equation} \]
+							 \frac{dC_l}{d\Omega_c},
+							 \end{equation} \]
+
+							 	\[\begin{equation}
+							  F_{\alpha, \beta} =\sum_{i,j} \frac{d\mu_i}{d\theta_{\alpha}}
+					 		C_{i,j}^{-1} \frac{d\mu_j}{d\theta_{\beta}}
+					 		\end{equation} \]
+
 			</li>
 			<li class="fragment" data-fragment-index="3" >
-				 Visualising confidence regions:<br>
-							The Fisher matrix used to plot the projected confidence region
-							 of two parameters $\Omega_c, \sigma_8$
+				 Constraints on cosmological parameter $\Omega_c$:<br>
+
 			</li>
 		</ul>
 	</div>
@@ -417,15 +482,16 @@ avalable<!doctype html>
 	<div class='col'>
 
 	<div style="position:relative; width:550px; height:550px; margin:0 auto;">
-		<img class="fragment current-visible plain" data-fragment-index="0" data-src="assets/com_kmap.png" style="position:absolute;top:0;left:0;"  />
-		<img  class="fragment current-visible plain" data-fragment-index="1" data-src="assets/ps.png" style="position:absolute;top:0;left:0;"  />
-		<img  class="fragment" data-fragment-index="3" data-src="assets/Fisher_.png" style="position:absolute;top:0;left:0;"  />
-		<div class="fragment current-visible plain" data-fragment-index="2">
+		<img class="fragment current-visible plain" data-fragment-index="0" data-src="assets/kmap_copia.png" style="position:absolute;top:0;left:0;"  />
+		<img  class="fragment current-visible plain" data-fragment-index="1" data-src="assets/power_spectrum.png" style="position:absolute;top:0;left:0;"  />
+		<img  class="fragment current-visible plain" data-fragment-index="2" data-src="assets/power_spectrum.png" style="position:absolute;top:0;left:0;"  />
+		<img  class="fragment" data-fragment-index="3" data-src="assets/forecast_omegac.png" style="position:absolute;top:0;left:0;"  />
+		<!-- <div class="fragment current-visible plain" data-fragment-index="2">
 			\[\begin{equation}
 		F_{\alpha, \beta} =\sum_{i,j} \frac{d\mu_i}{d\theta_{\alpha}}
 		C_{i,j}^{-1} \frac{d\mu_j}{d\theta_{\beta}}
 		\end{equation} \] </div>
-	</div>
+	</div> -->
 
 	</div>
 	</div>
@@ -433,7 +499,7 @@ avalable<!doctype html>
 
 
 
-	<section>
+	<!-- <section>
 			<h3 class="slide-title"> Next steps </h3>
 	<div class='container'>
 		<div class='col'>
@@ -457,11 +523,11 @@ Compare density estimation methods with and without gradients for inference
 				</div>
 			</div>
 	</div>
-	</section>
+	</section> -->
 
 
 
-<section>
+<!-- <section>
 			<h3 class="slide-title"> Summary</h3>
 
 			<ul>
@@ -480,14 +546,14 @@ Compare density estimation methods with and without gradients for inference
 				<li class="fragment">
 					We use these derivatives to measure the <b class="alert">Fisher information</b>. content of
 					lensing summary statistics on cosmological parameters
-				</li>
+				</li> -->
 				<!-- <br>
 				<li class="fragment"> Our community has unique needs and limited resources,
 				we will all gain by working collaboratively !
 			</li> -->
-			</ul>
+			<!-- </ul>
 
-		</section>
+		</section> -->
 
 
 	<section>
@@ -507,7 +573,7 @@ Compare density estimation methods with and without gradients for inference
 						<ul>
 							<li> Forecasts on differentiable higher-order statistics, including peak counts, L1 norm, etc.
 </li>
-							<li> Even analytic cosmological computations can benefit from differentiability.<br> <a href="https://github.com/DifferentiableUniverseInitiative/flowpm">https://github.com/DifferentiableUniverseInitiative/flowpm</a> </li>
+							<li> Inference of the full posterior distribution by using the Hamiltonian Monte Carlo (HMC) method </li>
 						</ul>
 					</li>
 					<br>
@@ -531,8 +597,8 @@ Compare density estimation methods with and without gradients for inference
 
 
 
-						</div>
-					</div>
+						<!-- </div> -->
+					<!-- </div> -->
 
 					<style>
 						/* .reveal .slides {
