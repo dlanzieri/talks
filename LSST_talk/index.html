@@ -1,0 +1,869 @@
+avalable<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Template Presentation</title>
+		<meta name="description" content="Presentation for the IN2P3 workshop">
+		<meta name="author" content="Denise Lanzieri">
+
+		<link rel="stylesheet" href="reveal.js/dist/reset.css">
+		<link rel="stylesheet" href="reveal.js/dist/reveal.css">
+		<link rel="stylesheet" href="reveal.js/dist/theme/darkenergy.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="reveal.js/plugin/highlight/monokai.css" id="highlight-theme">
+		<!-- <link rel="stylesheet" href="plugin/highlight/monokai.css" id="highlight-theme"> -->
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+				<!-- <div class="reveal">
+		<div class="slides"> -->
+			<section data-background-image="assets/lsst_stills_0009_crop.jpg">
+				<div class="container">
+					<div class="title" style="border-radius: 20px; background-color:rgba(0, 0, 0, 0.4);">
+						<h2> Forecasting the power of Higher Order Weak Lensing Statistics with automatically differentiable simulations </h2>
+					</div>
+				</div>
+				<hr>
+				<div style="border-radius: 20px; background-color:rgba(0, 0, 0, 0);">
+					<div class="container">
+						<div class="col">
+							<div align="left" style="margin-left: 70px;">
+								<h2> Denise Lanzieri</h2>
+								<br>
+								<img src="assets/CosmoStatDarkBK.png" class="plain"></img>
+								<br>
+							</div>
+						</div>
+
+						<div class="col">
+							<br>
+							<br>
+							<br>
+							<br>
+							<img src="assets/logo_UParis.png" class="plain" height="150"></img>
+						</div>
+
+						<div class="col">
+							<br>
+
+							<br>
+							<br>
+							<img src="assets/aim.png" class="plain" height="150"></img>
+						</div>
+					</div>
+					<div> slides at <a href="https://dlanzieri.github.io/talks/LSST_talk/">github.com/dlanzieri/talks/LSST_talk</a> </div>
+				</div>
+			</section>
+
+
+			<section data-background-image="assets/WMAP_timeline_large.jpg">
+				<h3 class='slide-title' style="position:absolute;top:0;"> the $\Lambda$CDM view of the Universe </h3>
+				<br> <br>
+				<div class="container">
+					<div class="col" style="flex: 0 0 40em;">
+
+					</div>
+					<div class="col">
+
+						<img class="plain" data-src="assets/Euclid.png" style="width: 300px" />
+
+						<img class="plain" data-src="assets/wfirstlogo.png" style="width: 300px" />
+
+						<img class="plain" data-src="assets/vrro.png" style="width: 300px" />
+					</div>
+				</div>
+				<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
+			</section>
+
+				<section  data-background-color="black">
+
+					<h2 class='slide-title'>
+						Weak Gravitational lensing</h2>
+						<img class="plain" data-src="assets/lensing.jpg" style="width: 700px"   />
+					<!-- <h2 class="col">A gravitational lens is a distribution of matter creating a gravitational field that distorts and magnifies the light from distant galaxies that are behind it but in the same line of sight.
+					</h2> -->
+
+						<!-- <div class="block-content">
+							A <b class="alert">gravitational lens</b> is a distribution of matter creating a gravitational field that distorts and magnifies the light from distant galaxies that are behind it but in the same line of sight.
+						<br>
+						<br>
+					<b class="alert">	Weak lensing </b> regime $\Longrightarrow$ small distortions in the shape of background
+						 galaxies images that can not be
+						detected on individual galaxies, but only statistically
+				</div> -->
+				</section>
+
+
+				<section>
+			<h2 class='slide-title'> 2 Point Statistics: A Suboptimal Measure </h2>
+ <h3>  How do we make the most of the available data?</h3>
+			<div class='container'>
+
+				<div class='col'>
+
+					<div style="position:relative; width:480px; height:30px; margin:0 auto;">
+					<div class="fragment current-visible" style="position:absolute;top:0;" data-fragment-index="2">HSC cosmic shear power spectrum</div>
+						<div class="fragment" style="position:absolute;top:0;" data-fragment-index="3">HSC Y1 constraints on $(S_8, \Omega_m)$</div>
+					</div>
+					<div style="position:relative; width:480px; height:300px; margin:0 auto;">
+						<div class="fragment current-visible" style="position:absolute;top:0;left:0;" data-fragment-index="0">
+							<img class="plain" data-src="assets/alonso_g1.png" />
+							<img class="plain" data-src="assets/alonso_g2.png" />
+						</div>
+						<div class="fragment current-visible" style="position:absolute;top:0;left:0;" data-fragment-index="1">
+							<img class="plain" data-src="assets/alonso_g1.png" />
+							<img class="plain" data-src="assets/alonso_g2.png" />
+						</div>
+						<img class="fragment current-visible plain" data-src="assets/hsc_correlation_function.png" style="position:absolute;top:0;left:0;" data-fragment-index="2" />
+						<img class="fragment  plain" data-src="assets/hsc_constraints.png" style="position:absolute;top:0;left:0;" data-fragment-index="3" />
+					</div>
+
+					<div class="fragment" data-fragment-index="3" style="float:right; font-size: 20px">(Hikage,..., <b>Lanusse</b>, et al. 2018)</div>
+				</div>
+
+				<div class='col'>
+						<li class="fragment" data-fragment-index="0"> Standard Weak lensing analysis: </li>
+					<ul>
+						<br>
+
+
+								<li class="fragment" data-fragment-index="0"> <b class="alert">Shear $\gamma$</b> </li>
+								<!-- <br> distortions of observed galaxy images</li> -->
+								<!-- <li class="fragment" data-fragment-index="1">	Mass Mapping from Weak Lensing <b class="alert"> convergence $\kappa$</b>,
+								 <br> i.e. the change in angular size
+
+								</li> -->
+
+						<br>
+						<li class="fragment" data-fragment-index="1"> Data reduction </li>
+
+						<br>
+						<li class="fragment" data-fragment-index="2">  <b class="alert">Power spectrum</b>
+							<!-- <ul>
+								<li  >  Compute <b class="alert">summary statistics</b> based on 2pt statistics of the lensing signal, <br>e.g. the <b>power spectrum</b>
+
+									</li>
+							</ul> -->
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="block fragment">
+				<div class="block-title">
+					Main limitation: 	The lensing convergence field is inherently and significantly non-Gaussian
+				</div>
+				<div class="block-content">
+					The two-point statistics do not fully capture the <b>non-Gaussian</b> information encoded in the <b>peaks </b> of the matter distribution
+					<br>
+					<br>
+					<div class="fragment"> $\Longrightarrow$ We are dismissing most of the information! </div>
+				</div>
+			</div>
+		</section>
+
+
+
+
+
+
+
+
+		<section>
+		<h2 class='slide-title'>  How to maximize the information gain?  </h2>
+
+		<div class='container'>
+
+		<div class='col'>
+
+			<div style="position:relative; width:500px; height:40px; ">
+				<div class="fragment " style="position:absolute;top:0;" data-fragment-index="0">Cosmological constraints from the combination of different summary statistics</div>
+				<!-- <div class="fragment" style="position:absolute;top:0;" data-fragment-index="1">Cosmological constraints from the combination of different summart statistics</div> -->
+			</div>
+			<div style="position:relative; width:780px; height:555px; margin:0 auto;">
+				<img class="fragment plain" data-src="assets/Virg1.png" style="position:absolute;top:0;left:0;" data-fragment-index="0" />
+				<!-- <img class="fragment  plain" data-src="assets/Virgi_compa.png" style="position:absolute;top:0;left:0;" data-fragment-index="1" /> -->
+			</div>
+			<div class="fragment" data-fragment-index="0" style="float:right; font-size: 20px">(<b>Ajani</b>, et al. 2020)</div>
+		</div>
+
+		<div class='col'>
+			<ul>
+				<li class="fragment" data-fragment-index="0">	Approaches based on measuring high-order correlations to access the non-Gaussian information
+					<br>e.g. the <b class="alert"> Peaks count</b>, <br> <b class="alert"> Starlet $l_1$-norm </b>
+					<br>
+						<br>
+				<li class="fragment" data-fragment-index="1"> Investigate the constraining power of various map-based
+				higher order weak lensing statistics  </li>
+				<br>
+				<li class="fragment" data-fragment-index="2"> How can we do that in a fast and accurate way?  <br> $\Longrightarrow$  <b class="alert">Fisher Information</b>
+				</li>
+			</ul>
+		</div>
+		</div>
+				</section>
+
+
+
+
+		<section>
+		<h2 class='slide-title'>  Fisher Matrix  </h2>
+
+		<div class='container'>
+
+		<div class='col'>
+			<!-- <div style="position:relative; width:780px; height:555px; margin:0 auto;"> -->
+
+									\[\begin{equation}
+									F_{\alpha, \beta} =\sum_{i,j} \frac{d\mu_i}{d\theta_{\alpha}}
+									C_{i,j}^{-1} \frac{d\mu_j}{d\theta_{\beta}}
+							\end{equation} \]
+			<!-- </div> -->
+
+		</div>
+		<div class='col'>
+			<ul>
+				<li> Use Fisher matrix to estimate the information content extracted with a given statistic </li>
+				<br>
+				<li class="fragment" data-fragment-index="1" > Derivative of summary statistics respect to the cosmological parameters.
+				 <br>e.g. the $\Omega_c$, $\sigma_8$ </li>
+				 <br>
+				 <li class="fragment" data-fragment-index="2"> Estimate derivative with final differences</li>
+				<!-- <br>
+				<li class="fragment" data-fragment-index="0"> How we can do that?  <br> $\Longrightarrow$  <b class="alert">Build a full differentiable model of the Universe</b>
+				</li> -->
+			</ul>
+		</div>
+		</div>
+		<br>
+		<br>
+		<!-- <div >
+			<div class="fragment" data-fragment-index="2">
+				<h3>	How can we do that? 	<h3>
+					<div >
+			<b class="alert">	Building a full differentiable model of the Universe </b>
+			</div>
+			</div>
+		</div> -->
+		</section>
+
+
+		<section>
+		<h2 class='slide-title'>  Numerical Differentiation  </h2>
+		<div class='container'>
+		<div class='col'>
+
+\[\begin{equation}
+		\left.\frac{df(x)}{dx}\right|_{x_1} \approx \frac{f(x_1+h)-f(x_1)}{h}
+		\end{equation} \]
+
+</div>
+<div style="position:relative; width:450px; height:450px; margin:0 auto;">
+	<div class='col'>
+<img  data-src="assets/finite.png" style="position:absolute;top:0;left:0;" />
+</div>
+</div>
+</div>
+
+
+<div class='container'>
+	<ul>
+<b class="alert">	Flaws </b> :
+	<br>
+	<li>It’s numerically very unstable</li>
+	<br>
+	<li>It’s very expensive in term of simulation time</li>
+		<br>
+	<li>Computes an approximation</li>
+		<br>
+</ul>
+<div class='col'>
+		<div class="fragment" data-fragment-index="0" style="position:relative; width:450px; height:250px; margin:0 auto;">
+		 Different approach :
+				<div >
+	<h3>	<b class="alert">	Automatic Differentiation </b> <h3>
+		</div>
+		</div>
+	</div>
+</div>
+
+
+	</section>
+
+	<section>
+		<h3 class='slide-title'> Automatic Differentiation and Gradients in TensorFlow</h3>
+		<br>
+		<br>
+			<ul>
+				<li class="fragment" data-fragment-index="0"> TensorFlow compute automatically derivatives of arbitrary order by applying the <b class="alert">chain rule </b> 
+					repeatedly to elementary arithmetic operations
+				</li>
+
+				<br>
+
+				<li class="fragment" data-fragment-index="1"> To differentiate automatically, TensorFlow remember what operations
+					happen in what order during the forward pass and traverses this list of operations in reverse order to compute gradients.
+				</li>
+
+				<br>
+			</ul>
+		</br>
+		</br>
+		<div class='container'>
+			<ul class="fragment" data-fragment-index="3">
+		<b class="alert">	Advantages </b> :
+			<br>
+			<li>Derivative as functions</li>
+			<br>
+			<li>No numerical approximation</li>
+				<br>
+			<li>High speed</li>
+				<br>
+		</ul>
+		<div class='col'>
+				<div class="fragment" data-fragment-index="3" style="position:relative; width:450px; height:250px; margin:0 auto;">
+				 <b class="alert">Chain rule </b>  :
+						<div >
+									<p class="fragment" data-fragment-index="3">
+									\[\begin{equation}
+								\frac{dw}{du}=\frac{dw}{dv}\frac{dv}{du}
+							\end{equation} \]
+							</p>
+				</div>
+				</div>
+			</div>
+		</div>
+
+	</section>
+
+
+
+
+		<section>
+			<h3 class='slide-title'>Cosmological N-Body Simulations</h3>
+			<img data-src="assets/evolvingLSS.jpg" class="plain" /><br>
+
+		</section>
+
+				<section class="inverted" data-background="#000">
+							<h2>How do we simulate the Universe in a fast and differentiable way?</h2>
+						</section>
+
+
+				<section>
+		<h3 class='slide-title'>The Particle-Mesh scheme for N-body simulations</h3>
+		<b>The idea</b>: approximate gravitational forces by estimating densities on a grid.
+
+		<div class='container'>
+			<div class='col'>
+				<ul>
+					<li>The numerical scheme:
+						<br>
+						<br>
+						<ul>
+							<li class="fragment" data-fragment-index="1"> Estimate the density of particles on a mesh<br>
+								$\Longrightarrow$ compute gravitational forces by FFT
+							</li>
+
+							<br>
+
+							<li class="fragment" data-fragment-index="2"> Interpolate forces at particle positions
+							</li>
+
+							<br>
+
+							<li class="fragment" data-fragment-index="3"> Update particle velocity and positions, and iterate
+							</li>
+						</ul>
+					</li>
+					<br>
+
+					<li class='fragment'> Fast and simple, at the cost of approximating short range interactions.
+					</li>
+
+				</ul>
+			</div>
+
+			<div class='col'>
+
+				<div style="position:relative; width:550px; height:550px; margin:0 auto;">
+					<img class="fragment current-visible plain" data-src="assets/particle_positions_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="0" />
+					<img class="fragment current-visible plain" data-src="assets/particle_density_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="1" />
+					<img class="fragment current-visible plain" data-src="assets/particle_positions_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="2" />
+					<img class="fragment  plain" data-src="assets/particle_positions_1.png" style="position:absolute;top:0;left:0;" data-fragment-index="3" />
+
+				</div>
+
+			</div>
+		</div>
+
+		<div class="fragment"> $\Longrightarrow$ Only a series of FFTs and interpolations.</div>
+	</section>
+
+	<section>
+					<h3 class='slide-title'>Introducing FlowPM: Particle-Mesh Simulations in TensorFlow</h3>
+
+					<div class='container'>
+						<div class='col'>
+							<img data-src="assets/github.png" class="plain" style="height:70px" />
+							<div> <a href="https://github.com/DifferentiableUniverseInitiative/flowpm">https://github.com/DifferentiableUniverseInitiative/flowpm</a>
+							</div>
+							<pre class="python"><code data-trim data-noescape>
+											import tensorflow as tf
+											import flowpm
+											# Defines integration steps
+											stages = np.linspace(0.1, 1.0, 10, endpoint=True)
+
+											initial_conds = flowpm.linear_field(32,        # size of the cube
+											100,       # Physical size
+											ipklin,    # Initial powerspectrum
+											batch_size=16)
+
+											# Sample particles and displace them by LPT
+											state = flowpm.lpt_init(initial_conds, a0=0.1)
+
+											# Evolve particles down to z=0
+											final_state = flowpm.nbody(state, stages, 32)
+
+											# Retrieve final density field
+											final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
+											final_state[0])
+
+											with tf.Session() as sess:
+											sim = sess.run(final_field)
+										</code></pre>
+							<ul>
+								<li> Seamless interfacing with deep learning components
+								</li>
+
+							</ul>
+						</div>
+
+						<div class='col'>
+							<div class="fig-container" data-file="assets/flowpm_16.html" data-style="height: 550px;"></div>
+							<img data-src="assets/TF_FullColor_Horizontal.png" class='plain' style="height: 70px;" />
+						</div>
+					</div>
+
+					<!--We can have a link to the project, an showcase an iframe with the
+								small simulation running on the right-->
+				</section>
+
+
+				<section>
+					<h2 class='slide-title'> Mocking the weak lensing universe:</h2>
+
+					<div class='container'>
+						<div class='col'>
+							<ul>
+				<li class="fragment" data-fragment-index="1">	We can map	the	distribution of	all matter over	cosmic time. </li>
+				<br>
+				<li class="fragment" data-fragment-index="2"> Convergence maps	<br> $\Longrightarrow$	weighted	projection	of	the	3D	cosmological
+				mass	density	along	the	line-of-sight. </li>
+				<br>
+				<li class="fragment" data-fragment-index="3">Access the signal in the convergence maps using a given statistic, e.g. Convergence	power	spectrum </li>
+				</ul>
+				</div>
+				<div class='col'>
+						<img class="fragment" data-src="assets/kmap.png"  style="width: 400px" data-fragment-index="2" />
+							<div class="fragment" data-fragment-index="2" style="float:right; font-size: 17px" > Convergence map at z=1.0, based on a 3D simulation of side length 256 Mpc/h and $256^3$ particles.    (<b>Böhm</b>, et al. 2020)</div>
+				<!-- <div class="fragment"data-fragment-index="3" style="width: 150px">
+					\begin{equation}
+					\kappa(\boldsymbol{\theta},\chi_s)= \frac{3H_0^2 \Omega_m}{2c^2}
+				\int_0^{\chi_s}
+				d\chi \frac{\chi}{a(\chi)}
+				 W(\chi,\chi_s)
+    \delta(f_k(\chi)\boldsymbol{\theta},\chi).
+\end{equation} -->
+
+						<!-- \[\begin{equation}
+						\left \langle  \tilde{\kappa}(l)\tilde{\kappa}^{*}(l') \right \rangle=(2\pi)^2\delta_D(l-l')P_{\kappa}(l)
+				\end{equation} \] -->
+				<!-- </div> -->
+				</div>
+				</div>
+				</section>
+
+
+
+  <section>
+		<h3 class='slide-title'> Mocking the weak lensing universe: The Born Approximation</h3>
+		<br>
+		<br>
+			<ul>
+				<li class="fragment" data-fragment-index="1"> Numerical simulation of WL features rely on ray-tracing
+					 through the output of N-body simulations​
+
+				</li>
+
+				<br>
+
+				<li class="fragment" data-fragment-index="2"> Knowledge of the Gravitational potential and accurate
+					solvers for light ray trajectories is computationally expensive
+
+				</li>
+
+				<br>
+
+				<li class="fragment" data-fragment-index="3"> Born approximation , only requiring knowledge of the density field,
+					can be implemented more efficiently and at a lower computational cost
+
+				</li>
+			</ul>
+		</br>
+		</br>
+		<p class="fragment">
+		\[\begin{equation}
+		\kappa_{born}(\boldsymbol{\theta},\chi_s)= \frac{3H_0^2 \Omega_m}{2c^2}
+	\int_0^{\chi_s}
+	d\chi \frac{\chi}{a(\chi)}
+	 W(\chi,\chi_s)
+	\delta(\chi \boldsymbol{\theta},\chi).
+\end{equation} \]
+</p>
+	</section>
+
+
+	<section>
+	<h3 class='slide-title'>Raytracing Validation</h3>
+	We simulate lensing lightcones implementing gravitational lensing ray-tracing in <b class="alert">FlowPM  </b> framework
+	<div class='container' >
+		<div class='col'>
+	<img  data-src="assets/comparison1_inv.png" style=" height:315px; width:1000px"   />
+	<img data-src="assets/comparison3_inv.png" style=" height:315px;width:1000px"/>
+</div>
+</div>
+</section>
+
+
+	<section>
+	<h3 class='slide-title'>Proof of Concept</h3>
+<div class='container'>
+
+	<div class='col'>
+		<ul>
+			<li class="fragment" data-fragment-index="0"> Convergence map at z=1.0, based on a 3D simulation of $64^3$ particles for side.
+				The 2D lensing map has an angular extent of $5^{\circ}.$
+			</li>
+			<br>
+			<li class="fragment" data-fragment-index="1">
+				<b class="alert"> Angular Power Spectrum $C_\ell$</b>
+			 </li>
+			<br>
+			<li class="fragment" data-fragment-index="2" >
+				The Jacobian:
+							\[\begin{equation}
+							 \frac{dC_l}{d\Omega_c},
+							  \frac{dC_l}{d\sigma_8}
+							 \end{equation} \]
+
+							 	\[\begin{equation}
+							  F_{\alpha, \beta} =\sum_{i,j} \frac{d\mu_i}{d\theta_{\alpha}}
+					 		C_{i,j}^{-1} \frac{d\mu_j}{d\theta_{\beta}}
+					 		\end{equation} \]
+
+			</li>
+			<li class="fragment" data-fragment-index="3" >
+				 Constraints on cosmological parameter $\Omega_c$ and $\sigma_8$:<br>
+
+			</li>
+		</ul>
+	</div>
+
+	<div class='col'>
+
+	<div style="position:relative; width:550px; height:550px; margin:0 auto;">
+		<img class="fragment current-visible plain" data-fragment-index="0" data-src="assets/kmap_black.png" style="position:absolute;top:0;left:0;"  />
+		<img  class="fragment current-visible plain" data-fragment-index="1" data-src="assets/kmap_black.png" style="position:absolute;top:0;left:0;"  />
+		<img  class="fragment current-visible plain" data-fragment-index="2" data-src="assets/kmap_black.png" style="position:absolute;top:0;left:0;"  />
+		<img  class="fragment" data-fragment-index="3" data-src="assets/fisher_mean2.png" style="position:absolute;top:0;left:0;"  />
+		<!-- <div class="fragment current-visible plain" data-fragment-index="2">
+			\[\begin{equation}
+		F_{\alpha, \beta} =\sum_{i,j} \frac{d\mu_i}{d\theta_{\alpha}}
+		C_{i,j}^{-1} \frac{d\mu_j}{d\theta_{\beta}}
+		\end{equation} \] </div>
+	</div> -->
+
+	</div>
+	</div>
+	</section>
+
+
+
+	<section>
+			<h3 class="slide-title"> Status and Next steps </h3>
+			<br>
+		<br>
+	<div class='container'>
+		<div class='col'>
+			<ul>
+				<li class="fragment" data-fragment-index="0"> Distributed version of FlowPM on several GPUs to generate large-scale mass-maps
+				 </li>
+				 <br>
+				 <li class="fragment" data-fragment-index="1">  <b class="alert">Peak counts </b> statistic implement in TensorFlow framework
+					 <ul>
+						 <li class="fragment" data-fragment-index="1">	Weak lensing peaks trace regions where the value of the convergence field is high  <b class="alert"> $\Longrightarrow$ </b>  they are associated to massive Structures. </li>
+<li class="fragment" data-fragment-index="1"> We compute peaks as local maxima of the signal-to-noise field .e. as a pixel of larger value than its eight neighbors in the image. </li>
+					 </ul>
+</li>
+<br>
+<li class="fragment" data-fragment-index="2">
+Compute summary statistic higher than second order to extract non-Gaussian cosmological information and infer cosmological parameters
+</li>
+			</ul>
+		</div>
+			<!-- <div class='col'>
+				<div style="position:relative; width:550px; height:550px; margin:0 auto;">
+					<img  class="fragment" data-fragment-index="0" data-src="assets/Virgicompa2.png" style="position:absolute;top:0;left:0;"  />
+				</div>
+			</div> -->
+	</div>
+	</section>
+
+
+
+<!-- <section>
+			<h3 class="slide-title"> Summary</h3>
+
+			<ul>
+				<li class="fragment"> We implement fast and accurate <b class="alert"> FlowPM N-body </b> simulations based on the <b class="alert">TensorFlow </b>framework to model
+					the Large-Scale Structure in a <b>fast and differentiable way</b>. <br>
+				</li>
+				<br>
+				<li class="fragment"> We simulate lensing lightcones implementing gravitational lensing <b class="alert">ray-tracing </b> in this framework
+				</li>
+					<br>
+				<li class="fragment">
+					We take <b class="alert">derivatives</b> of the resulting gravitational lensing maps with respect to cosmological parameters
+					(or any systematics included in the simulations)
+				</li>
+					<br>
+				<li class="fragment">
+					We use these derivatives to measure the <b class="alert">Fisher information</b>. content of
+					lensing summary statistics on cosmological parameters
+				</li> -->
+				<!-- <br>
+				<li class="fragment"> Our community has unique needs and limited resources,
+				we will all gain by working collaboratively !
+			</li> -->
+			<!-- </ul>
+
+		</section> -->
+
+
+	<section>
+		<h1> Conclusion </h1>
+	</section>
+
+	<section>
+		<h3 class="slide-title"> Conclusion </h3>
+		<div class="block ">
+			<div class="block-title">
+				What can be gained by simulating the Universe in a fast and differentiable way?
+			</div>
+			<div class="block-content">
+				<br>
+				<ul>
+					<li class="fragment"> Differentiable physical models for fast inference
+						<ul>
+							<li> Forecasts on differentiable higher-order statistics, including peak counts, L1 norm, etc.
+</li>
+							<!-- <li> Inference of the full posterior distribution by using the Hamiltonian Monte Carlo (HMC) method </li> -->
+						</ul>
+					</li>
+					<br>
+					<br>
+					<li class="fragment">Investigate the constraining power of various map-based higher order weak lensing statistics
+						<!-- <ul>
+							<li>Learn galaxy morphologies from noisy and PSF-convolved data, for simulation purposes.</il>
+							<li>Use data-driven model as prior for solving inverse problems such as deblending or deconvolution.</il>
+						</ul> -->
+						</il>
+					<br>
+				</ul>
+			</div>
+		</div>
+		<br>
+		<br>
+
+		<br> <br> <br>
+	</section>
+
+	<section>
+		<h3 class="slide-title"> Conclusion </h3>
+		<div class="block ">
+			<div class="block-title">
+				Everyone is most welcome to join! How to get in touch:
+			</div>
+			<div class="block-content">
+				<br>
+				<ul>
+					<li class="fragment"> Confluence <a href="https://confluence.slac.stanford.edu/display/LSSTDESC/Forecasting+the+power+of+Higher+Order+Weak+Lensing+Statistics+with+automatically+differentiable+simulations">
+						page </a>
+					</li>
+
+					<br>
+					<li class="fragment">Slack channel #desc-wl-massmap, and new #desc-wl-fwd-mdl
+					</li>
+					<br>
+					<li class="fragment">GitHub repo: <a href="https://github.com/LSSTDESC/DifferentiableHOS"> https://github.com/LSSTDESC/DifferentiableHOS </a> </li>
+	        <br>
+				</ul>
+			</div>
+		</div>
+		<br>
+		<br>
+		<p class="fragment">Thank you ! </p>
+		<br> <br> <br>
+	</section>
+
+
+
+						<!-- </div> -->
+					<!-- </div> -->
+
+					<style>
+						/* .reveal .slides {
+							border: 5px solid red;
+							min-height: 100%;
+							width: 128mm;
+							height: 96mm;
+						} */
+
+						.reveal .block {
+							background-color: #191919;
+							margin-left: 20px;
+							margin-right: 20px;
+							text-align: left;
+							padding-bottom: 0.1em;
+						}
+
+						.reveal .block-title {
+							background-color: #333333;
+							padding: 8px 35px 8px 14px;
+							color: #FFAA7F;
+							font-weight: bold;
+						}
+
+						.reveal .block-content {
+							padding: 8px 35px 8px 14px;
+						}
+
+						.reveal .slide-title {
+							border-left: 5px solid white;
+							text-align: left;
+							margin-left: 20px;
+							padding-left: 20px;
+						}
+
+						.reveal .alert {
+							color: #FFAA7F;
+							font-weight: bold;
+						}
+
+						.reveal .inverted {
+							filter: invert(100%);
+						}
+
+						/*
+					/* .reveal .alert {
+					padding:8px 35px 8px 14px; margin-bottom:18px;
+					text-shadow:0 1px 0 rgba(255,255,255,1);
+					border:5px solid #FFAA7F;
+					-webkit-border-radius: 14px; -moz-border-radius: 14px;
+					border-radius:14px
+					background-position: 10px 10px;
+					background-repeat: no-repeat;
+					background-size: 38px;
+					padding-left: 30px; /* 55px; if icon
+					}
+					.reveal .alert-block {padding-top:14px; padding-bottom:14px}
+					.reveal .alert-block > p, .alert-block > ul {margin-bottom:1em}
+					/*.reveal .alert li {margin-top: 1em}
+					.reveal .alert-block p+p {margin-top:5px} */
+					</style>
+
+
+					<script src="reveal.js/dist/reveal.js"></script>
+					<script src="reveal.js/plugin/notes/notes.js"></script>
+					<script src="reveal.js/plugin/markdown/markdown.js"></script>
+					<script src="reveal.js/plugin/highlight/highlight.js"></script>
+					<script src="reveal.js/plugin/math/math.js"></script>
+					<script>
+						// More info about initialization & config:
+						// - https://revealjs.com/initialization/
+						// - https://revealjs.com/config/
+						Reveal.initialize({
+							controls: false,
+
+							//center: false,
+							hash: true,
+
+							// Visibility rule for backwards navigation arrows; "faded", "hidden"
+							// or "visible"
+							controlsBackArrows: 'hidden',
+
+							// Display a presentation progress bar
+							progress: true,
+
+							// Display the page number of the current slide
+							slideNumber: true,
+
+							transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+							// The "normal" size of the presentation, aspect ratio will be preserved
+							// when the presentation is scaled to fit different resolutions. Can be
+							// specified using percentage units.
+							width: 1280,
+							height: 720,
+
+							// Factor of the display size that should remain empty around the content
+							margin: 0.1,
+
+							// Bounds for smallest/largest possible scale to apply to content
+							minScale: 0.2,
+							maxScale: 1.5,
+
+
+							// Learn about plugins: https://revealjs.com/plugins/
+							plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath],
+
+							dependencies: [{
+									src: 'reveal.js/plugin/markdown/marked.js'
+								},
+								{
+									src: 'reveal.js/plugin/markdown/markdown.js'
+								},
+								{
+									src: 'reveal.js/plugin/notes/notes.js',
+									async: true
+								},
+								{
+									src: 'reveal.js/plugin/math/math.js',
+									async: true
+								},
+								{
+									src: 'reveal.js/plugin/reveal.js-d3/reveald3.js'
+								},
+								{
+									src: 'reveal.js/plugin/reveal.js-plugins/chart/Chart.min.js'
+								},
+								{
+									src: 'reveal.js/plugin/reveal.js-plugins/chart/csv2chart.js'
+								},
+								{
+									src: 'reveal.js/plugin/highlight/highlight.js',
+									async: true
+								},
+							]
+
+						});
+					</script>
+				</body>
+
+				</html>

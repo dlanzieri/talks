@@ -1,3 +1,6 @@
 [submodule "IN2P3_workshop_2021/reveal.js"]
 	path = IN2P3_workshop_2021/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "LSST_talk/reveal.js"]
+	path = LSST_talk/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
