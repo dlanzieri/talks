@@ -4,3 +4,6 @@
 [submodule "LSST_talk/reveal.js"]
 	path = LSST_talk/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "CarbonFreeConf_2021_June/reveal.js"]
+	path = CarbonFreeConf_2021_June/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
