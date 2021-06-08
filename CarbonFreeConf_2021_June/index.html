@@ -56,7 +56,7 @@ avalable<!doctype html>
 							<img src="assets/aim.png" class="plain" height="150"></img>
 						</div>
 					</div>
-					<div> slides at <a href="https://dlanzieri.github.io/talks/LSST_talk/">github.com/dlanzieri/talks/LSST_talk</a> </div>
+					<div> slides at <a href="https://github.com/dlanzieri/talks/tree/CarbonFreeConf_2021/CarbonFreeConf_2021_June/">github.com/dlanzieri/talks/CarbonFreeConf_2021_June</a> </div>
 				</div>
 			</section>
 
@@ -529,7 +529,7 @@ avalable<!doctype html>
 	</section>
 
 
-	<section>
+	<!-- <section>
 	<h3 class='slide-title'>Raytracing Validation</h3>
 	We simulate lensing lightcones implementing gravitational lensing ray-tracing in <b class="alert">FlowPM  </b> framework
 	<div class='container' >
@@ -538,7 +538,7 @@ avalable<!doctype html>
 	<img data-src="assets/comparison3_inv.png" style=" height:315px;width:1000px"/>
 </div>
 </div>
-</section>
+</section> -->
 
 
 	<section>
@@ -547,7 +547,7 @@ avalable<!doctype html>
 
 	<div class='col'>
 		<ul>
-			<li class="fragment" data-fragment-index="0"> Convergence map at z=1.0, based on a 3D simulation of $64^3$ particles for side.
+			<li class="fragment" data-fragment-index="0"> Convergence map at z=1.0, based on a 3D simulation of $128^3$ particles for side.
 				The 2D lensing map has an angular extent of $5^{\circ}.$
 			</li>
 			<br>
@@ -580,8 +580,8 @@ avalable<!doctype html>
 	<div style="position:relative; width:550px; height:550px; margin:0 auto;">
 		<img class="fragment current-visible plain" data-fragment-index="0" data-src="assets/kmap_black.png" style="position:absolute;top:0;left:0;"  />
 		<img  class="fragment current-visible plain" data-fragment-index="1" data-src="assets/kmap_black.png" style="position:absolute;top:0;left:0;"  />
-		<img  class="fragment current-visible plain" data-fragment-index="2" data-src="assets/kmap_black.png" style="position:absolute;top:0;left:0;"  />
-		<img  class="fragment" data-fragment-index="3" data-src="assets/fisher_mean2.png" style="position:absolute;top:0;left:0;"  />
+		<img  class="fragment current-visible plain" data-fragment-index="2" data-src="assets/momcomp6.png" style="position:absolute;top:0;left:0;"  />
+		<img  class="fragment" data-fragment-index="3" data-src="assets/fisher_black.png" style="position:absolute;top:0;left:0;"  />
 		<!-- <div class="fragment current-visible plain" data-fragment-index="2">
 			\[\begin{equation}
 		F_{\alpha, \beta} =\sum_{i,j} \frac{d\mu_i}{d\theta_{\alpha}}
@@ -596,16 +596,14 @@ avalable<!doctype html>
 <!-- .e. as a pixel of larger value than its eight neighbors in the image. -->
 
 	<section>
-			<h3 class="slide-title"> Status and Next steps </h3>
+			<h3 class="slide-title"> Proof of Concept </h3>
 			<br>
 		<br>
 	<div class='container'>
 		<div class='col'>
 			<ul>
-				<li class="fragment" data-fragment-index="0"> Distributed version of FlowPM on several GPUs to generate large-scale mass-maps
-				 </li>
 				 <br>
-				 <li class="fragment" data-fragment-index="1">  <b class="alert">Peak counts </b> statistic implement in TensorFlow framework
+			<li> <b class="alert">Peak counts </b> statistic implement in TensorFlow framework </li>
 					 <ul>
 						 <li class="fragment" data-fragment-index="1">	Weak lensing peaks trace regions where the value of the convergence field is high  <b class="alert"> $\Longrightarrow$ </b>  they are associated to massive Structures. </li>
 <li class="fragment" data-fragment-index="1"> We compute peaks as local maxima of the signal-to-noise field  </li>
@@ -613,15 +611,15 @@ avalable<!doctype html>
 </li>
 <br>
 <li class="fragment" data-fragment-index="2">
-Compute summary statistic higher than second order to extract non-Gaussian cosmological information and infer cosmological parameters
+We are testing the simulations to reproduce a DESC Y1-like setting
 </li>
 			</ul>
 		</div>
-			<!-- <div class='col'>
+			<div class='col'>
 				<div style="position:relative; width:550px; height:550px; margin:0 auto;">
-					<img  class="fragment" data-fragment-index="0" data-src="assets/Virgicompa2.png" style="position:absolute;top:0;left:0;"  />
+					<img   data-src="assets/peak.png" style="position:absolute;top:0;left:0;"  />
 				</div>
-			</div> -->
+			</div>
 	</div>
 	</section>
 
@@ -690,11 +688,11 @@ Compute summary statistic higher than second order to extract non-Gaussian cosmo
 		</div>
 		<br>
 		<br>
-
+   	<p class="fragment">Thank you ! </p>
 		<br> <br> <br>
 	</section>
 
-	<section>
+	<!-- <section>
 		<h3 class="slide-title"> Conclusion </h3>
 		<div class="block ">
 			<div class="block-title">
@@ -720,7 +718,7 @@ Compute summary statistic higher than second order to extract non-Gaussian cosmo
 		<br>
 		<p class="fragment">Thank you ! </p>
 		<br> <br> <br>
-	</section>
+	</section> -->
 
 
 
