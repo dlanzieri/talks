@@ -113,17 +113,17 @@ avalable<!doctype html>
 				\begin{equation}
 				 \vec{\beta}=\vec{\theta}-\vec{\alpha}(\vec{\theta})
 				\end{equation}  </li>
-				<li class="fragment" data-fragment-index="0">	 In	the	 <b class="alert">weak lensing</b> approximation, The image distortion is described by the Jacobian matrix:
+				<li class="fragment" data-fragment-index="0"> The	deflection	angle	is	the	gradient	of	a	scalar	potential,	which	is	an
+integral	over	the	light	travel	path
+				 \begin{equation}
+	\alpha_{i}=\partial_i \frac{2}{c^2}
+		\int_0^{\chi}d\chi'\frac{\chi-\chi'}{\chi\chi'}\Phi(\chi'\vec{\theta},\chi')
+\end{equation} </li>
+				<li class="fragment" data-fragment-index="1">	 In	the	 <b class="alert">weak lensing</b> approximation, The image distortion is described by the Jacobian matrix:
 				 \begin{equation}
     A_{ij}=\frac{\partial \beta_i}{\partial \theta_j}
 		=\delta_{ij}-\frac{\partial \alpha_i}{\partial \theta_j}
 				 \end{equation}  </li>
-				<li class="fragment" data-fragment-index=1> The	deflection	angle	is	the	gradient	of	a	scalar	potential,	which	is	an
-integral	over	the	light	travel	path
-				 \begin{equation}
-  \alpha_{i}=\partial_i \frac{2}{c^2}
-    \int_0^{\chi}d\chi'\frac{\chi-\chi'}{\chi\chi'}\Phi(\chi'\vec{\theta},\chi')
-\end{equation} </li>
 			 </div>
 <div class="col">
 	<img class="plain" data-src="assets/lensthin.png" style="width: 500px"   />
@@ -134,7 +134,7 @@ integral	over	the	light	travel	path
 				 <h3  class='slide-title'> Weak Gravitational Lensing</h3>
 					 <div class="container">
 						 <div class="col">
-							 <li >	the Jacobian matrix is parametrized in terms of the scalar convergence,  <b class="alert">$\kappa$</b>, and the two-component spin-two shear <b class="alert">$\gamma$</b>$=(\gamma_1,\gamma_2)$,
+							 <li >	The Jacobian matrix is parametrized in terms of the scalar convergence,  <b class="alert">$\kappa$</b>, and the two-component spin-two shear <b class="alert">$\gamma$</b>$=(\gamma_1,\gamma_2)$,
 								\begin{equation}
 					A=
 						\begin{pmatrix} 1-\kappa-\gamma_1  & -\gamma_2 \\ -\gamma_2  &1-\kappa+\gamma_1 \end{pmatrix}
@@ -791,7 +791,7 @@ reduces the numerical effect</li>
 	<ul>
 		<br>
 		<br>
-		<li class="fragment" data-fragment-index="0" > Derivative of ary statistics respect to the cosmological parameters.
+		<li class="fragment" data-fragment-index="0" > Derivative of summary statistics respect to the cosmological parameters.
 		 <br>e.g. the $\Omega_c$, $\sigma_8$ </li>
 		 <br>
 		 <li class="fragment"data-fragment-index="1"> The main reason for using Fisher matrices is that full MCMCs are extremely slow, and get slower with dimensionality.</li>
@@ -811,16 +811,6 @@ reduces the numerical effect</li>
 <section>
 <h2 class='slide-title'>  A first application: Fisher forecasts  </h2>
 <div class='col'>
-	<li style="position:absolute;top:95;left:20;"> Use Fisher matrix to estimate the information content extracted with a given statistic for more cosmological parameters simultaneously </li>
-	<div style="position:relative; width:900px; height:900px; margin:0 auto;">
-<img style="position:absolute;top:55;left:80;"; data-src="assets/corner.png" />
-</div>
-</div>
-</section>
-
-<section>
-<h2 class='slide-title'>  A first application: Fisher forecasts  </h2>
-<div class='col'>
 	<li style="position:absolute;top:95;left:20;"> Use Fisher matrix to investigate the constraining power of different statistics </li>
 	<div style="position:relative; width:900px; height:900px; margin:0 auto;">
 <img  style="position:absolute;top:55;left:80;"; data-src="assets/Fisher.png" />
@@ -828,6 +818,15 @@ reduces the numerical effect</li>
 </div>
 </section>
 
+<section>
+<h2 class='slide-title'>  A first application: Fisher forecasts  </h2>
+<div class='col'>
+	<li style="position:absolute;top:95;left:20;"> Use Fisher matrix to estimate the information content extracted with a given statistic for more cosmological parameters simultaneously </li>
+	<div style="position:relative; width:900px; height:900px; margin:0 auto;">
+<img style="position:absolute;top:55;left:80;"; data-src="assets/corner.png" />
+</div>
+</div>
+</section>
 
 
 		 <section>
@@ -843,7 +842,7 @@ reduces the numerical effect</li>
 			 <div class="col">
 				 <div class="fragment fade-up" data-fragment-index="1">
 					<img class="plain" data-src="assets/ia.png " style="height: 500px;"/><br>
-					<div style="float:right; font-size: 20px">Harnois-Déraps et al. (2015)</div>
+					<div style="float:right; font-size: 20px">Harnois-Déraps et al. (2021)</div>
 				</div>
 			 </div>
 		 </div>
@@ -871,7 +870,7 @@ reduces the numerical effect</li>
 	 </section>
 
 	 <section>
-	 <h3 class="slide-title" > Intrinsic alignments:Validation and next steps</h3>
+	 <h3 class="slide-title" > Intrinsic alignments: Validation and next steps</h3>
 	 	<div class="container">
 	 <div class="col">
 		 <ul>
