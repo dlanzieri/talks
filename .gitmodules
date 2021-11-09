@@ -7,9 +7,3 @@
 [submodule "CarbonFreeConf_2021_June/reveal.js"]
 	path = CarbonFreeConf_2021_June/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
-[submodule "FORTH_talk/reveal.js"]
-	path = FORTH_talk/reveal.js
-	url = https://github.com/EiffL/reveal.js.git
-[submodule "FORTH_talk2.0/reveal.js"]
-	path = FORTH_talk2.0/reveal.js
-	url = https://github.com/EiffL/reveal.js.git
