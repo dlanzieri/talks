@@ -520,25 +520,29 @@ number of simulations</li>
 							<div> <a href="https://github.com/DifferentiableUniverseInitiative/flowpm">https://github.com/DifferentiableUniverseInitiative/flowpm</a>
 							</div>
 							<pre class="python"><code data-trim data-noescape>
-								import tensorflow as tf
-								import flowpm
-								# Defines integration steps
-								stages = np.linspace(0.1, 1.0, 10, endpoint=True)
+											import tensorflow as tf
+											import flowpm
+											# Defines integration steps
+											stages = np.linspace(0.1, 1.0, 10, endpoint=True)
 
-								initial_conds = flowpm.linear_field(32,       # size of the cube
-								                                    100,      # Physical size
-								                                    ipklin,   # Initial powerspectrum
-								                                    batch_size=16)
+											initial_conds = flowpm.linear_field(32,        # size of the cube
+											100,       # Physical size
+											ipklin,    # Initial powerspectrum
+											batch_size=16)
 
-								# Sample particles and displace them by LPT
-								state = flowpm.lpt_init(initial_conds, a0=0.1)
+											# Sample particles and displace them by LPT
+											state = flowpm.lpt_init(initial_conds, a0=0.1)
 
-								# Evolve particles down to z=0
-								final_state = flowpm.nbody(state, stages, 32)
+											# Evolve particles down to z=0
+											final_state = flowpm.nbody(state, stages, 32)
 
-								# Retrieve final density field
-								final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
-								                               final_state[0])										</code></pre>
+											# Retrieve final density field
+											final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
+											final_state[0])
+
+											with tf.Session() as sess:
+											sim = sess.run(final_field)
+										</code></pre>
 							<ul>
 								<li> Seamless interfacing with deep learning components
 								</li>
@@ -977,8 +981,9 @@ reduces the numerical effect</li>
 
 
 
-						<!-- </div> -->
-					<!-- </div> -->
+						</div>
+					</div>
+
 
 					<style>
 						/* .reveal .slides {
