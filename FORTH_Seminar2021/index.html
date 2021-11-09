@@ -520,25 +520,25 @@ number of simulations</li>
 							<div> <a href="https://github.com/DifferentiableUniverseInitiative/flowpm">https://github.com/DifferentiableUniverseInitiative/flowpm</a>
 							</div>
 							<pre class="python"><code data-trim data-noescape>
-											import tensorflow as tf
-											import flowpm
-											# Defines integration steps
-											stages = np.linspace(0.1, 1.0, 10, endpoint=True)
+import tensorflow as tf
+import flowpm
+# Defines integration steps
+stages = np.linspace(0.1, 1.0, 10, endpoint=True)
 
-											initial_conds = flowpm.linear_field(32,        # size of the cube
-											100,       # Physical size
-											ipklin,    # Initial powerspectrum
-											batch_size=16)
+initial_conds = flowpm.linear_field(32,        # size of the cube
+100,       # Physical size
+ipklin,    # Initial powerspectrum
+batch_size=16)
 
-											# Sample particles and displace them by LPT
-											state = flowpm.lpt_init(initial_conds, a0=0.1)
+# Sample particles and displace them by LPT
+state = flowpm.lpt_init(initial_conds, a0=0.1)
 
-											# Evolve particles down to z=0
-											final_state = flowpm.nbody(state, stages, 32)
+# Evolve particles down to z=0
+final_state = flowpm.nbody(state, stages, 32)
 
-											# Retrieve final density field
-											final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
-											final_state[0])
+# Retrieve final density field
+final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
+final_state[0])
 										</code></pre>
 							<ul>
 								<li> Seamless interfacing with deep learning components
@@ -557,65 +557,6 @@ number of simulations</li>
 								small simulation running on the right-->
 				</section>
 
-				<section>
-					<h3 class='slide-title'>Introducing FlowPM: Particle-Mesh Simulations in TensorFlow</h3>
-					<div class="container">
-						<div class="col">
-							<div style="float:right; font-size: 20px"> Modi, <b>Lanusse</b>, Seljak (2020)
-								<a href="https://arxiv.org/abs/2010.11847"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2010.11847-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a>
-							</div>
-						</div>
-					</div>
-					<div class='container'>
-						<div class='col'>
-							<img data-src="assets/github.png" class="plain" style="height:70px" />
-							<img data-src="assets/TF_FullColor_Horizontal.png" class='plain' style="height: 70px;" />
-
-							<div> <a href="https://github.com/DifferentiableUniverseInitiative/flowpm">https://github.com/DifferentiableUniverseInitiative/flowpm</a>
-							</div>
-							<pre class="python"><code data-trim data-noescape>
-				import tensorflow as tf
-				import flowpm
-				# Defines integration steps
-				stages = np.linspace(0.1, 1.0, 10, endpoint=True)
-
-				initial_conds = flowpm.linear_field(32,       # size of the cube
-																			100,      # Physical size
-																			ipklin,   # Initial powerspectrum
-																			batch_size=16)
-
-				# Sample particles and displace them by LPT
-				state = flowpm.lpt_init(initial_conds, a0=0.1)
-
-				# Evolve particles down to z=0
-				final_state = flowpm.nbody(state, stages, 32)
-
-				# Retrieve final density field
-				final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
-																 final_state[0])
-														</code></pre>
-							<ul>
-								<li> Seamless interfacing with deep learning components
-								</li>
-								<li> Gradients readily available
-								</li>
-							</ul>
-							<br>
-							<br>
-							<br>
-							<br>
-							<br>
-						</div>
-
-						<div class='col'>
-							<div class="fig-container" data-file="flowpm_16.html" data-style="height: 550px;"></div>
-							<br>
-							<br>
-							<br>
-							<br>
-						</div>
-					</div>
-				</section>
 
 
 	<section>
