@@ -10,3 +10,6 @@
 [submodule "FORTH_Seminar2021/reveal.js"]
 	path = FORTH_Seminar2021/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "Euclid_France_2021/reveal.js"]
+	path = Euclid_France_2021/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
