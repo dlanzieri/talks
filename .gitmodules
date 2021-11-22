@@ -13,3 +13,6 @@
 [submodule "Euclid_France_2021/reveal.js"]
 	path = Euclid_France_2021/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "LSST_France_Nov2021/reveal.js"]
+	path = LSST_France_Nov2021/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
