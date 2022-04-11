@@ -16,3 +16,6 @@
 [submodule "LSST_France_Nov2021/reveal.js"]
 	path = LSST_France_Nov2021/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "WL_beyond_2pt_conf/reveal.js"]
+	path = WL_beyond_2pt_conf/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
