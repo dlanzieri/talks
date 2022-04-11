@@ -1,0 +1,419 @@
+avalable<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title> Cosmology with Weak Lensing: Beyond the Two-point Statistics talk</title>
+		<meta name="description" content="Presentation for the Cosmology with Weak Lensing: Beyond the Two-point Statistics">
+		<meta name="author" content="Denise Lanzieri">
+
+		<link rel="stylesheet" href="reveal.js/dist/reset.css">
+		<link rel="stylesheet" href="reveal.js/dist/reveal.css">
+		<link rel="stylesheet" href="reveal.js/dist/theme/darkenergy.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="reveal.js/plugin/highlight/monokai.css" id="highlight-theme">
+		<!-- <link rel="stylesheet" href="plugin/highlight/monokai.css" id="highlight-theme"> -->
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+				<!-- <div class="reveal">
+		<div class="slides"> -->
+			<section data-background-image="assets/lsst_stills_0009_crop.jpg">
+				<div class="container">
+					<div class="title" style=" position: relative;
+	  bottom: -99px; border-radius: 20px; background-color:rgba(0, 0, 0, 0.2);">
+						<h2> Forecasting the power of Higher Order Weak Lensing Statistics with automatically differentiable simulations </h2>
+					</div>
+				</div>
+
+				<div style="border-radius: 20px; position: relative;
+  bottom: -320px; background-color:rgba(0, 0, 0, 0);">
+		<div style="position:relative; top:-100px; right:500px;"> <h2>Denise Lanzieri </h2>
+		<br>
+	</div>
+<div style="position:relative; top:-140px; right:300px;">  <h3>	Supervisors: François Lanusse, Jean-Luc Starck  </h3>	</div>
+					<div class="container" style="position:relative; top:-140px;">
+						<div class="col">
+								<br>
+								<img src="assets/CosmoStatDarkBK.png" class="plain" style="position:relative; top:40px;"></img>
+								<br>
+						</div>
+						<div class="col">
+							<br>
+							<br>
+							<br>
+							<br>
+							<img src="assets/logo_UParis_id.png" class="plain" height="140";></img>
+						</div>
+						<div class="col">
+							<br>
+							<br>
+							<br>
+							<br>
+							<img src="assets/CEA_logo_nouveau.svg.png" class="plain" height="120";></img>
+						</div>
+						<div class="col">
+							<br>
+							<br>
+							<br>
+							<img src="assets/aim.png" class="plain" height="140" style="position: relative;
+			  bottom: -20px; right:-10px" ></img>
+						</div>
+				</div>
+					<div> slides at <a href="https://dlanzieri.github.io/talks/LSST_France_Nov2021/">github.com/dlanzieri/talks/LSST_France_Nov2021</a> </div>
+				</div>
+			</section>
+
+			<section class="inverted" data-background="#000">
+			<h2 class='slide-title'> Traditional cosmological inference</h2>
+ <h3>  How do we make the most of the available data?</h3>
+			<div class='container'>
+
+				<div class='col'>
+
+					<div style="position:relative; width:480px; height:30px; margin:0 auto;">
+					<div class="fragment current-visible" style="position:absolute;top:0;" data-fragment-index="1">HSC cosmic shear power spectrum</div>
+						<div class="fragment" style="position:absolute;top:0;" data-fragment-index="2">HSC Y1 constraints on $(S_8, \Omega_m)$</div>
+					</div>
+					<div style="position:relative; width:480px; height:300px; margin:0 auto;">
+						<div class="fragment current-visible" style="position:absolute;top:0;left:0;" data-fragment-index="0">
+							<img class="plain" data-src="assets/alonso_g1.png" />
+							<img class="plain" data-src="assets/alonso_g2.png" />
+						</div>
+						<img class="fragment current-visible plain" data-src="assets/hsc_correlation_function.png" style="position:absolute;top:0;left:0;" data-fragment-index="1" />
+						<img class="fragment  plain" data-src="assets/hsc_constraints.png" style="position:absolute;top:0;left:0;" data-fragment-index="2" />
+					</div>
+
+					<div class="fragment" data-fragment-index="2" style="float:right; font-size: 20px">(Hikage,..., <b>Lanusse</b>, et al. 2018)</div>
+				</div>
+
+				<div class='col'>
+						<!-- <li class="fragment" data-fragment-index="0"> Standard Weak lensing analysis: </li> -->
+						<ul>
+							<li class="fragment" data-fragment-index="0"> Data reduction </li>
+							<br>
+							<li class="fragment" data-fragment-index="1"> Compute <b class="alert">summary statistics</b> based on 2pt functions, <br>e.g. the <b>power spectrum</b> </li>
+							<br>
+							<li class="fragment" data-fragment-index="2"> Run an MCMC to recover a posterior on model parameters, using an <b class="alert">analytic likelihood</b>
+								$$ p(\theta | x ) \propto \underbrace{p(x | \theta)}_{\mathrm{likelihood}} \ \underbrace{p(\theta)}_{\mathrm{prior}}$$
+							</li>
+						</ul>
+				</div>
+			</div>
+
+			<div class="block fragment">
+				<div class="block-title">
+					Main limitation:
+				</div>
+				<div class="block-content">
+					<ul>
+						<li>The two-point statistics do not fully capture the <b>non-Gaussian</b> information encoded in the <b>peaks </b> of the matter distribution
+						</li>
+						<br>
+						<li> The need for an explicit likelihood
+						</li>
+				</ul>
+					<!-- <div class="fragment"> $\Longrightarrow$ We are dismissing most of the information! </div> -->
+				</div>
+			</div>
+		</section>
+
+
+<section class="inverted" data-background="#000">
+	<h2 class='slide-title'> Need for automatic differentiation
+	</h2>
+		<div style="position: relative; left: -37px; ">
+		Some approaches proposed to access the non-Gaussian information: <b class:"alert">lensing peak count statistics, lensing probability distribution function, machine learning approaches, forward modelling approaches, BORG, etc</b>
+	  </div>
+		<div class='container'>
+			<div class='col'>
+				<div class="block" >
+					<div class="block-title">
+					Main limitation: Lack of analytical models
+					</div>
+					<div class="block-content">
+						<ul>
+							<br>
+							<li>Simulation-based approaches
+							</li>
+							<br>
+							<li >Gradient-based approaches
+							</li>
+							<ul>
+							<br>
+								<li class="fragment" data-fragment-index="0">  Costly as they require a large number of simulations
+								</li>
+								<br>
+								<li class="fragment" data-fragment-index="1">  Intractable for more than 3 or 4 cosmological parameters.
+								</li>
+							</ul>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class='col' style="position: relative; left: 30px; bottom:-90px" >
+				<div  class="fragment" data-fragment-index="0" >
+					\[\begin{equation}
+							\left.\frac{df(x)}{dx}\right|_{x_1} \approx \frac{f(x_1+h)-f(x_1)}{h}
+							\end{equation} \]
+						<img  data-src="assets/finite_.png"  />
+				</div>
+			</div>
+		</div>
+</section>
+
+
+<section  class="inverted" data-background="#000">
+	<h3 class='slide-title'> How do we simulate the Universe in a fast and differentiable way?
+	</h3>
+		<div class='container'>
+			<div class='col'>
+				<div class="block-title"  style="position:relative; left:-50px; top:-45px; ">	DLL (Differentiable lensing light cone)
+				</div>
+					<ul>
+						<li class="fragment" data-fragment-index="0"> <b class="alert"> FLowPM N-body </b> simulation (particle-mesh solver)
+						</li>
+						<br>
+						<li class="fragment" data-fragment-index="1">  Fills the gap in the accuracy-speed space
+						</li>
+						<br>
+						<li class="fragment" data-fragment-index="2">  Implements raytracing by Born approximation
+						</li>
+						<br>
+						<li class="fragment" data-fragment-index="3">  Provides derivatives with respect to cosmological and nuisance parameters through automatic differentiation
+						</li>
+					</ul>
+					<div class="fragment" data-fragment-index="4" style="position:relative; width:60px; height:60px; left:50px; top:10px;">
+						<img  style="position:relative; left:90px;" data-src="assets/github.png"  />
+						<div  style="position:relative; left:-60px;"> <a href="https://github.com/DifferentiableUniverseInitiative/flowpm/">github.com/DifferentiableUniverseInitiative/flowpm/</a>
+						</div>
+					</div>
+			</div>
+			<span style="position:relative; top:-215px;  ">&#10233;</span>
+			<span class="fragment  plain" data-fragment-index="3" style="position:relative; top:82px;  ">&#10233;</span>
+			<div class='col'>
+  			<div style="position:relative; left:50px; top:55px;  ">   TensorFlow-based weak gravitational lensing package
+				</div>
+				<div style="position:relative; width:550px; height:550px; margin:0 auto;">
+					<img class="fragment current-visible plain" data-src="assets/evolvingLSS.jpg" style="position:absolute;top:70;left:30;" data-fragment-index="0" />
+					<img class="fragment current-visible plain" data-src="assets/pkhalofit_comp_.png" style="position:absolute;top:70;left:30;" data-fragment-index="1" />
+					<!-- <img class="fragment current-visible plain" data-src="assets/kmap_with.png" style="position:absolute;top:70;left:30;" data-fragment-index="2" /> -->
+					<div class="fragment current-visible plain"  style="position:absolute;top:200;left:-50; width:10px;" data-fragment-index="2">
+						\[\begin{equation}
+							\kappa_{born}(\boldsymbol{\theta},\chi_s)= \frac{3H_0^2 \Omega_m}{2c^2}
+							\int_0^{\chi_s}
+							d\chi \frac{\chi}{a(\chi)}
+							 W(\chi,\chi_s)
+							\delta(\chi \boldsymbol{\theta},\chi).
+						\end{equation} \]
+					</div>
+					<div class="fragment  plain"  style="position:absolute;top:100;left:150;" data-fragment-index="3">
+						 $y = a * x + b$
+						 <br>
+						 <span>&#8595;</span>
+						 	$$ y = u + b \qquad u = a * x $$
+							<span>&#8595;</span>
+							$$\frac{\partial y}{\partial x} = \frac{\partial y}{\partial u} \frac{ \partial u}{\partial x} = 1 \times a = a$$
+					</div>
+					<img class="fragment  plain" data-src="assets/TF_FullColor_Horizontal.png" style="position:absolute;top:350;left:30;" data-fragment-index="3" />
+				</div>
+			</div>
+		</div>
+</section>
+
+
+<section class="inverted" data-background="#000">
+	<h2 class='slide-title'>  A first application: Fisher forecasts
+	</h2>
+		<div class='col'>
+			<li style="position:absolute;top:85;left:20;"> Use Fisher matrix to investigate the constraining power of different statistics
+			</li>
+			<div style="position:relative; width:900px; height:900px; margin:0 auto;">
+				<img  style="position:absolute;top:55;left:80;"; data-src="assets/mom_.png" />
+			</div>
+		</div>
+</section>
+
+<section class="inverted" data-background="#000">
+	<h3 class="slide-title"> Conclusion
+	</h3>
+	<div class="block " style="border-radius: 20px; position: relative;bottom: -80px; background-color:rgba(0, 0, 0, 0.4);">
+		<div class="block-title"> What can be gained by simulating the Universe in a fast and differentiable way?
+		</div>
+		<div class="block-content">
+			<br>
+			<ul>
+				<li class="fragment"> Investigate the constraining power of various map-based higher order weak lensing statistics and control the systematics
+				</li>
+				<br>
+				<br>
+				<li class="fragment">Differentiable physical models for fast inference ( made efficient by very fast lensing lightcone and having access to gradient)
+				</li>
+				<br>
+				<br>
+				<li class="fragment">Even analytic cosmological computations can benefit from differentiability.
+				</li>
+				<br>
+			</ul>
+		</div>
+	</div>
+	<br>
+	<br>
+	<p class="fragment"; style="position: relative;bottom: -80px"; >Thank you !
+	</p>
+	<br>
+	<br>
+	<br>
+</section>
+
+</div>
+</div>
+
+
+					<style>
+						/* .reveal .slides {
+							border: 5px solid red;
+							background-color: #333333;
+							min-height: 100%;
+							 width: 128mm;
+							height: 96mm;
+						} */
+
+
+
+						.reveal .block {
+							background-color: #191919;
+							margin-left: 20px;
+							margin-right: 20px;
+							text-align: left;
+							padding-bottom: 0.1em;
+						}
+
+						.reveal .block-title {
+							background-color: #333333;
+							padding: 8px 35px 8px 14px;
+							color: #FFAA7F;
+							font-weight: bold;
+						}
+
+						.reveal .block-content {
+							padding: 8px 35px 8px 14px;
+						}
+
+						.reveal .slide-title {
+							border-left: 5px solid white;
+							text-align: left;
+							margin-left: 20px;
+							padding-left: 20px;
+						}
+
+						.reveal .alert {
+							color: #FFAA7F;
+							font-weight: bold;
+						}
+
+						.reveal .inverted {
+							filter: invert(100%);
+						}
+
+						/*
+					/* .reveal .alert {
+					padding:8px 35px 8px 14px; margin-bottom:18px;
+					text-shadow:0 1px 0 rgba(255,255,255,1);
+					border:5px solid #FFAA7F;
+					-webkit-border-radius: 14px; -moz-border-radius: 14px;
+					border-radius:14px
+					background-position: 10px 10px;
+					background-repeat: no-repeat;
+					background-size: 38px;
+					padding-left: 30px; /* 55px; if icon
+					}
+					.reveal .alert-block {padding-top:14px; padding-bottom:14px}
+					.reveal .alert-block > p, .alert-block > ul {margin-bottom:1em}
+					/*.reveal .alert li {margin-top: 1em}
+					.reveal .alert-block p+p {margin-top:5px} */
+					</style>
+
+
+					<script src="reveal.js/dist/reveal.js"></script>
+					<script src="reveal.js/plugin/notes/notes.js"></script>
+					<script src="reveal.js/plugin/markdown/markdown.js"></script>
+					<script src="reveal.js/plugin/highlight/highlight.js"></script>
+					<script src="reveal.js/plugin/math/math.js"></script>
+					<script>
+						// More info about initialization & config:
+						// - https://revealjs.com/initialization/
+						// - https://revealjs.com/config/
+						Reveal.initialize({
+							controls: false,
+
+							//center: false,
+							hash: true,
+
+							// Visibility rule for backwards navigation arrows; "faded", "hidden"
+							// or "visible"
+							controlsBackArrows: 'hidden',
+
+							// Display a presentation progress bar
+							progress: true,
+
+							// Display the page number of the current slide
+							slideNumber: true,
+
+							transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+							// The "normal" size of the presentation, aspect ratio will be preserved
+							// when the presentation is scaled to fit different resolutions. Can be
+							// specified using percentage units.
+							width: 1280,
+							height: 720,
+
+							// Factor of the display size that should remain empty around the content
+							margin: 0.1,
+
+							// Bounds for smallest/largest possible scale to apply to content
+							minScale: 0.2,
+							maxScale: 1.5,
+
+
+							// Learn about plugins: https://revealjs.com/plugins/
+							plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath],
+
+							dependencies: [{
+									src: 'reveal.js/plugin/markdown/marked.js'
+								},
+								{
+									src: 'reveal.js/plugin/markdown/markdown.js'
+								},
+								{
+									src: 'reveal.js/plugin/notes/notes.js',
+									async: true
+								},
+								{
+									src: 'reveal.js/plugin/math/math.js',
+									async: true
+								},
+								{
+									src: 'reveal.js/plugin/reveal.js-d3/reveald3.js'
+								},
+								{
+									src: 'reveal.js/plugin/reveal.js-plugins/chart/Chart.min.js'
+								},
+								{
+									src: 'reveal.js/plugin/reveal.js-plugins/chart/csv2chart.js'
+								},
+								{
+									src: 'reveal.js/plugin/highlight/highlight.js',
+									async: true
+								},
+							]
+
+						});
+					</script>
+				</body>
+
+				</html>
