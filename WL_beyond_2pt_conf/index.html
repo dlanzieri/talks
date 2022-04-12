@@ -133,7 +133,7 @@ avalable<!doctype html>
 			<div class='col'>
 				<div class="block" >
 					<div class="block-title">
-					Main limitation: Lack of analytical models
+					Main limitation: 
 					</div>
 					<div class="block-content">
 						<ul>
@@ -172,37 +172,37 @@ avalable<!doctype html>
 	</h3>
 		<div class='container'>
 			<div class='col'>
-				<div class="block-title"  style="position:relative; left:-50px; top:-45px; ">	DLL (Differentiable lensing light cone)
+				<div class="block-title"  style="position:relative; left:-50px; top:-70px; ">	DLL (Differentiable lensing light cone)
 				</div>
 					<ul>
 						<li class="fragment" data-fragment-index="0"> <b class="alert"> FLowPM N-body </b> simulation (particle-mesh solver)
 						</li>
 						<br>
-						<li class="fragment" data-fragment-index="1">  Fills the gap in the accuracy-speed space
+						<!-- <li class="fragment" data-fragment-index="1">  Fills the gap in the accuracy-speed space
+						</li>
+						<br> -->
+						<li class="fragment" data-fragment-index="1">  Implements raytracing by Born approximation
 						</li>
 						<br>
-						<li class="fragment" data-fragment-index="2">  Implements raytracing by Born approximation
-						</li>
-						<br>
-						<li class="fragment" data-fragment-index="3">  Provides derivatives with respect to cosmological and nuisance parameters through automatic differentiation
+						<li class="fragment" data-fragment-index="2">  Provides derivatives with respect to cosmological and nuisance parameters through automatic differentiation
 						</li>
 					</ul>
-					<div class="fragment" data-fragment-index="4" style="position:relative; width:60px; height:60px; left:50px; top:10px;">
+					<div class="fragment" data-fragment-index="3" style="position:relative; width:60px; height:60px; left:50px; top:10px;">
 						<img  style="position:relative; left:90px;" data-src="assets/github.png"  />
 						<div  style="position:relative; left:-60px;"> <a href="https://github.com/DifferentiableUniverseInitiative/flowpm/">github.com/DifferentiableUniverseInitiative/flowpm/</a>
 						</div>
 					</div>
 			</div>
 			<span style="position:relative; top:-215px;  ">&#10233;</span>
-			<span class="fragment  plain" data-fragment-index="3" style="position:relative; top:82px;  ">&#10233;</span>
+			<span class="fragment  plain" data-fragment-index="2" style="position:relative; top:82px;  ">&#10233;</span>
 			<div class='col'>
   			<div style="position:relative; left:50px; top:55px;  ">   TensorFlow-based weak gravitational lensing package
 				</div>
 				<div style="position:relative; width:550px; height:550px; margin:0 auto;">
 					<img class="fragment current-visible plain" data-src="assets/evolvingLSS.jpg" style="position:absolute;top:70;left:30;" data-fragment-index="0" />
-					<img class="fragment current-visible plain" data-src="assets/pkhalofit_comp_.png" style="position:absolute;top:70;left:30;" data-fragment-index="1" />
+					<!-- <img class="fragment current-visible plain" data-src="assets/pkhalofit_comp_.png" style="position:absolute;top:70;left:30;" data-fragment-index="1" /> -->
 					<!-- <img class="fragment current-visible plain" data-src="assets/kmap_with.png" style="position:absolute;top:70;left:30;" data-fragment-index="2" /> -->
-					<div class="fragment current-visible plain"  style="position:absolute;top:200;left:-50; width:10px;" data-fragment-index="2">
+					<div class="fragment current-visible plain"  style="position:absolute;top:150;left:-50; width:10px;" data-fragment-index="1">
 						\[\begin{equation}
 							\kappa_{born}(\boldsymbol{\theta},\chi_s)= \frac{3H_0^2 \Omega_m}{2c^2}
 							\int_0^{\chi_s}
@@ -211,7 +211,7 @@ avalable<!doctype html>
 							\delta(\chi \boldsymbol{\theta},\chi).
 						\end{equation} \]
 					</div>
-					<div class="fragment  plain"  style="position:absolute;top:100;left:150;" data-fragment-index="3">
+					<div class="fragment  plain"  style="position:absolute;top:100;left:150;" data-fragment-index="2">
 						 $y = a * x + b$
 						 <br>
 						 <span>&#8595;</span>
@@ -219,24 +219,53 @@ avalable<!doctype html>
 							<span>&#8595;</span>
 							$$\frac{\partial y}{\partial x} = \frac{\partial y}{\partial u} \frac{ \partial u}{\partial x} = 1 \times a = a$$
 					</div>
-					<img class="fragment  plain" data-src="assets/TF_FullColor_Horizontal.png" style="position:absolute;top:350;left:30;" data-fragment-index="3" />
+					<img class="fragment  plain" data-src="assets/TF_FullColor_Horizontal.png" style="position:absolute;top:350;left:30;" data-fragment-index="2" />
 				</div>
 			</div>
 		</div>
 </section>
 
+<section  class="inverted" data-background="#000">
+<h2 class='slide-title'>	Fill the gap in the accuracy-
+speed space </h2>
+	<div style="position:relative; width:600px; height:600px; margin:0 auto;">
+
+			<div class='col'>
+				<img  style="position:absolute;top:90;left:-380; width:580px; height:340px"; data-src="assets/clsktnghalo_comp_.png" />
+				<!-- <div style="float:right; font-size: 15px; position:absolute;top:450;left:-380;"> Angular power spectra from our DLL maps with and without correction compared to the $\kappa$TNG predictions.
+				</div> -->
+				</div>
+			<div class='col'>
+				<img  style="position:absolute;top:55;left:380;"; data-src="assets/peakcountsktngsn_.png" /> </li>
+				<!-- <div style="font-size:15px;;"> Peak counts from our DLL map at source redshift $z_$=1.034 compared to the  $\kappa$TNG at the same redshift.
+				</div> -->
+			</div>
+	</div>
+	<!-- <div style="position:relative; top:-75; left:-200">
+		<ul>	<h3>Future work:<h3>
+			<li> Baryonic impact on 2-point and higher order statistics
+			</li>
+			<br>
+			<li> Fast and differentiable method to include baryons (BCM? LDL?)
+			</li>
+	  </ul>
+	</div> -->
+</section>
 
 <section class="inverted" data-background="#000">
 	<h2 class='slide-title'>  A first application: Fisher forecasts
 	</h2>
 		<div class='col'>
-			<li style="position:absolute;top:85;left:20;"> Use Fisher matrix to investigate the constraining power of different statistics
+			<li style="position:absolute;top:95;left:20;"> Use Fisher matrix to investigate the constraining power of different statistics
 			</li>
-			<div style="position:relative; width:900px; height:900px; margin:0 auto;">
-				<img  style="position:absolute;top:55;left:80;"; data-src="assets/mom_.png" />
+			<div style="position:relative; width:1200px; height:1200px; margin:0 auto;">
+				<img  style="position:absolute;top:25;left:80;"; data-src="assets/mom_.png" />
 			</div>
 		</div>
 </section>
+
+
+
 
 <section class="inverted" data-background="#000">
 	<h3 class="slide-title"> Conclusion
