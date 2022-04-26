@@ -19,3 +19,6 @@
 [submodule "WL_beyond_2pt_conf/reveal.js"]
 	path = WL_beyond_2pt_conf/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "Euclid_Oslo_2022/reveal.js"]
+	path = Euclid_Oslo_2022/reveal.js
+	url = https://github.com/EiffL/reveal.js.git

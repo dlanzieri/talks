@@ -1,0 +1,469 @@
+avalable<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title> Lagrangian Neural ODEs for Fast N-body Simulations </title>
+		<meta name="description" content="Presentation for the Euclid consortium meeting 2022">
+		<meta name="author" content="Denise Lanzieri">
+		<link rel="stylesheet" href="reveal.js/dist/reset.css">
+		<link rel="stylesheet" href="reveal.js/dist/reveal.css">
+		<link rel="stylesheet" href="reveal.js/dist/theme/darkenergy.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="reveal.js/plugin/highlight/monokai.css" id="highlight-theme">
+		<!-- <link rel="stylesheet" href="plugin/highlight/monokai.css" id="highlight-theme"> -->
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+				<!-- <div class="reveal">
+		<div class="slides"> -->
+			<section data-background-image="assets/lsst_stills_0009_crop.jpg">
+				<div class="container">
+					<div class="title" style=" position: relative;
+	  bottom: -99px; border-radius: 20px; background-color:rgba(0, 0, 0, 0.2);">
+						<h2> Lagrangian Neural ODEs for Fast N-body Simulations </h2>
+					</div>
+				</div>
+
+				<div style="border-radius: 20px; position: relative;
+  bottom: -320px; background-color:rgba(0, 0, 0, 0);">
+		<div style="position:relative; top:-100px; right:500px;"> <h2>Denise Lanzieri </h2>
+		<br>
+	</div>
+<div style="position:relative; top:-140px; right:300px;">  <h3>	Supervisors: François Lanusse, Jean-Luc Starck  </h3>	</div>
+					<div class="container" style="position:relative; top:-140px;">
+						<div class="col">
+								<br>
+								<img src="assets/CosmoStatDarkBK.png" class="plain" style="position:relative; top:40px;"></img>
+								<br>
+						</div>
+						<div class="col">
+							<br>
+							<br>
+							<br>
+							<br>
+							<img src="assets/logo_UParis_id.png" class="plain" height="140";></img>
+						</div>
+						<div class="col">
+							<br>
+							<br>
+							<br>
+							<br>
+							<img src="assets/CEA_logo_nouveau.svg.png" class="plain" height="120";></img>
+						</div>
+						<div class="col">
+							<br>
+							<br>
+							<br>
+							<img src="assets/aim.png" class="plain" height="140" style="position: relative;
+			  bottom: -20px; right:-10px" ></img>
+						</div>
+				</div>
+					<div> slides at <a href="https://dlanzieri.github.io/talks/LSST_France_Nov2021/">github.com/dlanzieri/talks/LSST_France_Nov2021</a> </div>
+				</div>
+			</section>
+
+
+<!-- <section class="inverted"  data-background="#000">
+		<h3 class='slide-title'> Automatic Differentiation and Gradients in TensorFlow</h3>
+		<br>
+		<br>
+			<ul>
+				<li class="fragment" data-fragment-index="0"> <b>Automatic differentiation</b> allows you to compute analytic derivatives of arbitraty expressions:<br>
+					If I form the expression $y = a * x + b$, it is separated in fundamental ops:
+					$$ y = u + b \qquad u = a * x $$
+					then gradients can be obtained by the chain rule:
+					$$\frac{\partial y}{\partial x} = \frac{\partial y}{\partial u} \frac{ \partial u}{\partial x} = 1 \times a = a$$
+				</li>
+				<br>
+				<li class="fragment" data-fragment-index="1"> To differentiate automatically, TensorFlow remember what operations
+					happen in what order during the forward pass and traverses this list of operations in reverse order to compute gradients.
+				</li>
+				<br>
+			</ul>
+		</br>
+		</br>
+		<div class='container'>
+			<ul class="fragment" data-fragment-index="3">
+				<b class="alert">	Advantages </b> :
+				<br>
+				<li>Derivative as functions</li>
+				<br>
+				<li>No numerical approximation</li>
+				<br>
+				<li>High speed</li>
+				<br>
+			</ul>
+			<div class="col">
+				<img class="fragment" data-fragment-index="3" data-src="assets/TF_FullColor_Horizontal.png" class='plain' style="height: 70px;" />
+			</div>
+		</div>
+	</section> -->
+
+<section class="inverted"  data-background="#000">
+		<h3 class='slide-title'>Cosmological N-Body Simulations</h3>
+			<img data-src="assets/evolvingLSS.jpg" class="plain" /><br>
+</section>
+
+
+
+<section class="inverted"  data-background="#000">
+	<h3 class='slide-title'>The Particle-Mesh scheme for N-body simulations</h3>
+		<b>The idea</b>: approximate gravitational forces by estimating densities on a grid.
+		<div class='container'>
+			<div class='col'>
+				<ul>
+					<li>The numerical scheme:
+					<br>
+					<br>
+					<ul>
+						<li class="fragment" data-fragment-index="1"> Estimate the density of particles on a mesh<br>
+							$\Longrightarrow$ compute gravitational forces by FFT
+						</li>
+						<br>
+						<li class="fragment" data-fragment-index="2"> Interpolate forces at particle positions
+						</li>
+						<br>
+						<li class="fragment" data-fragment-index="3"> Update particle velocity and positions, and iterate
+						</li>
+					</ul>
+					</li>
+					<br>
+					<li class='fragment'> Fast and simple, at the cost of approximating short range interactions.
+					</li>
+			</ul>
+		</div>
+		<div class='col'>
+			<div style="position:relative; width:550px; height:550px; margin:0 auto;">
+				<img class="fragment current-visible plain" data-src="assets/particle_positions_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="0" />
+				<img class="fragment current-visible plain" data-src="assets/particle_density_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="1" />
+				<img class="fragment current-visible plain" data-src="assets/particle_positions_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="2" />
+				<img class="fragment  plain" data-src="assets/particle_positions_1.png" style="position:absolute;top:0;left:0;" data-fragment-index="3" />
+			</div>
+		</div>
+	</div>
+	<div class="fragment"> $\Longrightarrow$ Only a series of FFTs and interpolations.</div>
+</section>
+
+
+
+<section class="inverted" data-background="#000">
+				<h3 class='slide-title'>Introducing FlowPM: Particle-Mesh Simulations in TensorFlow</h3>
+				<div class='container'>
+					<div class='col'>
+						<img data-src="assets/github.png" class="plain" style="height:70px" />
+						<div> <a href="https://github.com/DifferentiableUniverseInitiative/flowpm">https://github.com/DifferentiableUniverseInitiative/flowpm</a>
+							<a href="https://arxiv.org/pdf/2010.11847.pdf"> https://arxiv.org/pdf/2010.11847.pdf</a>
+						</div>
+						<pre class="python"><code data-trim data-noescape>
+										import tensorflow as tf
+										import flowpm
+										# Defines integration steps
+										stages = np.linspace(0.1, 1.0, 10, endpoint=True)
+
+										initial_conds = flowpm.linear_field(32,        # size of the cube
+										100,       # Physical size
+										ipklin,    # Initial powerspectrum
+										batch_size=16)
+
+										# Sample particles and displace them by LPT
+										state = flowpm.lpt_init(initial_conds, a0=0.1)
+
+										# Evolve particles down to z=0
+										final_state = flowpm.nbody(state, stages, 32)
+
+										# Retrieve final density field
+										final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
+										final_state[0])
+
+										with tf.Session() as sess:
+										sim = sess.run(final_field)
+									</code></pre>
+						<ul>
+							<li> Seamless interfacing with deep learning components
+							</li>
+						</ul>
+					</div>
+					<div class='col'>
+						<div class="fig-container" data-file="flowpm_16.html" data-style="height: 550px;"></div>
+						<img data-src="assets/TF_FullColor_Horizontal.png" class='plain' style="height: 70px;" />
+					</div>
+				</div>
+			</section>
+
+<section class="inverted" data-background="#000">
+	<h3 class='slide-title'>	Fill the gap in the accuracy-speed space </h3>
+		<div class='container'>
+			<div class='col'>
+				<ul>
+					Flow N-body PM simulation:
+					<br>
+					<br>
+						<ul>
+							<li>Fast (limited number of time steps while enforcing the correct linear
+								growth)
+							</li>
+							<br>
+							<li>Cannot give accurate halo matter profiles or matter power spectrum
+							</li>
+						</ul>
+						<br>
+ 					The correction idea :mimics the physics that is missing <br> $\Longrightarrow$ <b class="alert"> Halo virialization </b>
+				</ul>
+			</div>
+			<div class='col'>
+				<img data-src="assets/pgd_.png" class='plain' style="height: 300px; width:700px" />
+				<div style="float:right; font-size: 20px">(Biwei Dai et al. 2018)</div>
+			</div>
+</section>
+
+<section class="inverted" data-background="#000">
+	<h3 class='slide-title'>	Potential Gradient Descent (PGD) </h3>
+ 		<div class='container'>
+			<div class='col'>
+				<ul>
+					<li>Additional displacements to sharpen the halos
+					</li>
+					<br>
+					<li>The direction of the displacements points towards the halo center (local potential minimum).</li>
+					<br>
+					<li>The gravitational force:
+							\begin{equation}
+								\mathbf{F}=-\nabla\Phi
+							\end{equation}
+					</li>
+					<li> The PGD correction displacement:
+						\begin{equation}
+							\mathbf{S}=-\alpha\nabla \hat{O}_{h}\hat{O}_{l}\Phi
+						\end{equation}
+						High pass filter prevents the large scale growth, low pass filter reduces the numerical effect
+					</li>
+				</ul>
+			</div>
+			<div class='col'>
+ 				<img data-src="assets/pot_pgd_.png" class='plain' style="height: 500px; width:700px" />
+				<div style="float:right; font-size: 20px"><a href=" https://iopscience.iop.org/article/10.1088/1475-7516/2018/11/009/pdf?casa_token=3b8_RUCo4uAAAAAA:aqUgqZUFV1jao2LlJSqI25p2GEh-2KmGTS_ab4p1F9TSK5d0SytTPG6rN_YRhKYdnd9lBiX32A:">(Biwei Dai et al. 2018)</a></div>
+			</div>
+		</div>
+</section>
+
+<section  class="inverted" data-background="#000">
+<h3 class='slide-title'>	Fill the gap in the accuracy-
+speed space</h3>
+<li style="position:absolute;top:115;left:0;"> The PGD scheme <a href=" https://iopscience.iop.org/article/10.1088/1475-7516/2018/11/009/pdf?casa_token=3b8_RUCo4uAAAAAA:aqUgqZUFV1jao2LlJSqI25p2GEh-2KmGTS_ab4p1F9TSK5d0SytTPG6rN_YRhKYdnd9lBiX32A:">(Dai et al. 2018)</a>:
+</li>
+<div class='container'>
+<div class='col'>
+	<div  style="position:relative; width:600px; height:600px; margin:0 auto;">
+	<img  style="position:absolute;top:90;left:-340;"; data-src="assets/clsktnghalo_comp_.png" />
+<img  style="position:absolute;top:90;left:300;"; data-src="assets/peakcountsktngsn_.png" />
+</div>
+</div>
+</div>
+</section>
+
+<section class="inverted" data-background="#000">
+	<h3 class='slide-title'>	Fourier-space filter scheme </h3>
+ 		<div class='container'>
+			<div class='col'>
+				<ul>
+					<li>Correction kernel parameterised by a b-spline.
+					</li>
+					<br>
+					<li>The knots position and value of the spline predicted by a neural network as a function of scale factor.</li>
+					<br>
+					<li>Trained on the CAMELS IlustrisTNG-DM simulation using as a
+					 loss function the distance between particle positions and their velocity at each snaphost step.
+					</li>
+					<br>
+					<li> Directly applied to the gravitational potential
+					</li>
+				</ul>
+			</div>
+			<div class='col'>
+ 				<img data-src="assets/pkhalofit_comp_.png" class='plain' style="height: 500px; width:700px" />
+			</div>
+		</div>
+</section>
+
+
+<section class="inverted" data-background="#000">
+	<h3 class="slide-title"> Conclusion
+	</h3>
+	<div class="block " style="border-radius: 20px; position: relative;bottom: -80px; background-color:rgba(0, 0, 0, 0.4);">
+		<div class="block-title"> What can be gained by simulating the Universe in a fast and differentiable way?
+		</div>
+		<div class="block-content">
+			<br>
+			<ul>
+				<li class="fragment"> Investigate the constraining power of various map-based higher order weak lensing statistics and control the systematics
+				</li>
+				<br>
+				<br>
+				<li class="fragment">Differentiable physical models for fast inference ( made efficient by very fast lensing lightcone and having access to gradient)
+				</li>
+				<br>
+				<br>
+			</ul>
+		</div>
+	</div>
+	<br>
+	<br>
+	<p class="fragment"; style="position: relative;bottom: -80px"; >Thank you !
+	</p>
+	<br>
+	<br>
+	<br>
+</section>
+
+</div>
+</div>
+
+
+					<style>
+						/* .reveal .slides {
+							border: 5px solid red;
+							background-color: #333333;
+							min-height: 100%;
+							 width: 128mm;
+							height: 96mm;
+						} */
+
+
+
+						.reveal .block {
+							background-color: #191919;
+							margin-left: 20px;
+							margin-right: 20px;
+							text-align: left;
+							padding-bottom: 0.1em;
+						}
+
+						.reveal .block-title {
+							background-color: #333333;
+							padding: 8px 35px 8px 14px;
+							color: #FFAA7F;
+							font-weight: bold;
+						}
+
+						.reveal .block-content {
+							padding: 8px 35px 8px 14px;
+						}
+
+						.reveal .slide-title {
+							border-left: 5px solid white;
+							text-align: left;
+							margin-left: 20px;
+							padding-left: 20px;
+						}
+
+						.reveal .alert {
+							color: #FFAA7F;
+							font-weight: bold;
+						}
+
+						.reveal .inverted {
+							filter: invert(100%);
+						}
+
+						/*
+					/* .reveal .alert {
+					padding:8px 35px 8px 14px; margin-bottom:18px;
+					text-shadow:0 1px 0 rgba(255,255,255,1);
+					border:5px solid #FFAA7F;
+					-webkit-border-radius: 14px; -moz-border-radius: 14px;
+					border-radius:14px
+					background-position: 10px 10px;
+					background-repeat: no-repeat;
+					background-size: 38px;
+					padding-left: 30px; /* 55px; if icon
+					}
+					.reveal .alert-block {padding-top:14px; padding-bottom:14px}
+					.reveal .alert-block > p, .alert-block > ul {margin-bottom:1em}
+					/*.reveal .alert li {margin-top: 1em}
+					.reveal .alert-block p+p {margin-top:5px} */
+					</style>
+
+
+					<script src="reveal.js/dist/reveal.js"></script>
+					<script src="reveal.js/plugin/notes/notes.js"></script>
+					<script src="reveal.js/plugin/markdown/markdown.js"></script>
+					<script src="reveal.js/plugin/highlight/highlight.js"></script>
+					<script src="reveal.js/plugin/math/math.js"></script>
+					<script>
+						// More info about initialization & config:
+						// - https://revealjs.com/initialization/
+						// - https://revealjs.com/config/
+						Reveal.initialize({
+							controls: false,
+
+							//center: false,
+							hash: true,
+
+							// Visibility rule for backwards navigation arrows; "faded", "hidden"
+							// or "visible"
+							controlsBackArrows: 'hidden',
+
+							// Display a presentation progress bar
+							progress: true,
+
+							// Display the page number of the current slide
+							slideNumber: true,
+
+							transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+							// The "normal" size of the presentation, aspect ratio will be preserved
+							// when the presentation is scaled to fit different resolutions. Can be
+							// specified using percentage units.
+							width: 1280,
+							height: 720,
+
+							// Factor of the display size that should remain empty around the content
+							margin: 0.1,
+
+							// Bounds for smallest/largest possible scale to apply to content
+							minScale: 0.2,
+							maxScale: 1.5,
+
+
+							// Learn about plugins: https://revealjs.com/plugins/
+							plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath],
+
+							dependencies: [{
+									src: 'reveal.js/plugin/markdown/marked.js'
+								},
+								{
+									src: 'reveal.js/plugin/markdown/markdown.js'
+								},
+								{
+									src: 'reveal.js/plugin/notes/notes.js',
+									async: true
+								},
+								{
+									src: 'reveal.js/plugin/math/math.js',
+									async: true
+								},
+								{
+									src: 'reveal.js/plugin/reveal.js-d3/reveald3.js'
+								},
+								{
+									src: 'reveal.js/plugin/reveal.js-plugins/chart/Chart.min.js'
+								},
+								{
+									src: 'reveal.js/plugin/reveal.js-plugins/chart/csv2chart.js'
+								},
+								{
+									src: 'reveal.js/plugin/highlight/highlight.js',
+									async: true
+								},
+							]
+
+						});
+					</script>
+				</body>
+
+				</html>
