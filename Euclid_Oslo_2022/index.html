@@ -1,4 +1,4 @@
-avalable<!doctype html>
+<!doctype html>
 <html>
 	<head>
 		<meta charset="utf-8">
@@ -200,7 +200,7 @@ avalable<!doctype html>
 		<div class='container'>
 			<div class='col'>
 				<ul>
-					Flow N-body PM simulation:
+					N-body PM simulation:
 					<br>
 					<br>
 						<ul>
@@ -216,9 +216,262 @@ avalable<!doctype html>
 				</ul>
 			</div>
 			<div class='col'>
-				<img data-src="assets/pgd_.png" class='plain' style="height: 300px; width:700px" />
-				<div style="float:right; font-size: 20px">(Biwei Dai et al. 2018)</div>
+				<img data-src="assets/plot1_.png" class='plain' style="height: 400px; width:700px" />
 			</div>
+</section>
+<!--
+
+<section class="inverted" data-background="#000">
+	<h3 class='slide-title'>	Fourier-space filter scheme </h3>
+ 		<div class='container'>
+			<div class='col'>
+				<ul>
+					<li>Correction kernel parameterised by a b-spline.
+					</li>
+					<br>
+					<li>The knots position and value of the spline predicted by a neural network as a function of scale factor.</li>
+					<br>
+					<li>Trained on the CAMELS IlustrisTNG-DM simulation using as a
+					 loss function the distance between particle positions and their velocity at each snaphost step.
+					</li>
+					<br>
+					<li> Directly applied to the gravitational potential
+					</li>
+				</ul>
+			</div>
+			<div class='col'>
+ 				<img data-src="assets/pkhalofit_comp_.png" class='plain' style="height: 500px; width:700px" />
+			</div>
+		</div>
+</section> -->
+
+<!--
+<section  class="inverted" data-background="#000">
+<h3 class='slide-title'>	Fill the gap in the accuracy-
+speed space</h3>
+<!-- <li style="position:absolute;top:115;left:0;"> The PGD scheme <a href=" https://iopscience.iop.org/article/10.1088/1475-7516/2018/11/009/pdf?casa_token=3b8_RUCo4uAAAAAA:aqUgqZUFV1jao2LlJSqI25p2GEh-2KmGTS_ab4p1F9TSK5d0SytTPG6rN_YRhKYdnd9lBiX32A:">(Dai et al. 2018)</a>:
+</li> -->
+<!-- <div class='container'>
+<div class='col'>
+	<div  style="position:relative; width:600px; height:600px; margin:0 auto;">
+	<img  style="position:absolute;top:90;left:-340;"; data-src="assets/clsktnghalo3arc_comp_.png" />
+<img  style="position:absolute;top:90;left:300;"; data-src="assets/clsktnghalo3arc__pgd_comp_.png" />
+</div>
+</div>
+</div>
+</section> -->
+
+<section>
+<section class="inverted" data-background="#000">
+	<h3 class="slide-title">Solving the N-body differential equations</h3>
+
+	<div class="container">
+		<div class="col">
+
+			<ul>
+				<li> We are following the technique from Neural ODEs to <b>backpropagate
+					through an ODE solver</b>.<br>
+					<a href="https://proceedings.neurips.cc/paper/2018/file/69386f6bb1dfed68692a24c8686939b9-Paper.pdf">Neural Ordinary Differential Equations, Chen et al. 2018</a>
+					<img data-src="assets/chen2018_.png"/>
+				</li>
+
+				<li> Benefits:
+						<ul>
+							<li>Tune the accuracy-speed by defining a tolerance of the ODE Solver</li>
+
+							<li><b>Reduced memory usage</b>: no need to store intermediate steps for backpropagation.</li>
+						</ul>
+				</li>
+			</ul>
+
+		</div>
+
+		<div class="col">
+
+			<pre class="python"><code data-trim data-noescape>
+				def neural_nbody_ode(a, state):
+			     pos = state[0]; vel = state[1]
+
+					 #### Compute gravitational forces
+			     delta = flowpm.cic_paint(tf.zeros([batch_size, nc, nc, nc]), pos)
+			     delta_k = r2c3d(delta)
+			     pot_k = delta_k * laplace_kernel(kvec) * longrange_kernel(kvec)
+			     forces = tf.stack([ flowpm.cic_readout(
+			             c2r3d(pot_k *gradient_kernel(kvec, i)), pos)
+			         for i in range(3) ], axis=-1)
+			     forces = forces * 1.5 * cosmo.Omega_m
+					 #######################################
+
+			     #Computes the update of position (drift)
+			     dpos = 1. / (a**3 * flowpm.tfbackground.E(cosmo, a)) * vel
+
+			     #Computes the update of velocity (kick)
+			     dvel = 1. / (a**2 * flowpm.tfbackground.E(cosmo, a)) * forces
+
+			   return tf.stack([dpos, dvel], axis=0)
+
+    states = odesolver.solve(neural_nbody_ode, a_i, y0, solution_times)
+
+						</code></pre>
+
+		</div>
+	</div>
+<br>
+	<div class="fragment">$\Longrightarrow$ We can use this parametrisation to complement the physical ODE with neural networks.</div>
+
+</section>
+
+<section class="inverted" data-background="#000">
+	<h3 class="slide-title" > Comparison of Dormand-Prince Solver vs FastPM</h3>
+	<img style="width:800px; height:550px;" data-src="assets/fastpm_vs_ode_.png"/>
+</section>
+
+</section>
+
+<section >
+<section class="inverted" data-background="#000">
+	<h3 class="slide-title"> Hybrid Physical-Neural ODE</h3>
+		<div class="container">
+			<div class="col">
+
+				<ul>
+
+					<li>Neural network parametrising a correction to the gravitational
+						potential as a <b>Fourier-based isotropic filter</b>.</li>
+
+					<br>
+
+					<li>Model is fitted as to minimize the following loss function over position x and power spectrum:
+
+						$$\mathcal{L} =  \sum_{i}^{snapshots} || \mathbf{x}^{ref}_i - \mathbf{x}_i ||_2^2  +  || \frac{p_i(k)}{p_i^{ref}(k)} -1 ||_2^2 $$
+					</li>
+
+
+				</ul>
+
+			</div>
+
+			<div class="col">
+
+				<div  class="r-stack">
+
+				<pre class="python"><code data-trim data-noescape>
+					def neural_nbody_ode(a, state):
+				     pos = state[0]; vel = state[1]
+
+					 	  #### Compute gravitational forces
+				     delta = flowpm.cic_paint(tf.zeros([batch_size, nc, nc, nc]), pos)
+				     delta_k = r2c3d(delta)
+				     pot_k = delta_k * laplace_kernel(kvec) * longrange_kernel(kvec)
+
+						  # Neural potential correction
+						  pot_k = pot_k * (1 + apply_model(kvec, a))
+						  ######################################
+
+				     forces = tf.stack([ flowpm.cic_readout(
+				             c2r3d(pot_k *gradient_kernel(kvec, i)), pos)
+				         for i in range(3) ], axis=-1)
+				     forces = forces * 1.5 * cosmo.Omega_m
+				  		#######################################
+
+				     #Computes the update of position (drift)
+				     dpos = 1. / (a**3 * flowpm.tfbackground.E(cosmo, a)) * vel
+
+				     #Computes the update of velocity (kick)
+				     dvel = 1. / (a**2 * flowpm.tfbackground.E(cosmo, a)) * forces
+
+				   return tf.stack([dpos, dvel], axis=0)
+							</code></pre>
+
+						<div class="fragment">
+							<img data-src="assets/fitted_filter_.png">
+						</div>
+
+
+					</div>
+
+			</div>
+		</div>
+</section>
+
+<section class="inverted" data-background="#000">
+
+<div class="container">
+
+	<div class="col">
+		<img data-src="assets/pk_residuals_notlearned_.png"/>
+		<br>
+		Without neural correction
+	</div>
+
+	<div class="col">
+		<img data-src="assets/pk_residuals_learned_.png"/>
+		<br>
+		With neural correction
+	</div>
+
+</div>
+
+</section>
+
+<section class="inverted" data-background="#000">
+
+	<div class="container">
+
+		<div class="col">
+			<img data-src="assets/sim_test1_.png"/>
+			<br>
+			Different boxsize
+		</div>
+
+		<div class="col">
+			<img data-src="assets/sim_test2_.png"/>
+			<br>
+			Different resolution
+		</div>
+
+
+		<div class="col">
+			<img data-src="assets/sim_test3_.png"/>
+			<br>
+			Different Cosmology!
+		</div>
+
+
+	</div>
+
+</section>
+
+</section>
+
+
+<section class="inverted" data-background="#000">
+	<h3 class="slide-title"> Conclusion
+	</h3>
+	<div class="block " style="border-radius: 20px; position: relative;bottom: -80px; background-color:rgba(0, 0, 0, 0.4);">
+		<div class="block-title"> Takeaways
+		</div>
+		<div class="block-content">
+			<br>
+			<ul>
+				<li class="fragment"> Hybrid Model combining a physical model with a Neural Network to compensate for the PM approximation
+				</li>
+				<br>
+				<br>
+				<li class="fragment"> Part of weak lensing package fully differentiable
+				</li>
+				<br>
+				<br>
+			</ul>
+		</div>
+	</div>
+	<br>
+	<br>
+	<p class="fragment"; style="position: relative;bottom: -80px"; >Thank you !
+	</p>
+	<br>
+	<br>
+	<br>
 </section>
 
 <section class="inverted" data-background="#000">
@@ -252,79 +505,6 @@ avalable<!doctype html>
 </section>
 
 
-<section class="inverted" data-background="#000">
-	<h3 class='slide-title'>	Fourier-space filter scheme </h3>
- 		<div class='container'>
-			<div class='col'>
-				<ul>
-					<li>Correction kernel parameterised by a b-spline.
-					</li>
-					<br>
-					<li>The knots position and value of the spline predicted by a neural network as a function of scale factor.</li>
-					<br>
-					<li>Trained on the CAMELS IlustrisTNG-DM simulation using as a
-					 loss function the distance between particle positions and their velocity at each snaphost step.
-					</li>
-					<br>
-					<li> Directly applied to the gravitational potential
-					</li>
-				</ul>
-			</div>
-			<div class='col'>
- 				<img data-src="assets/pkhalofit_comp_.png" class='plain' style="height: 500px; width:700px" />
-			</div>
-		</div>
-</section>
-
-
-<section  class="inverted" data-background="#000">
-<h3 class='slide-title'>	Fill the gap in the accuracy-
-speed space</h3>
-<!-- <li style="position:absolute;top:115;left:0;"> The PGD scheme <a href=" https://iopscience.iop.org/article/10.1088/1475-7516/2018/11/009/pdf?casa_token=3b8_RUCo4uAAAAAA:aqUgqZUFV1jao2LlJSqI25p2GEh-2KmGTS_ab4p1F9TSK5d0SytTPG6rN_YRhKYdnd9lBiX32A:">(Dai et al. 2018)</a>:
-</li> -->
-<div class='container'>
-<div class='col'>
-	<div  style="position:relative; width:600px; height:600px; margin:0 auto;">
-	<img  style="position:absolute;top:90;left:-340;"; data-src="assets/clsktnghalo3arc_comp_.png" />
-<img  style="position:absolute;top:90;left:300;"; data-src="assets/clsktnghalo3arc__pgd_comp_.png" />
-</div>
-</div>
-</div>
-</section>
-
-<section class="inverted" data-background="#000">
-	<h3 class="slide-title"> Conclusion
-	</h3>
-	<div class="block " style="border-radius: 20px; position: relative;bottom: -80px; background-color:rgba(0, 0, 0, 0.4);">
-		<div class="block-title"> Where ML can be useful for Cosmology?
-		</div>
-		<div class="block-content">
-			<br>
-			<ul>
-				<li class="fragment"> High accuracy simulations while keeping computational costs as low as possible
-				</li>
-					<ul>
-					<br>
-						<li class="fragment">With only $128^3$ particles produces convergence maps whose power agree with theoretical lensing power spectra up to $\ell=1000$
-					</ul>
-				<br>
-				<br>
-				<li class="fragment">Made possible by a Machine-learning sharpening step
-				</li>
-				<br>
-				<br>
-			</ul>
-		</div>
-	</div>
-	<br>
-	<br>
-	<p class="fragment"; style="position: relative;bottom: -80px"; >Thank you !
-	</p>
-	<br>
-	<br>
-	<br>
-</section>
-
 </div>
 </div>
 
@@ -337,8 +517,6 @@ speed space</h3>
 							 width: 128mm;
 							height: 96mm;
 						} */
-
-
 
 						.reveal .block {
 							background-color: #191919;
