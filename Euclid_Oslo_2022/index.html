@@ -272,6 +272,7 @@ speed space</h3>
 				<li> We are following the technique from Neural ODEs to <b>backpropagate
 					through an ODE solver</b>.<br>
 					<a href="https://proceedings.neurips.cc/paper/2018/file/69386f6bb1dfed68692a24c8686939b9-Paper.pdf">Neural Ordinary Differential Equations, Chen et al. 2018</a>
+
 					<img data-src="assets/chen2018_.png"/>
 				</li>
 
@@ -320,6 +321,7 @@ speed space</h3>
 	<div class="fragment">$\Longrightarrow$ We can use this parametrisation to complement the physical ODE with neural networks.</div>
 
 </section>
+
 
 <section class="inverted" data-background="#000">
 	<h3 class="slide-title" > Comparison of Dormand-Prince Solver vs FastPM</h3>
@@ -415,6 +417,101 @@ speed space</h3>
 </section>
 
 <section class="inverted" data-background="#000">
+<section>
+	<h3 class="slide-title"> Comparison of Dormand-Prince Solver vs FastPM</h3>
+	<img data-src="assets/fastpm_vs_ode.png"/>
+</section>
+
+</section>
+
+<section>
+<section>
+	<h3 class="slide-title"> Hybrid Physical-Neural ODE</h3>
+		<div class="container">
+			<div class="col">
+
+				<ul>
+
+					<li>Neural network parametrising a correction to the gravitational
+						potential as a <b>Fourier-based isotropic filter</b>.</li>
+
+					<br>
+
+					<li>Model is fitted as to minimize the following loss function over position x and power spectrum:
+
+						$$\mathcal{L} =  \sum_{i}^{snapshots} || \mathbf{x}^{ref}_i - \mathbf{x}_i ||_2^2  +  || \frac{p_i(k)}{p_i^{ref}(k)} -1 ||_2^2 $$
+					</li>
+
+
+				</ul>
+
+			</div>
+
+			<div class="col">
+
+				<div class="r-stack">
+
+				<pre class="python"><code data-trim data-noescape>
+					def neural_nbody_ode(a, state):
+				     pos = state[0]; vel = state[1]
+
+					 	  #### Compute gravitational forces
+				     delta = flowpm.cic_paint(tf.zeros([batch_size, nc, nc, nc]), pos)
+				     delta_k = r2c3d(delta)
+				     pot_k = delta_k * laplace_kernel(kvec) * longrange_kernel(kvec)
+
+						  # Neural potential correction
+						  pot_k = pot_k * (1 + apply_model(kvec, a))
+						  ######################################
+
+				     forces = tf.stack([ flowpm.cic_readout(
+				             c2r3d(pot_k *gradient_kernel(kvec, i)), pos)
+				         for i in range(3) ], axis=-1)
+				     forces = forces * 1.5 * cosmo.Omega_m
+				  		#######################################
+
+				     #Computes the update of position (drift)
+				     dpos = 1. / (a**3 * flowpm.tfbackground.E(cosmo, a)) * vel
+
+				     #Computes the update of velocity (kick)
+				     dvel = 1. / (a**2 * flowpm.tfbackground.E(cosmo, a)) * forces
+
+				   return tf.stack([dpos, dvel], axis=0)
+							</code></pre>
+
+						<div class="fragment">
+							<img data-src="assets/fitted_filter.png">
+						</div>
+
+
+					</div>
+
+			</div>
+		</div>
+</section>
+
+<section>
+
+<div class="container">
+
+	<div class="col">
+		<img data-src="assets/pk_residuals_notlearned.png"/>
+		<br>
+		Without neural correction
+	</div>
+
+	<div class="col">
+		<img data-src="assets/pk_residuals_learned.png"/>
+		<br>
+		With neural correction
+	</div>
+
+</div>
+
+</section>
+
+<section>
+
 
 	<div class="container">
 
@@ -426,6 +523,7 @@ speed space</h3>
 
 		<div class="col">
 			<img data-src="assets/sim_test2_.png"/>
+
 			<br>
 			Different resolution
 		</div>
