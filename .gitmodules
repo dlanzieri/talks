@@ -22,3 +22,6 @@
 [submodule "Euclid_Oslo_2022/reveal.js"]
 	path = Euclid_Oslo_2022/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "bayesian_deep_cosmo/reveal.js"]
+	path = bayesian_deep_cosmo/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
