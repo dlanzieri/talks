@@ -1,0 +1,559 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Hybrid Physical-Neural ODEs for Fast N-body Simulations</title>
+		<meta name="description" content="Presentation for the international conference on machine learning and applications">
+		<meta name="author" content="Denise">
+
+		<link rel="stylesheet" href="reveal.js/dist/reset.css">
+		<link rel="stylesheet" href="reveal.js/dist/reveal.css">
+		<link rel="stylesheet" href="reveal.js/dist/theme/darkenergy.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css" id="highlight-theme">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section data-background-image="assets/lsst_stills_0009_crop.jpg">
+					<div class="container">
+						<div class="title" style=" position: relative;
+			bottom: -99px; border-radius: 20px; background-color:rgba(0, 0, 0, 0.2);">
+							<h2>Hybrid Physical-Neural ODEs for Fast N-body Simulations</h2>
+						</div>
+					</div>
+
+					<div style="border-radius: 20px; position: relative;
+		bottom: -320px; background-color:rgba(0, 0, 0, 0);">
+			<div style="position:relative; top:-100px; right:500px;"> <h2>Denise Lanzieri </h2>
+			<br>
+		</div>
+	<div style="position:relative; top:-140px; right:300px;">  <h3>	Supervisors: François Lanusse, Jean-Luc Starck  </h3>	</div>
+						<div class="container" style="position:relative; top:-140px;">
+							<div class="col">
+									<br>
+									<img src="assets/CosmoStatDarkBK.png" class="plain" style="position:relative; top:40px;"></img>
+									<br>
+							</div>
+							<div class="col">
+								<br>
+								<br>
+								<br>
+								<br>
+								<img src="assets/logo_UParis_id.png" class="plain" height="140";></img>
+							</div>
+							<div class="col">
+								<br>
+								<br>
+								<br>
+								<br>
+								<img src="assets/CEA_logo_nouveau.svg.png" class="plain" height="120";></img>
+							</div>
+							<div class="col">
+								<br>
+								<br>
+								<br>
+								<img src="assets/aim.png" class="plain" height="140" style="position: relative;
+					bottom: -20px; right:-10px" ></img>
+							</div>
+					</div>
+						<div> slides at <a href="https://dlanzieri.github.io/talks/LSST_France_Nov2021/">github.com/dlanzieri/talks/LSST_France_Nov2021</a> </div>
+					</div>
+				</section>
+				<section data-background-video="assets/illustris_movie_cube_sub_frame.mp4">
+					<div class="fragment fade-up">
+						<img data-src="assets/IAhydro.png" style="height: 500px;"><br>
+						<div style="float:right; font-size: 20px">Kiessling et al. (2015)</div>
+					</div>
+				</section>
+
+				<section>
+					<h3  class='slide-title'>Outline of this talk</h3>
+						<br>
+						<br>
+						<br>
+						<br>
+						<ul>
+							<li class="fragment grow">Fast realization of complex processes
+							</li>
+							<ul>
+								<br>
+								<li>  $\Longrightarrow$ Take the effective physics description and combine it with a ML approach
+								</li>
+							</ul>
+							<br>
+							<br>
+							<li  class="fragment grow">Cosmological simulations are based on physical processes
+							</li>
+							<ul>
+								<br>
+								<li> 	$\Longrightarrow$ these impose symmetries and constraints
+								</li>
+							</ul>
+						</ul>
+						<br>
+						<br>
+						<br>
+						<br>
+				</section>
+				<section>
+					<h3 class='slide-title'>The Particle-Mesh scheme for N-body simulations</h3>
+					<b>The idea</b>: approximate gravitational forces by estimating densities on a grid.
+					<div class='container'>
+							<div class='col'>
+							<ul>
+								<li>The numerical scheme:
+									<br>
+									<br>
+									<ul>
+										<li class="fragment" data-fragment-index="1"> Estimate the density of particles on a mesh<br>
+											$\Longrightarrow$ use the cloud-in-cell (CIC) interpolation scheme
+										</li>
+										<br>
+										<li class="fragment" data-fragment-index="2"> Apply a Fourier transform to obtain the over-density field $\delta_k$ in Fourier space.
+										</li>
+										<br>
+										<li class="fragment" data-fragment-index="3">  Compute gravitational forces 	$\Longrightarrow$ related to the density field via a transfer function ($\nabla \nabla^{-2}$)
+										</li>
+									</ul>
+								</li>
+								<br>
+								<li class='fragment'> Fast and simple, at the cost of approximating short range interactions.
+								</li>
+							</ul>
+							</div>
+							<div class='col'>
+								<div style="position:relative; width:550px; height:550px; margin:0 auto;">
+									<img class="fragment current-visible plain" data-src="assets/particle_positions_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="0" />
+									<img class="fragment current-visible plain" data-src="assets/particle_density_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="1" />
+									<img class="fragment  plain" data-src="assets/particle_positions_1.png" style="position:absolute;top:0;left:0;" data-fragment-index="2" />
+								</div>
+							</div>
+					</div>
+					<div class="fragment"> $\Longrightarrow$ Only a series of FFTs and interpolations.
+					</div>
+				</section>
+
+				<section>
+					<h3 class='slide-title'>	Fill the gap in the accuracy-speed space </h3>
+						<div class='container'>
+							<div class='col'>
+								<ul>
+									N-body PM simulation:
+									<br>
+									<br>
+										<ul>
+											<li>Fast (limited number of time steps while enforcing the correct linear
+												growth)
+											</li>
+											<br>
+											<li>Cannot give accurate halo matter profiles or matter power spectrum
+											</li>
+										</ul>
+										<br>
+				 					The correction idea :mimics the physics that is missing <br> $\Longrightarrow$ <b class="alert"> Halo virialization </b>
+								</ul>
+							</div>
+							<div class='col'>
+								<img data-src="assets/comparison_halofit_.png" class='plain' style="height: 400px; width:700px" />
+							</div>
+						</div>
+				</section>
+
+				<section>
+						<h3 class="slide-title">Solving the N-body differential equations </h3>
+							<div class="container">
+								  <div class="col">
+										<ul>
+											<li>Time integration from a system of ordinary differential equations (ODE) and treat the ODEsolver as a black box
+										</li>
+										<br>
+										<br>
+										 <li> We can use this parametrisation to complement the physical ODE with neural networks.
+										</li>
+										</ul>
+									</div>
+									<div class="col">
+											$$     \left\{ \begin{array}{ll}
+        											\frac{d \mathbf{x}}{d a} & = \frac{1}{a^3 E(a)} \mathbf{v} \\
+        											\frac{d \mathbf{v}}{d a} & =  \frac{1}{a^2 E(a)} F_\theta(\mathbf{x}, a), \\
+    													\end{array} \right. $$
+											<br> With:
+											<br>
+												$$    F_\theta(\mathbf{x}, a) = \frac{3 \Omega_m}{2}  \nabla \left[ \phi_{PM} (\mathbf{x}) \ast (1 + \color{orange}{f_\theta(a)}) \right] $$
+									</div>
+									</div>
+							<br>
+							<br>
+							<div class="fragment">$\Longrightarrow$ Correction integrated to the gravitational potential as a Fourier-based isotropic filter $f_{\theta}$</div>
+				</section>
+
+
+				<section>
+							<h3 class="slide-title"> Hybrid Physical-Neural ODE</h3>
+								<div class="container">
+										<div class="col">
+											<ul>
+												<li>$\color{orange}{f_\theta(a)}$ implemented as a Fourier-based
+														isotropic filter defined by a b-spline	$\Longrightarrow$ incorporates translation and rotation symmetries
+												</li>
+												<br>
+												<br>
+												<li> The NN takes as input the scale factor and returns the parameters defining the b-spline
+												</li>
+										 </ul>
+										</div>
+										<div>
+												<img data-src="assets/fitted_filter_.png" class='plain' style="height: 400px; width:700px" />
+										</div>
+								</div>
+				</section>
+
+				<section>
+					<h3 class="slide-title">Hybrid Physical-Neural ODE</h3>
+					<div class="container">
+						<div class="col">
+								$$\mathcal{L} =  \sum_{i}^{snapshots} \lambda_1|| \mathbf{x}^{ref}_i - \mathbf{x}_i ||_2^2  + \lambda_2 || \frac{p_i(k)}{p_i^{ref}(k)} -1 ||_2^2 $$
+						</div>
+						<div class="col">
+							<ul>
+								<li> We are following the technique from Neural ODEs to <b>backpropagate
+									through an ODE solver</b>.<br>
+									<a href="https://proceedings.neurips.cc/paper/2018/file/69386f6bb1dfed68692a24c8686939b9-Paper.pdf">Neural Ordinary Differential Equations, Chen et al. 2018</a>
+									<img data-src="assets/chen2018_.png"/>
+								</li>
+								<li> Benefits:
+										<ul>
+											<li>Tune the accuracy-speed by defining a tolerance of the ODE Solver</li>
+
+											<li><b>Reduced memory usage</b>: no need to store intermediate steps for backpropagation.</li>
+										</ul>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</section>
+
+
+				<section >
+					<div class="container">
+						<div class="col">
+							<img data-src="assets/camels_residuals_nocorrection_.png"/>
+							<br>
+							Without neural correction
+						</div>
+						<div class="col">
+							<img data-src="assets/camels_residuals_pk_pow_.png"/>
+							<br>
+							With neural correction
+						</div>
+					</div>
+				</section>
+
+
+
+				<section >
+					<h3 class='slide-title'>	Potential Gradient Descent (PGD) </h3>
+				 		<div class='container'>
+							<div class='col'>
+								<ul>
+									<li>Additional displacements to sharpen the halos
+									</li>
+									<br>
+									<li>The direction of the displacements points towards the halo center (local potential minimum).</li>
+									<br>
+									<li>The gravitational force:
+											\begin{equation}
+												\mathbf{F}=-\nabla\Phi
+											\end{equation}
+									</li>
+									<li> The PGD correction displacement:
+										\begin{equation}
+											\mathbf{S}=-\alpha\nabla \hat{O}_{h}\hat{O}_{l}\Phi
+										\end{equation}
+										High pass filter prevents the large scale growth, low pass filter reduces the numerical effect
+									</li>
+								</ul>
+							</div>
+							<div class='col'>
+				 				<img data-src="assets/pot_pgd.png" class='plain' style="height: 500px; width:700px" />
+								<div style="float:right; font-size: 20px"><a href=" https://iopscience.iop.org/article/10.1088/1475-7516/2018/11/009/pdf?casa_token=3b8_RUCo4uAAAAAA:aqUgqZUFV1jao2LlJSqI25p2GEh-2KmGTS_ab4p1F9TSK5d0SytTPG6rN_YRhKYdnd9lBiX32A:">(Biwei Dai et al. 2018)</a></div>
+							</div>
+						</div>
+				</section>
+
+				<section>
+						<section>
+							<h3 class="slide-title"> Projections of final density field </h3>
+							<br>
+							<br>
+							<div class="container">
+								<div class="col">
+									<div class="block-content">
+										<div style="position:relative; height:570px; width:700px top:0px; left:0px;">
+											Camels simulations
+											<img data-src="assets/cluster_2D_Camels.png" style="height:400px;width:1500px"></img>
+										</div>
+									</div>
+								</div>
+								<div class="col">
+									<div class="block-content">
+										<div style="position:relative; height:570px; top:0px; left:0px;">
+											<div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="0">
+												PM simulations
+												<img data-src='assets/cluster_2D_PM.png' style="height:400px;" />
+											</div>
+
+											<div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="1">
+												PM+NN correction
+												<img data-src='assets/cluster_2D_PM_NN.png' style="height:400px;" />
+											</div>
+
+											<div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="2">
+												PM+PGD correction
+												<img data-src='assets/cluster_2D_PM_PGD.png' style="height:400px;" />
+											</div>
+										</div>
+									</div>
+								</div>
+
+
+							</div>
+						</section>
+
+						<section>
+							<h3 class="slide-title">Results </h3>
+							<div class="container">
+								<div class="col">
+									<img data-src="assets/camels_residual_CV_0_.png"/>
+								</div>
+								<div class="col" >
+									<img data-src="assets/cross_corr_CV_0_.png" />
+								</div>
+							</div>
+						</section>
+
+					<section>
+						<h3 class="slide-title">Results </h3>
+						<div class="container">
+							<div class="col">
+								<img data-src="assets/camels_residual_diff_resolution_CV_0_.png"/>
+								<br>
+								Different resolution
+							</div>
+							<div class="col">
+								<img data-src="assets/halofit_residuals_wrong_boxsize_res_.png"/>
+								<br>
+								Different resolution and volume
+							</div>
+							<div class="col">
+								<img data-src="assets/camels_residual_diffomega_1P_1_n5_.png"/>
+								<br>
+								Different Cosmology!
+							</div>
+						</div>
+					</section>
+
+					<section>
+						<h3 class="slide-title">Results </h3>
+						<div class="container">
+							<div class="col">
+								<img data-src="assets/cross_corr_diffresolution_CV_0_.png"/>
+								<br>
+								Different resolution
+							</div>
+							<div class="col">
+								<img data-src="assets/cross_corr_diffomega_1P_1_n5_.png"/>
+								<br>
+								Different Cosmology!
+							</div>
+						</div>
+					</section>
+				</section>
+
+				<section>
+	<h3 class="slide-title"> Conclusion </h3>
+
+	<br> <br> <br>
+
+							<div class="block ">
+								<div class="block-title">
+								takeaway message
+								</div>
+								<div class="block-content">
+									<ul>
+										<li class="fragment"> Powerful ways to simulate fast and differentiable cosmological simulations
+										</il>
+										<br>
+										<br>
+										<li class="fragment"> Data driven way of complementing a physical models
+											<ul>
+												<li> correction scheme to compensate for the small-scales approximations</li>
+											</ul>
+										</li>
+										<br>
+										<li class="fragment"> Differentiable physical models for fast inference
+											<ul>
+												<li> Likelihood-free inference approach
+												</li>
+												<li> Inference of the full posterior distribution by using the Hamiltonian Monte Carlo (HMC) method </li>
+											</ul>
+										</li>
+
+									</ul>
+							</div>
+						</div>
+							<br>
+						<p class="fragment">Thank you ! </p>
+												 <br> <br>
+
+</section>
+
+
+			</div>
+		</div>
+
+		<style>
+			/* .reveal .slides {
+				border: 5px solid red;
+				background-color: #333333;
+				min-height: 100%;
+				 width: 128mm;
+				height: 96mm;
+			} */
+
+			.reveal .block {
+				background-color: #191919;
+				margin-left: 20px;
+				margin-right: 20px;
+				text-align: left;
+				padding-bottom: 0.1em;
+			}
+
+			.reveal .block-title {
+				background-color: #333333;
+				padding: 8px 35px 8px 14px;
+				color: #FFAA7F;
+				font-weight: bold;
+			}
+
+			.reveal .block-content {
+				padding: 8px 35px 8px 14px;
+			}
+
+			.reveal .slide-title {
+				border-left: 5px solid white;
+				text-align: left;
+				margin-left: 20px;
+				padding-left: 20px;
+			}
+
+			.reveal .alert {
+				color: #FFAA7F;
+				font-weight: bold;
+			}
+
+			.reveal .inverted {
+				filter: invert(100%);
+			}
+
+			/*
+		/* .reveal .alert {
+		padding:8px 35px 8px 14px; margin-bottom:18px;
+		text-shadow:0 1px 0 rgba(255,255,255,1);
+		border:5px solid #FFAA7F;
+		-webkit-border-radius: 14px; -moz-border-radius: 14px;
+		border-radius:14px
+		background-position: 10px 10px;
+		background-repeat: no-repeat;
+		background-size: 38px;
+		padding-left: 30px; /* 55px; if icon
+		}
+		.reveal .alert-block {padding-top:14px; padding-bottom:14px}
+		.reveal .alert-block > p, .alert-block > ul {margin-bottom:1em}
+		/*.reveal .alert li {margin-top: 1em}
+		.reveal .alert-block p+p {margin-top:5px} */
+		</style>
+
+
+		<script src="reveal.js/dist/reveal.js"></script>
+		<script src="reveal.js/plugin/notes/notes.js"></script>
+		<script src="reveal.js/plugin/markdown/markdown.js"></script>
+		<script src="reveal.js/plugin/highlight/highlight.js"></script>
+		<script src="reveal.js/plugin/math/math.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				controls: false,
+
+				//center: false,
+				hash: true,
+
+				// Visibility rule for backwards navigation arrows; "faded", "hidden"
+				// or "visible"
+				controlsBackArrows: 'hidden',
+
+				// Display a presentation progress bar
+				progress: true,
+
+				// Display the page number of the current slide
+				slideNumber: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// The "normal" size of the presentation, aspect ratio will be preserved
+				// when the presentation is scaled to fit different resolutions. Can be
+				// specified using percentage units.
+				width: 1280,
+				height: 720,
+
+				// Factor of the display size that should remain empty around the content
+				margin: 0.1,
+
+				// Bounds for smallest/largest possible scale to apply to content
+				minScale: 0.2,
+				maxScale: 1.5,
+
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath],
+
+				dependencies: [{
+						src: 'reveal.js/plugin/markdown/marked.js'
+					},
+					{
+						src: 'reveal.js/plugin/markdown/markdown.js'
+					},
+					{
+						src: 'reveal.js/plugin/notes/notes.js',
+						async: true
+					},
+					{
+						src: 'reveal.js/plugin/math/math.js',
+						async: true
+					},
+					{
+						src: 'reveal.js/plugin/reveal.js-d3/reveald3.js'
+					},
+					{
+						src: 'reveal.js/plugin/reveal.js-plugins/chart/Chart.min.js'
+					},
+					{
+						src: 'reveal.js/plugin/reveal.js-plugins/chart/csv2chart.js'
+					},
+					{
+						src: 'reveal.js/plugin/highlight/highlight.js',
+						async: true
+					},
+				]
+
+			});
+		</script>
+
+	</body>
+</html>
