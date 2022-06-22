@@ -22,3 +22,6 @@
 [submodule "Euclid_Oslo_2022/reveal.js"]
 	path = Euclid_Oslo_2022/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "icml_workshop/reveal.js"]
+	path = icml_workshop/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
