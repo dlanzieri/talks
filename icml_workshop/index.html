@@ -24,12 +24,12 @@
 			<div class="title"  style="border-radius: 20px; background-color:rgba(0, 0, 0, 0.2);">
 				<h2>Hybrid Physical-Neural ODEs for Fast N-body Simulations</h2>
 					<center><hr size="100" width="300"></center>
-					<h3><p style="color:#32b3f8";>Machine Learning for Astrophysics </p></h3>
-					<h4><p style="color:#32b3f8";>International Conference on Machine Learning (ICML 2022), July 22nd, Baltimore, MD</p></h4>
+					<h3><p ;>Machine Learning for Astrophysics </p></h3>
+					<h4><p ;>International Conference on Machine Learning (ICML 2022), July 22nd, Baltimore, MD</p></h4>
 			</div>
 		</div>
 		<p>
-		 Denise Lanzieri François Lanusse, Jean-Luc Starck
+		 Denise Lanzieri, François Lanusse, Jean-Luc Starck
 	 </p>
 	 <div  style=" position: relative;bottom: -20px; right:-10p"x>
 					<img src="assets/CosmoStatDarkBK.png" class="plain" style="width: 280px;"></img>
@@ -37,7 +37,7 @@
 					<img src="assets/CEA_logo_nouveau.svg.png" class="plain" style="width: 100px; height=120";></img>
 					<img src="assets/aim.png" class="plain"  style=" height: 100px; " ></img>
 		</div>
-			<div style=" position: relative;bottom: -60px;" > slides at <a style="color:#32b3f8"; href="https://dlanzieri.github.io/talks/icml_workshop/">github.com/dlanzieri/talks/icml_workshop</a> </div>
+			<div style=" position: relative;bottom: -60px;" > slides at <a style="color:#FFAA7F"; href="https://dlanzieri.github.io/talks/icml_workshop/">dlanzieri.github.io/talks/icml_workshop/</a> </div>
 	</section>
 
 
@@ -49,7 +49,7 @@
 				</section>
 
 				<section>
-					<h3  class='slide-title'><p style="color:#5D6D7E" >Outline of this talk</p></h3>
+					<h3  class='slide-title'><p style="color:#FFAA7F" >Outline of this talk</p></h3>
 						<br>
 						<br>
 						<br>
@@ -59,7 +59,7 @@
 							</li>
 							<ul>
 								<br>
-								<li>  $\Longrightarrow$ Take the effective physics description and combine it with a ML approach
+								<li>  $\Longrightarrow$ Take the effective <span style='color:#996699'>physics description</span> and combine it with a <span style='color:#996699'>ML approach</span>
 								</li>
 							</ul>
 							<br>
@@ -68,7 +68,7 @@
 							</li>
 							<ul>
 								<br>
-								<li> 	$\Longrightarrow$ these impose symmetries and constraints
+								<li> 	$\Longrightarrow$ These impose <span style='color:#669900'>symmetries</span> and <span style='color:#669900'>constraints</span>
 								</li>
 							</ul>
 							<br>
@@ -77,7 +77,7 @@
 							</li>
 								<ul>
 									<br>
-									<li>$\Longrightarrow$ JAX and TensorFlow framework
+									<li>$\Longrightarrow$ <span style='color:#6699CC'>JAX</span> and <span style='color:#6699CC'>TensorFlow</span> framework
 									</li>
 								</ul>
 						</ul>
@@ -87,7 +87,7 @@
 
 
 				<section>
-					<h3 class='slide-title'><p style="color:#5D6D7E" >The Particle-Mesh scheme for N-body simulations</p></h3>
+					<h3 class='slide-title'><p style="color:#FFAA7F" >The Particle-Mesh scheme for N-body simulations</p></h3>
 					<b>The idea</b>: approximate gravitational forces by estimating densities on a grid.
 					<div class='container'>
 							<div class='col'style=" position: relative;bottom: 130px;">
@@ -123,7 +123,7 @@
 
 
 				<section>
-					<h3 class='slide-title'><p style="color:#5D6D7E" >	Fill the gap in the accuracy-speed space</p> </h3>
+					<h3 class='slide-title'><p style="color:#FFAA7F" >	Fill the gap in the accuracy-speed space</p> </h3>
 						<div class='container'>
 							<div class='col'>
 								<ul>
@@ -139,7 +139,7 @@
 											</li>
 										</ul>
 										<br>
-				 					The correction idea :mimics the physics that is missing <br> $\Longrightarrow$ <b style="color:#5D6D7E"> Halo virialization </b>
+				 					The correction idea :mimics the physics that is missing <br> $\Longrightarrow$ <b style="color:#FFAA7F"> Halo virialization </b>
 								</ul>
 							</div>
 							<div class='col'>
@@ -149,7 +149,7 @@
 				</section>
 
 				<section>
-						<h3 class="slide-title"><p style="color:#5D6D7E" >Solving the N-body differential equations </p></h3>
+						<h3 class="slide-title"><p style="color:#FFAA7F" >Solving the N-body differential equations </p></h3>
 						<br><br>
 							We compute the time integration from a system of ordinary differential equations (ODE)
 											$$\left\{ \begin{array}{ll}
@@ -177,7 +177,7 @@
 
 
 				<section>
-							<h3 class="slide-title"><p style="color:#5D6D7E" > Hybrid Physical-Neural ODE</p></h3>
+							<h3 class="slide-title"><p style="color:#FFAA7F" > Hybrid Physical-Neural ODE</p></h3>
 						<ul>
 							<li>
 								Instead of using the same parameters to correct the gravitational potential, we introduce scale-factor-dependent B-spline basis functions  <span style='color:#996699'>$f_{\theta}(a)$</span>
@@ -191,14 +191,14 @@
 							</li>
 					 </ul>
 					 <div>
-							 <img data-src="assets/nn_filter.png" class='plain' style="height: 400px; width:700px" />
+							 <img data-src="assets/nn_filter3.png" class='plain' style="height: 400px; width:700px" />
 					 </div>
 
 				</section>
 
 
 				<section>
-					<h3 class="slide-title"><p style="color:#5D6D7E" >Hybrid Physical-Neural ODE</p></h3>
+					<h3 class="slide-title"><p style="color:#FFAA7F" >Hybrid Physical-Neural ODE</p></h3>
 					<div class="container">
 						<div class="col">
 								$$\mathcal{L} =  \sum_{i}^{snapshots} \lambda_1|| \mathbf{x}^{ref}_i - \mathbf{x}_i ||_2^2  + \lambda_2 || \frac{p_i(k)}{p_i^{ref}(k)} -1 ||_2^2 $$
@@ -226,7 +226,7 @@
 
 
 				<section >
-					<h3 class="slide-title"><p style="color:#5D6D7E" >Hybrid Physical-Neural ODE</p></h3>
+					<h3 class="slide-title"><p style="color:#FFAA7F" >Hybrid Physical-Neural ODE</p></h3>
 					<div class="container">
 						<div class="col">
 							<img data-src="assets/comparison_pk_without.png"/>
@@ -244,7 +244,7 @@
 
 
 				<section >
-					<h3 class='slide-title'><p style="color:#5D6D7E" >	Potential Gradient Descent (PGD)</p> </h3>
+					<h3 class='slide-title'><p style="color:#FFAA7F" >	Potential Gradient Descent (PGD)</p> </h3>
 				 		<div class='container'>
 							<div class='col'>
 								<ul>
@@ -275,7 +275,7 @@
 
 				<section>
 						<section>
-							<h3 class="slide-title"> <p style="color:#5D6D7E" >Projections of final density field </p></h3>
+							<h3 class="slide-title"> <p style="color:#FFAA7F" >Projections of final density field </p></h3>
 							<br>
 							<br>
 							<div class="container">
@@ -313,7 +313,7 @@
 						</section>
 
 						<section>
-							<h3 class="slide-title"><p style="color:#5D6D7E" >Results </h3></p>
+							<h3 class="slide-title"><p style="color:#FFAA7F" >Results </h3></p>
 							<div class="container">
 								<div class="col">
 									<img data-src="assets/camels_residual_CV_0.png"/>
@@ -325,7 +325,7 @@
 						</section>
 
 					<section>
-						<h3 class="slide-title"><p style="color:#5D6D7E" >Results </h3></p>
+						<h3 class="slide-title"><p style="color:#FFAA7F" >Results </h3></p>
 						<div class="container">
 							<div class="col">
 								<img data-src="assets/camels_residual_diff_resolution_CV_0.png"/>
@@ -346,7 +346,7 @@
 					</section>
 
 					<section>
-						<h3 class="slide-title"><p style="color:#5D6D7E">Results </h3></p>
+						<h3 class="slide-title"><p style="color:#FFAA7F">Results </h3></p>
 						<div class="container">
 							<div class="col">
 								<img data-src="assets/cross_corr_diffresolution_CV_0.png"/>
@@ -363,27 +363,27 @@
 				</section>
 
 				<section>
-	<h3 class="slide-title"><p style="color:#5D6D7E" > Conclusion </p> </h3>
+	<h3 class="slide-title"><p style="color:#FFAA7F" > Conclusion </p> </h3>
 
 	<br> <br> <br>
 
 							<div class="block ">
 								<div class="block-title" >
-								takeaway message
+								Takeaway message
 								</div>
 								<div class="block-content">
 									<ul>
-										<li class="fragment"> Powerful ways to simulate fast and differentiable cosmological simulations
+										<li class="fragment"> Powerful ways to simulate <span style='color:#996699'>fast</span> and <span style='color:#996699'>differentiable</span> cosmological simulations
 										</il>
 										<br>
 										<br>
-										<li class="fragment"> Data driven way of complementing a physical models
+										<li class="fragment"> Data driven way of complementing a <span style='color:#669900'>physical models</span>
 											<ul>
 												<li> correction scheme to compensate for the small-scales approximations</li>
 											</ul>
 										</li>
 										<br>
-										<li class="fragment"> Differentiable physical models for fast inference
+										<li class="fragment"> Differentiable physical models for <span style='color:#6699CC'>fast inference</span>
 											<ul>
 												<li> Likelihood-free inference approach
 												</li>
