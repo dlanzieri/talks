@@ -180,10 +180,10 @@
 							<h3 class="slide-title"><p style="color:#FFAA7F" > Hybrid Physical-Neural ODE</p></h3>
 						<ul>
 							<li>
-								To correct the gravitational potential, we introduce scale-factor-dependent B-spline basis functions  <span style='color:#996699'>$f_{\theta}(a)$</span>
+								To correct the gravitational potential, we introduce the scale-factor-dependent functions <span style='color:#996699'>$f_{\theta}(a)$</span>
 							</li>
 							<br>
-						  <li> <span style='color:#996699'>$f_{\theta}(a)$</span> has fixed number of trainable parameters to make up the neural network $\to$ the number of spline knots.
+						  <li> <span style='color:#996699'>$f_{\theta}(a)$</span> is defined as B-spline functions whose coefficients are the output of the Neural Network.
 							</li>
 								<br>
 							<li>$\color{#996699}{f_\theta(a)}$ implemented as a Fourier-based
