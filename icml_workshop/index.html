@@ -49,7 +49,7 @@
 				</section>
 
 				<section>
-					<h3  class='slide-title'><p style="color:#FFAA7F" >Outline of this talk</p></h3>
+					<h3  class='slide-title'><p style="color:#FFAA7F" >Goal of this talk</p></h3>
 						<br>
 						<br>
 						<br>
@@ -105,57 +105,73 @@
 										<br>
 										<li class="fragment" data-fragment-index="3">  Compute gravitational forces 	$\to$ related to the density field via a transfer function ($\nabla \nabla^{-2}$)
 										</li>
+									</br>
+										<li class='fragment'data-fragment-index="4"> Interpolate back the force at every particle position
+										</li>
 									</ul>
-								</li>
-								<br>
-								<li class='fragment'data-fragment-index="4"> Only a series of FFTs and interpolations.
 								</li>
 							</ul>
 							</div>
 							<!-- <div class='col'> -->
 									<video playsinline="" data-autoplay="" data-paused-by-reveal="" data-lazy-loaded="" loop="loop" style="width:750px; height:850px; position: relative;bottom: 110px; right:-140px" src="assets/arrow_field.mp4"></video>
 							<!-- </div> -->
-					</div>
-					<div class="fragment"data-fragment-index="5"> $\to$ Fast and simple, at the cost of approximating short range interactions.
+					</div >
+					<div class="fragment"data-fragment-index="5" style=" position: relative;bottom: 300px;" > $\to$ Only a series of FFTs and interpolations.
 					</div>
 				</section>
-
-
 
 				<section>
 					<h3 class='slide-title'><p style="color:#FFAA7F" >	Fill the gap in the accuracy-speed space</p> </h3>
 						<div class='container'>
-							<div class='col'>
+							<div class='col'style=" position: relative;bottom: 290px; ">
 								<ul>
 									N-body PM simulation:
 									<br>
 									<br>
 										<ul>
-											<li>Fast (limited number of time steps while enforcing the correct linear
-												growth)
+											<li>Fast (we don't solve the full N-body problem)
 											</li>
 											<br>
-											<li>Cannot give accurate halo matter profiles or matter power spectrum
+											<li> Not able to resolve structures with scales smaller than the mesh resolution
+												<ul>
+													  <br>
+														<li  class="fragment" data-fragment-index="0">  $\to$  Overdensity structures less sharp than full N-body counterparts
+														</li>
+														<br>
+														<li class="fragment" data-fragment-index="1"> $\to$ Lack power on small scales
+														</li>
+												</ul>
 											</li>
 										</ul>
 										<br>
-				 					The correction idea :mimics the physics that is missing <br> $\Longrightarrow$ <b style="color:#FFAA7F"> Halo virialization </b>
+									<div  class="fragment" data-fragment-index="2">
+				 					The correction idea : mimics the physics that is missing
+								</div>
 								</ul>
 							</div>
-							<div class='col'>
-								<img data-src="assets/comparison_pk_intro.png" class='plain' style="height: 400px; width:700px" />
-							</div>
-						</div>
+							<div  class='col'>
+								<div class="plain fragment current-visible "  data-fragment-index="0">
+									<p style="position:relative; top:10px; left:0px;">Camels simulations</p>
+									<img  data-src="assets/cluster_2D_Camels.png" style="height:250px; position:relative; top:-30px; "></img>
+								</div>
+								<div class="plain fragment current-visible "  data-fragment-index="0">
+									<p style="position:relative; top:-50px; left:0px;">PM simulations</p>
+									<img  data-src='assets/cluster_2D_PM.png' style="height:250px; position:relative; top:-90px;" />
+							 </div>
+								<img  class="fragment" data-fragment-index="1" data-src="assets/comparison_pk_intro.png" class='plain' style="height: 400px; width:700px; position: relative;bottom: 650px; " />
+						  </div>
+					  </div>
 				</section>
 
+      <section>
 				<section>
-						<h3 class="slide-title"><p style="color:#FFAA7F" >Solving the N-body differential equations </p></h3>
+						<h3 class="slide-title"><p style="color:#FFAA7F" > Augment the physical equations with a neural network</p></h3>
 						<br><br>
 							We compute the time integration from a system of ordinary differential equations (ODE)
 											$$\left\{ \begin{array}{ll}
-											\frac{d \mathbf{x} }{d a} & = \frac{1}{a^3 E(a)} \color{#6699CC}{\mathbf{v}} \\
-											\frac{d \mathbf{v}}{d a} & =  \frac{1}{a^2 E(a)} F_\theta( \color{#6699CC}{\mathbf{x}} , a), \\
-											F_\theta(\mathbf{x}, a) &= \frac{3 \Omega_m}{2}  \nabla \left[ \color{#669900}{\phi_{PM}} (\color{#6699CC}{\mathbf{x}}) \right]
+											\frac{d  \color{#6699CC}{\mathbf{x}} }{d a} & = \frac{1}{a^3 E(a)} \color{#6699CC}{\mathbf{v}} \\
+											\frac{d  \color{#6699CC}{\mathbf{v}}}{d a} & =  \frac{1}{a^2 E(a)} F_\theta( \color{#6699CC}{\mathbf{x}} , a), \\
+											F_\theta( \color{#6699CC}{\mathbf{x}}, a) &= \frac{3 \Omega_m}{2}  \nabla \left[ \color{#669900}{\phi_{PM}} (\color{#6699CC}{\mathbf{x}}) \right]
 
 											\end{array} \right. $$
 							<ul>
@@ -172,57 +188,72 @@
 								$$F_\theta(\mathbf{x}, a) = \frac{3 \Omega_m}{2}  \nabla \left[ \phi_{PM} (\mathbf{x}) \ast (1 + \color{#996699}{f_\theta(a)}) \right] $$
 							</p>
 							<br>
-							<div class="fragment" data-fragment-index="1">$\Longrightarrow$ Correction integrated to the gravitational potential as a Fourier-based isotropic filter <span style='color:#996699'>$f_{\theta}$</span></div>
+							<div class="fragment" data-fragment-index="1" style="position:relative; top:0px; ">Correction integrated as a Fourier-based isotropic filter <span style='color:#996699'>$f_{\theta}$</span> $\to$ incorporates translation and rotation symmetries </div>
 				</section>
-
-
 				<section>
-							<h3 class="slide-title"><p style="color:#FFAA7F" > Hybrid Physical-Neural ODE</p></h3>
+							<h3 class="slide-title"><p style="color:#FFAA7F" > Learn the Neural Filter </p></h3>
 						<ul>
-							<li>
-								To correct the gravitational potential, we introduce the scale-factor-dependent functions <span style='color:#996699'>$f_{\theta}(a)$</span>
-							</li>
-							<br>
-						  <li> <span style='color:#996699'>$f_{\theta}(a)$</span> is defined as B-spline functions whose coefficients are the output of the Neural Network.
-							</li>
-								<br>
-							<li>$\color{#996699}{f_\theta(a)}$ implemented as a Fourier-based
-									isotropic filter $\to$ incorporates translation and rotation symmetries
+						  <li> <span style='color:#996699'>$f_{\theta}(a)$</span> is defined as B-spline functions whose coefficients are the output of the Neural Network of parameters $\theta$.
 							</li>
 					 </ul>
 					 <div>
 							 <img data-src="assets/nn_filter3.png" class='plain' style="height: 400px; width:700px" />
 					 </div>
-
 				</section>
-
-
 				<section>
-					<h3 class="slide-title"><p style="color:#FFAA7F" >Hybrid Physical-Neural ODE</p></h3>
+					<h3 class="slide-title"><p style="color:#FFAA7F" >Train and validation loss</p></h3>
 					<div class="container">
 						<div class="col">
-								$$\mathcal{L} =  \sum_{i}^{snapshots} \lambda_1|| \mathbf{x}^{ref}_i - \mathbf{x}_i ||_2^2  + \lambda_2 || \frac{p_i(k)}{p_i^{ref}(k)} -1 ||_2^2 $$
+								<div  >
+								$$\mathcal{L} =  \sum_{i}^{snapshots} \lambda_1||   \color{#6699CC}{\mathbf{x}^{ref}_i} -  \color{#6699CC}{\mathbf{x}_i}||_2^2  + \lambda_2 || \frac{\color{#996699}{p_i(k)}}{\color{#996699}{p_i^{ref}(k)}} -1 ||_2^2 $$
+								</div>
 						</div>
 						<div class="col">
 							<ul>
-								<li> We are following the technique from Neural ODEs to <b>backpropagate
-									through an ODE solver</b>.<br>
-									<a style="color:#996699"; href="https://proceedings.neurips.cc/paper/2018/file/69386f6bb1dfed68692a24c8686939b9-Paper.pdf">Neural Ordinary Differential Equations, Chen et al. 2018</a>
-									<ul>
-										<br>
-										 $\to$ Treat the ODE solver as a black box and compute gradients using the adjoint sensitivity method (Pontryagin et al., 1962).
-									</ul>
+								<li >We adopt a loss function penalizing both the <span style='color:#6699CC'>particle positions</span> and the overall <span style='color:#996699'>matter power spectrum</span> at different snapshot times
 								</li>
 								<br>
-								<li> Benefits:
-										<ul>
-											$\to$ Tune the accuracy-speed by defining a tolerance of the ODE Solver
-										</ul>
+								<li > We train and compare the model to the CAMELS simulations <a style="color:#GOLD"; href=" https://arxiv.org/pdf/2010.00619.pdf:">(Villaescusa-Navarro et al., 2021) </a>
 								</li>
+								<br>
+								<li> 	We use a single N-body simulation of $25^3$ ($h^{-1}$ Mpc)$^3$ volume, $64^3$ dark matter particles at the fiducial cosmology of $\Omega_m = 0.3$ and $\sigma_8 = 0.8$ .
 							</ul>
 						</div>
 					</div>
 				</section>
+
+
+				<section>
+					<h3 class="slide-title"><p style="color:#FFAA7F" >Backpropagation through the ODE solver</p></h3>
+						We are following the technique from Neural ODEs to <b>backpropagate through an ODE solver</b> (<a style="color:#FFAA7F; font-size: 20px" href="https://proceedings.neurips.cc/paper/2018/file/69386f6bb1dfed68692a24c8686939b9-Paper.pdf">Neural Ordinary Differential Equations, Chen et al. 2018</a>).
+						<br><br>
+						<!-- <li> $\to$ Treat the ODE solver as a black box and compute gradients using the adjoint sensitivity method (Pontryagin et al., 1962).
+						</li> -->
+							<div class="block">
+							<div class="block-title" style='color:white'>
+							 How	optimize a <span style='color:#6699CC'>loss function</span> with input the result of an ODE solver:  <span style='color:#6699CC'>$\textbf{L}$</span>(ODESolve$(\color{#996699}{z}(t_0),f,t_0,t_1,\color{#ecad60}{\theta}))$?
+							</div>
+							<div class="block-content">
+								<br>
+								 To optimize  <span style='color:#6699CC'>$\textbf{L}$</span>, we require gradients with respect to <span style='color:#ecad60'>$\theta$</span>:
+								<ul>
+								<ol>
+								<br>
+								<li class='fragment' data-fragment-index="0"> Determine how the gradient of the loss (the <span style='color:#669900'>adjoint</span>)  depends on the hidden state <span style='color:#996699'>$z$</span>(t) at each instant:
+									$$\color{#669900}{\textbf{a}}(t)=\frac{\partial \color{#6699CC}{L}}{\partial \color{#996699}{\textbf{z}}(t)}$$
+								</li>
+								<li class='fragment' data-fragment-index="1"> Compute the <span style='color:#669900'>adjoint</span> dynamics by solving a another ODE:
+									$$ \frac{d\color{#669900}{\textbf{a}}(t)}{dt}=\color{#669900}{\textbf{a}}(t)^{T}\frac{\partial f(\color{#996699}{\textbf{z}}(t),t,\color{#ecad60}{\theta})}{\partial \color{#996699}{\textbf{z}}}
+										 $$
+								</li>
+								<li class='fragment' data-fragment-index="2"> Compute the gradients with respect to the parameters $\theta$ evaluating a third integral:
+								$$ \frac{d\color{#6699CC}{L}}{d\color{#ecad60}{\theta}}=\int_{t_1}^{t_0}\color{#669900}{\textbf{a}}(t)^T \frac{\partial f (\color{#996699}{\textbf{z}}(t),t,\theta)}{\partial \color{#ecad60}{\theta}}dt $$
+								</li>
+						  </ol>
+						  </ul>
+						</div>
+				</section>
+
 
 
 				<section >
@@ -240,6 +271,7 @@
 						</div>
 					</div>
 				</section>
+			</section>
 
 
 
@@ -314,59 +346,78 @@
 
 						<section>
 							<h3 class="slide-title"><p style="color:#FFAA7F" >Results </h3></p>
-							<div class="container">
-								<div class="col">
-									<img data-src="assets/camels_residual_CV_0.png"/>
+								<br>
+								<div >
+									<li>
+										Netural network trained using single CAMELS simulation of <span style='color:#996699'>$25^3$ ($h^{-1}$ Mpc)$^3$ volume</span> and <span style='color:#669900'>$64^3$ dark matter particles</span> at the fiducial cosmology of  <span style='color:#6699CC'>$\Omega_m = 0.3$</span>
+									</li>
 								</div>
-								<div class="col" >
-									<img style=" position: relative;bottom: 21px;" data-src="assets/cross_corr_CV_0.png" />
+								<br><br>
+								<div class="container">
+									<div class="col">
+										<img data-src="assets/camels_residual_CV_0.png"/>
+									</div>
+									<div class="col" >
+										<img style=" position: relative;bottom: 21px;" data-src="assets/cross_corr_CV_0.png" />
+									</div>
 								</div>
-							</div>
 						</section>
 
 					<section>
-						<h3 class="slide-title"><p style="color:#FFAA7F" >Results </h3></p>
-						<div class="container">
-							<div class="col">
-								<img data-src="assets/camels_residual_diff_resolution_CV_0.png"/>
-								<br>
-								Different resolution
+						<h3 class="slide-title"><p style="color:#FFAA7F" >Results: Robustness to changes in resolution and cosmological parameters </h3></p>
+							<br>
+							<div >
+								<li>
+									Netural network trained using single CAMELS simulation of <span style='color:#996699'>$25^3$ ($h^{-1}$ Mpc)$^3$ volume</span> and <span style='color:#669900'>$64^3$ dark matter particles</span> at the fiducial cosmology of  <span style='color:#6699CC'>$\Omega_m = 0.3$</span>
+								</li>
 							</div>
-							<div class="col">
-								<img data-src="assets/halofit_residuals_wrong_boxsize_res.png"/>
-								<br>
-								Different resolution and volume
+							<br><br>
+							<div class="container">
+								<div class="col">
+									<img data-src="assets/camels_residual_diff_resolution_CV_0.png"/>
+									<br>
+									Higher resolution
+								</div>
+								<div class="col">
+									<img data-src="assets/halofit_residuals_wrong_boxsize_res.png"/>
+									<br>
+									Lower resolution
+								</div>
+								<div class="col">
+									<img data-src="assets/camels_residual_diffomega_1P_1_n5.png"/>
+									<br>
+									Different Cosmology
+								</div>
 							</div>
-							<div class="col">
-								<img data-src="assets/camels_residual_diffomega_1P_1_n5.png"/>
-								<br>
-								Different Cosmology!
-							</div>
-						</div>
 					</section>
 
 					<section>
-						<h3 class="slide-title"><p style="color:#FFAA7F">Results </h3></p>
-						<div class="container">
-							<div class="col">
-								<img data-src="assets/cross_corr_diffresolution_CV_0.png"/>
-								<br>
-								Different resolution
+						<h3 class="slide-title"><p style="color:#FFAA7F">Results: Robustness to changes in resolution and cosmological parameters  </h3></p>
+							<br>
+							<div>
+								<li>
+									Netural network trained using single CAMELS simulation of <span style='color:#996699'>$25^3$ ($h^{-1}$ Mpc)$^3$ volume</span> and <span style='color:#669900'>$64^3$ dark matter particles</span> at the fiducial cosmology of  <span style='color:#6699CC'>$\Omega_m = 0.3$</span>
+								</li>
 							</div>
-							<div class="col">
-								<img data-src="assets/cross_corr_diffomega_1P_1_n5.png"/>
-								<br>
-								Different Cosmology!
+							<br>
+							<div class="container">
+								<div class="col">
+									<img data-src="assets/cross_corr_diffresolution_CV_0.png"/>
+									<br>
+									Higher resolution
+								</div>
+								<div class="col">
+									<img data-src="assets/cross_corr_diffomega_1P_1_n5.png"/>
+									<br>
+									Different Cosmology!
+								</div>
 							</div>
-						</div>
 					</section>
 				</section>
 
 				<section>
-	<h3 class="slide-title"><p style="color:#FFAA7F" > Conclusion </p> </h3>
-
-	<br> <br> <br>
-
+					<h3 class="slide-title"><p style="color:#FFAA7F" > Conclusion </p> </h3>
+						<br> <br> <br>
 							<div class="block ">
 								<div class="block-title" >
 								Takeaway message
@@ -390,15 +441,13 @@
 												<li> Inference of the full posterior distribution by using the Hamiltonian Monte Carlo (HMC) method </li>
 											</ul>
 										</li>
-
 									</ul>
 							</div>
 						</div>
-							<br>
+						<br>
 						<p class="fragment">Thank you ! </p>
-												 <br> <br>
-
-</section>
+						<br> <br>
+			  </section>
 
 
 			</div>
