@@ -96,17 +96,18 @@
 									<br>
 									<br>
 									<ul>
-										<li class="fragment" data-fragment-index="1"> Estimate the density of particles on a mesh
-											$\to$ use the cloud-in-cell (CIC) interpolation scheme
+										<li class="fragment" data-fragment-index="0">From the particle positions estimate the density of particles on a mesh
 										</li>
 										<br>
-										<li class="fragment" data-fragment-index="2"> Apply a Fourier transform to obtain the over-density field $\delta_k$ in Fourier space.
+										<li class="fragment" data-fragment-index="1"> Apply a Fourier transform to obtain the over-density field $\delta_k$ in Fourier space.
 										</li>
 										<br>
-										<li class="fragment" data-fragment-index="3">  Compute gravitational forces 	$\to$ related to the density field via a transfer function ($\nabla \nabla^{-2}$)
-										</li>
-									</br>
-										<li class='fragment'data-fragment-index="4"> Interpolate back the force at every particle position
+											<ul>
+											<li class="fragment" data-fragment-index="1">  Compute gravitational forces 	$\to$ related to the density field via a transfer function ($\nabla \nabla^{-2}$)
+											</li>
+										</br>
+								    	</ul>
+										<li class='fragment'data-fragment-index="2"> Interpolate back the force at every particle position
 										</li>
 									</ul>
 								</li>
@@ -114,10 +115,10 @@
 							</div>
 							<div style="position:relative; width:550px; height:550px; margin:0 auto;">
 								<img class="fragment current-visible plain" data-src="assets/particle_positions_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="0"  />
-								<img class="fragment current-visible plain" data-src="assets/particle_density_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="1" />
-								<img class="fragment current-visible plain" data-src="assets/particle_density_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="2" />
-									<img class="fragment current-visible plain" data-src="assets/particle_density_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="3" />
-								<img class="fragment  plain" data-src="assets/particle_positions_1.png" style="position:absolute;top:0;left:0;" data-fragment-index="4" />
+								<img class="fragment current-visible plain"  data-src="assets/particle_density_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="1" />
+								<!-- <img class="fragment current-visible plain "  data-src="assets/particle_density_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="2" /> -->
+									<!-- <img  class="fragment current-visible plain"  data-src="assets/particle_density_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="3" /> -->
+								<img class="fragment  plain" data-src="assets/particle_positions_1.png" style="position:absolute;top:0;left:0;" data-fragment-index="2" />
 							</div>
 
 							<!-- <div class='col'> -->
@@ -127,6 +128,9 @@
 					<div class="fragment"data-fragment-index="5" style=" position: relative;bottom: 60px;" > $\to$ Only a series of FFTs and interpolations.
 					</div>
 				</section>
+
+
+
 
 				<section>
 					<h3 class='slide-title'><p style="color:#FFAA7F" >	Fill the gap in the accuracy-speed space</p> </h3>
