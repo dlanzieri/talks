@@ -90,7 +90,7 @@
 					<h3 class='slide-title'><p style="color:#FFAA7F" >The Particle-Mesh scheme for N-body simulations</p></h3>
 					<b>The idea</b>: approximate gravitational forces by estimating densities on a grid.
 					<div class='container'>
-							<div class='col'style=" position: relative;bottom: 130px;">
+							<div class='col'style=" position: relative;bottom: 60px;">
 							<ul>
 								<li>The numerical scheme:
 									<br>
@@ -112,11 +112,19 @@
 								</li>
 							</ul>
 							</div>
+							<div style="position:relative; width:550px; height:550px; margin:0 auto;">
+								<img class="fragment current-visible plain" data-src="assets/particle_positions_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="0"  />
+								<img class="fragment current-visible plain" data-src="assets/particle_density_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="1" />
+								<img class="fragment current-visible plain" data-src="assets/particle_density_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="2" />
+									<img class="fragment current-visible plain" data-src="assets/particle_density_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="3" />
+								<img class="fragment  plain" data-src="assets/particle_positions_1.png" style="position:absolute;top:0;left:0;" data-fragment-index="4" />
+							</div>
+
 							<!-- <div class='col'> -->
-									<video playsinline="" data-autoplay="" data-paused-by-reveal="" data-lazy-loaded="" loop="loop" style="width:750px; height:850px; position: relative;bottom: 110px; right:-140px" src="assets/arrow_field.mp4"></video>
+									<!-- <video playsinline="" data-autoplay="" data-paused-by-reveal="" data-lazy-loaded="" loop="loop" style="width:750px; height:850px; position: relative;bottom: 110px; right:-140px" src="assets/arrow_field.mp4"></video> -->
 							<!-- </div> -->
 					</div >
-					<div class="fragment"data-fragment-index="5" style=" position: relative;bottom: 300px;" > $\to$ Only a series of FFTs and interpolations.
+					<div class="fragment"data-fragment-index="5" style=" position: relative;bottom: 60px;" > $\to$ Only a series of FFTs and interpolations.
 					</div>
 				</section>
 
@@ -185,7 +193,8 @@
 							</p>
 							<br>
 							<p  class='fragment' data-fragment-index="1">
-								$$F_\theta(\mathbf{x}, a) = \frac{3 \Omega_m}{2}  \nabla \left[ \phi_{PM} (\mathbf{x}) \ast (1 + \color{#996699}{f_\theta(a)}) \right] $$
+								$$F_\theta(\mathbf{x}, a) = \frac{3 \Omega_m}{2}  \nabla \left[ \phi_{PM} (\mathbf{x}) \ast  \mathcal{F}^{-1} (1 + \color{#996699}{f_\theta(a,|\mathbf{k}|
+								\)}) \right] $$
 							</p>
 							<br>
 							<div class="fragment" data-fragment-index="1" style="position:relative; top:0px; ">Correction integrated as a Fourier-based isotropic filter <span style='color:#996699'>$f_{\theta}$</span> $\to$ incorporates translation and rotation symmetries </div>
@@ -197,7 +206,7 @@
 							</li>
 					 </ul>
 					 <div>
-							 <img data-src="assets/nn_filter3.png" class='plain' style="height: 400px; width:700px" />
+							 <img data-src="assets/nn_manim.png" class='plain' style="height: 600px; width:950px" />
 					 </div>
 				</section>
 				<section>
@@ -449,8 +458,14 @@
 							</div>
 						</div>
 						<br>
-						<p class="fragment">Thank you ! </p>
-						<br> <br>
+						<p class="fragment">
+							GitHub repo: <a href="https://github.com/DifferentiableUniverseInitiative/jaxpm-paper/tree/v_icml"> github.com/DifferentiableUniverseInitiative/jaxpm-paper </a>
+							<br>
+							arXiv:  <a href="https://arxiv.org/pdf/2207.05509.pdf"> 2207.05509 </a>
+							<br>
+							<br>
+							Thank you !
+						</p>
 			  </section>
 
 
