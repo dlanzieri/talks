@@ -28,3 +28,6 @@
 [submodule "bayesian_deep_workshop/reveal.js"]
 	path = bayesian_deep_workshop/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "CCA2022/reveal.js"]
+	path = CCA2022/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
