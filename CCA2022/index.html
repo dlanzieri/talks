@@ -280,16 +280,17 @@
 							cost of a <b>large number of latent variables</b>.
 						</li>
 					</ul>
-
 					<br>
-					<div class="fragment">
-						$\Longrightarrow$ How to peform efficient inference in this <span style='color:#996699'>large number of dimensions</span>?
-					</div>
 					<br>
 					<br>
 					<ul class="fragment"> 
+						<div class="fragment" data-fragment-index="2">
+							$\Longrightarrow$ How to peform efficient inference in this <span style='color:#996699'>large number of dimensions</span>?
+						</div>
+						<ul>
 						<li> Hamiltonian Monte-Carlo, Variational Inference,  Dimensionality reduction by Fisher-Information Maximization, etc.
 						</li>
+						</ul>
 					</ul>
 					<br>
 					<br>
@@ -300,10 +301,11 @@
 				</div>
 
 				<div class='col'>
-
+					Consider simulations as large Hierarchical Bayesian Models:
+					<br>
 					<div style="position:relative; width:500px; height:500px; margin:0 auto;">
-						<img data-src="assets/por.png" style="position:relative;top:0;left:10;width:550px;"/>
-						<div  style="float:right; font-size: 20px"><b>Porqueres</b>, et al. 2021)</div>
+						<img data-src="assets/por2.png" />
+						<div  style="float:right; font-size: 20px"><b>(Porqueres</b>, et al. 2021)</div>
 					</div>
 				</div>
 			</div>
@@ -593,44 +595,6 @@
 
 				<section>
 						<section>
-							<h3 class="slide-title"> <p style="color:#FFAA7F" >Projections of final density field </p></h3>
-							<br>
-							<br>
-							<div class="container">
-								<div class="col">
-									<div class="block-content">
-										<div style="position:relative; height:570px; width:700px top:0px; left:0px;">
-											Camels simulations
-											<img data-src="assets/cluster_2D_Camels.png" style="height:400px;width:1500px"></img>
-										</div>
-									</div>
-								</div>
-								<div class="col">
-									<div class="block-content">
-										<div style="position:relative; height:570px; top:0px; left:0px;">
-											<div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="0">
-												PM simulations
-												<img data-src='assets/cluster_2D_PM.png' style="height:400px;" />
-											</div>
-
-											<div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="1">
-												PM+NN correction
-												<img data-src='assets/cluster_2D_PM_NN.png' style="height:400px;" />
-											</div>
-
-											<div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="2">
-												PM+PGD correction
-												<img data-src='assets/cluster_2D_PM_PGD.png' style="height:400px;" />
-											</div>
-										</div>
-									</div>
-								</div>
-
-
-							</div>
-						</section>
-
-						<section>
 							<h3 class="slide-title"><p style="color:#FFAA7F" >Results </h3></p>
 								<br>
 								<div >
@@ -676,32 +640,7 @@
 								</div>
 							</div>
 					</section>
-
-					<section>
-						<h3 class="slide-title"><p style="color:#FFAA7F">Results: Robustness to changes in resolution and cosmological parameters  </h3></p>
-							<br>
-							<div>
-								<li>
-									Netural network trained using single CAMELS simulation of <span style='color:#996699'>$25^3$ ($h^{-1}$ Mpc)$^3$ volume</span> and <span style='color:#669900'>$64^3$ dark matter particles</span> at the fiducial cosmology of  <span style='color:#6699CC'>$\Omega_m = 0.3$</span>
-								</li>
-							</div>
-							<br>
-							<div class="container">
-								<div class="col">
-									<img data-src="assets/cross_corr_diffresolution_CV_0.png"/>
-									<br>
-									Higher resolution
-								</div>
-								<div class="col">
-									<img data-src="assets/cross_corr_diffomega_1P_1_n5.png"/>
-									<br>
-									Different Cosmology!
-								</div>
-							</div>
-					</section>
 				</section>
-
-
 				<section>
 					<h2> <b class="alert">Example use-case:</b> Forecasting the power of Higher Order Weak Lensing Statistics with automatically differentiable simulations</h2>
 					<hr>
@@ -851,15 +790,18 @@
 							<img data-src="assets/cls_DLL_vs_ktng.png" class='plain' />
 							<br>
 							<ul>
-								<li>Predictions from <b class="alert">DLL</b> simulations (<span style='color:#6699CC'>$128^3$</span> particles) against $\kappa$TNG
+								<li>Predictions from <b class="alert">DLL</b> simulations (<span style='color:#6699CC'>$128^3$</span> particles, box size of 205 Mpc/h ) against $\kappa$TNG (<span style='color:#6699CC'>$2500^3$</span> particles, box size of 205 Mpc/h )
 								</li>
 							</ul>
 						</div>
 						<div class="col">
-							<img data-src="assets/massivenu_.png"  class='plain' style="height: 360px; width:920px"  />
+							<div style="float:right; font-size: 15px">
+								(<b >Liu</b>, et al. 2017)
+							</div>
+							<img data-src="assets/massivenu_.png"  class='plain' style="height: 350px; width:920px"  />
 							<br>
 							<ul>
-								<li>Predictions from  <b class="alert">MassiveNus</b> simulations (<span style='color:#6699CC'>$1024^3$</span> particles) against Halofit.  (<b >Liu</b>, et al. 2017)
+								<li>Predictions from  <b class="alert">MassiveNus</b> simulations (<span style='color:#6699CC'>$1024^3$</span> particles, box size of 512 Mpc/h) against Halofit.  
 								</li>
 							</ul>
 						</div>
@@ -990,6 +932,65 @@
 						</div>
 					</div>
 				</section>
+				<section>
+					<h3 class="slide-title"> <p style="color:#FFAA7F" >Projections of final density field </p></h3>
+					<br>
+					<br>
+					<div class="container">
+						<div class="col">
+							<div class="block-content">
+								<div style="position:relative; height:570px; width:700px top:0px; left:0px;">
+									Camels simulations
+									<img data-src="assets/cluster_2D_Camels.png" style="height:400px;width:1500px"></img>
+								</div>
+							</div>
+						</div>
+						<div class="col">
+							<div class="block-content">
+								<div style="position:relative; height:570px; top:0px; left:0px;">
+									<div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="0">
+										PM simulations
+										<img data-src='assets/cluster_2D_PM.png' style="height:400px;" />
+									</div>
+
+									<div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="1">
+										PM+NN correction
+										<img data-src='assets/cluster_2D_PM_NN.png' style="height:400px;" />
+									</div>
+
+									<div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="2">
+										PM+PGD correction
+										<img data-src='assets/cluster_2D_PM_PGD.png' style="height:400px;" />
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</section>
+				<section>
+					<h3 class="slide-title"><p style="color:#FFAA7F">Results: Robustness to changes in resolution and cosmological parameters  </h3></p>
+						<br>
+						<div>
+							<li>
+								Netural network trained using single CAMELS simulation of <span style='color:#996699'>$25^3$ ($h^{-1}$ Mpc)$^3$ volume</span> and <span style='color:#669900'>$64^3$ dark matter particles</span> at the fiducial cosmology of  <span style='color:#6699CC'>$\Omega_m = 0.3$</span>
+							</li>
+						</div>
+						<br>
+						<div class="container">
+							<div class="col">
+								<img data-src="assets/cross_corr_diffresolution_CV_0.png"/>
+								<br>
+								Higher resolution
+							</div>
+							<div class="col">
+								<img data-src="assets/cross_corr_diffomega_1P_1_n5.png"/>
+								<br>
+								Different Cosmology!
+							</div>
+						</div>
+				</section>
+			</section>
 				<section >
 					<h3 class='slide-title'><p style="color:#FFAA7F"> Proof of Concept</h3> </p>
 					<li style="font-size: 20px";> 
