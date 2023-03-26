@@ -31,3 +31,6 @@
 [submodule "CCA2022/reveal.js"]
 	path = CCA2022/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "DAp_GPU_Day/reveal.js"]
+	path = DAp_GPU_Day/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
