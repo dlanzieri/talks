@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>Fast and Approximated Automatically Differentiable Simulations for Full-Field Cosmological Inference</title>
+		<title>Fast and Approximated Automatically Differentiable Simulations</title>
 		<meta name="description" content="Presentation for the international conference on machine learning and applications">
 		<meta name="author" content="Denise">
 
@@ -21,7 +21,7 @@
 	<section  data-background-image="assets/lsst_stills_0009_crop.jpg">
 		<div class="container">
 			<div class="title" style="border-radius: 20px; background-color:rgba(0, 0, 0, 0.4);">
-				<h2>Fast and Approximated Automatically Differentiable Simulations for Full-Field Cosmological Inference</h2>
+				<h2>Fast and Approximated Automatically Differentiable Simulations</h2>
 				<h3><p style="color:#FFAA7F";>DAp GPU Day</p></h3>
 			</div>
 			
@@ -56,263 +56,51 @@
 			<div> slides at <a style="color:#FFAA7F"; href="https://dlanzieri.github.io/talks/DAp_GPU_Day/">dlanzieri.github.io/DAp_GPU_Day/</a> </div>
 		</div>
 	</section>
-	<!-- <section>
-		<section data-background-video="assets/animation-day-to-night.mov" data-background-video-muted>
-			<h3 class='slide-title'>the Rubin Observatory Legacy Survey of Space and Time</h3>
-			<div class="container">
-				<div class="col">
-					<ul>
-						<li class="fragment fade-up"> 1000 images each night, 15 TB/night for 10 years</li>
-						<br>
-						<li class="fragment fade-up"> 18,000 square degrees, observed once every few days</li>
-						<br>
-						<li class="fragment fade-up"> Tens of billions of objects, each one observed $\sim1000$ times</li>
-					</ul>
-				</div>
-
-				<div class="col">
-					<video data-autoplay class="fragment fade-up" data-fragment-index="1" data-src="assets/obsim.mp4" type="video/mp4" />
-				</div>
-			</div>
-		</section>	
-	</section> -->
+	<section data-background-video="assets/illustris_movie_cube_sub_frame.mp4">
+		<h3  class='slide-title'> What are cosmological simulations?</h3>
+		<div class="fragment fade-up">
+			<img data-src="assets/IAhydro.png" style="height: 500px;"><br>
+			<div style="float:right; font-size: 20px">Kiessling et al. (2015)</div>
+		</div>
+	</section>
 	<section>
-		<h3  class='slide-title'><p style="color:#FFAA7F" > The challenges of modern surveys</p></h3>
-			$\Longrightarrow$  Modern surveys will provide <b>large volumes</b> of <b>high quality</b> data
+		<h3  class='slide-title'><p style="color:#FFAA7F" >TensorFlow and Jax cosmological N-body solvers</p></h3>
 			<br>
 			<br>
-			<div class="container">
-				<div class="col">
-					<div class="block fragment">
-						<div class="block-title">
-							A Blessing
-						</div>
-						<div class="block-content">
-							<ul>
-								<li>Unprecedented statistical power
-								</li>
-								<br>
-								<li>Great potential for new discoveries
-								</li>
-							</ul>
-						</div>
-					</div>
-					<br>
-					<div class="block fragment">
-						<div class="block-title">
-							A Curse
-						</div>
-						<div class="block-content">
-							<ul>
-								<li> Existing methods are reaching their limits at every
-									step of the science analysis
-								</li>
-								<br>
-								<li>Control of systematic uncertainties becomes paramount
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<div class="col">
-					LSST forecast on dark energy parameters
-					<img class="plain" data-src="assets/LSST_forecast_Y10.png" style="height :450px"/>
-				</div>
-			</div>
-			<div class="fragment">
-				$\Longrightarrow$ Dire need for <b class="alert">novel analysis techniques</b> to fully realize the potential of modern surveys.
-			</div>
-		</section>
-
-		<section data-background-image="assets/lensing.jpg">
-		</section>
-		<section>
-			<h3 class='slide-title'><p style="color:#FFAA7F" > The limits of traditional cosmological inference </h3></p>
-			<div class='container'>
-				<div class='col'>
-					<div style="position:relative; width:480px; height:30px; margin:0 auto;">
-						<div class="fragment current-visible" style="position:absolute;top:0;" data-fragment-index="1">HSC cosmic shear power spectrum</div>
-						<div class="fragment" style="position:absolute;top:0;" data-fragment-index="2">HSC Y1 constraints on $(S_8, \Omega_m)$</div>
-					</div>
-					<div style="position:relative; width:480px; height:300px; margin:0 auto;">
-						<div class="fragment current-visible" style="position:absolute;top:0;left:0;" data-fragment-index="0">
-							<img class="plain" data-src="assets/alonso_g1.png" />
-							<img class="plain" data-src="assets/alonso_g2.png" />
-						</div>
-						<img class="fragment current-visible plain" data-src="assets/hsc_correlation_function.png" style="position:absolute;top:0;left:0;" data-fragment-index="1" />
-						<img class="fragment  plain" data-src="assets/hsc_constraints.png" style="position:absolute;top:0;left:0;" data-fragment-index="2" />
-					</div>
-					<div class="fragment" data-fragment-index="1" style="float:right; font-size: 20px">(Hikage et al. 2018)</div>
-				</div>
-		
-				<div class='col'>
-					<ul>
-						<li class="fragment" data-fragment-index="0"> Measure the ellipticity $\epsilon = \epsilon_i + \gamma$ of all galaxies<br>
-							$\Longrightarrow$ Noisy tracer of the weak lensing shear $\gamma$ </li>
-						<br>
-						<li class="fragment" data-fragment-index="1"> Compute <b class="alert">summary statistics</b> based on 2pt functions, <br>e.g. the <b>power spectrum</b> </li>
-						<br>
-						<li class="fragment" data-fragment-index="2"> Run an MCMC to recover a posterior on model parameters, using an <b class="alert">analytic likelihood</b>
-							$$ p(\theta | x ) \propto \underbrace{p(x | \theta)}_{\mathrm{likelihood}} \ \underbrace{p(\theta)}_{\mathrm{prior}}$$
-						</li>
-					</ul>
-				</div>
-			</div>
-		
-			<div class="block fragment">
-				<div class="block-title">
-					Main limitation:
-				</div>
-				<div class="block-content">
-					<li>The two-point statistics do not fully capture the <b class="alert">non-Gaussian</b> information, e.g. information encoded in the peaks of the matter distribution</li>
-					<br>
-					<!-- <li>We can only compute the likelihood for <b class="alert">simple summary statistics</b> and on <b class="alert">large scales</b></li>
-					<br> -->
-					<div class="fragment"> $\Longrightarrow$ We are dismissing a significant fraction of the information! </div>
-				</div>
-			</div>
-		</section>
-
-		<section >
-			<h2 class='slide-title'> <p style="color:#FFAA7F" > How to maximize the information gain? </p> </h2>
-			<div class='container'>
-				<div class='col'>
-
-					<div style="position:relative; width:700px; height:500px; margin:0 auto;">
-						<img class="fragment plain" data-src="assets/Virg1_.png" style="position:absolute;top:0;left:0;" data-fragment-index="0" />
-					</div>
-					<div class="fragment" data-fragment-index="0" style="float:right; font-size: 20px">(<b>Ajani</b>, et al. 2020)
-					</div>
-				</div>
-				<div class='col'>
-					<ul><li class="fragment" data-fragment-index="0">	Approaches based on measuring high-order correlations to access the non-Gaussian information:
-							<ul>
-								<br>
-								<li>
-									Lensing peaks counts, Minkowski functionals, 3 point statistics, wavelet and scattering transform 
-								</li>
-								<br>
-								<li>
-									Machine learning-based methods 
-								</li>
-								<br>
-							</ul>
-						</li>
-					</ul>
-				</div>
-			</div>
-			<div class="block fragment">
-				<div class="block-title">
-					Main limitation: the need for an explicit likelihood
-				</div>
-				<div class="block-content">
-					We can only compute the likelihood for <b class="alert">simple summary statistics</b> and on <b class="alert">large scales</b>
-					<br>
-					<br>
-					<div class="fragment"> $\Longrightarrow$ We are dismissing a significant fraction of the information! </div>
-				</div>
-			</div>
-		</section>
-
-		<!-- <section>
-			<h3 class='slide-title'><p style="color:#FFAA7F" >A different approach:</p></h3>
-			<div class='container'>
-				<div class="col">
-					<ul>
-						<li class="fragment" data-fragment-index="0">
-							<span style='color:#996699'> Likelihood-free inference</span> methods:
-						</li>
-						<ul>
-							<br>
-							<li class="fragment" data-fragment-index="0">
-								Deep learning-based density estimation methods to model the likelihood without the need to make any Gaussianity assumption
-							</li> 
-						</ul>
-					</ul>
-					<ul> 
-						<br>
-						<li class="fragment" data-fragment-index="1">
-							<span style='color:#996699'> Bayesian forward-modelling</span> frameworks
-						</li>
-						<br>
-						<ul>
-							<li class="fragment" data-fragment-index="1">
-								Fully exploits the information content of the data (aka "full field inference").
-							</li>
-							<br>
-							<li class="fragment" data-fragment-index="1">
-								Easy to incorporate systematic effects and combine multiple cosmological probes by joint simulations.
-							</li>
-						</ul>
-					</ul>
-				</div>
-				<div  class="col">
-					<img class="fragment current-visible plain" data-src="/assets/jeffrey_s8.png" style="position:absolute;top:0;right:0;width:600px;" data-fragment-index="0" />
-					<img class="fragment plain" data-src="/assets/Por.png" style="position:absolute;top:0;right:0;width:450px;" data-fragment-index="1" />
-				</div>
-			</div>
-			<br>
-			<div class="plain fragment current-visible "  data-fragment-index="0" style="float:right; font-size: 20px">(<b>Jeffrey</b>, et al. 2020)
-			</div>
-			<div class="fragment plain"  data-fragment-index="1" style=" float:right;font-size: 20px">(<b>Porqueres</b>, et al. 2021)
-			</div>
-
-			<div class="plain fragment current-visible "  data-fragment-index="2"/>
 			<br>
 			<br>
-			$\Longrightarrow$ What do they all have in common?
+			<ul>
+				<li > Analysis & Inference:
+				</li>
+				<ul>
+					<br>
+					<li>  Simulations in TensorFlow and Jax have a unique capability that cosmologists did not have before $\Longrightarrow$  <span style='color:#996699'>differentiability</span> 
+					</li>
+				</ul>
+				<br>
+				<br>
+				<li > Hybrid Physical/Deep Learning Simulations
+				</li>
+				<ul>
+					<br>
+					<li>  We can develop  <span style='color:#669900'> hybrid </span> forward models where we use deep learning components as a part of the N-body simulations
+					</li>
+				</ul>
+			</ul>
 			<br>
-			They require fast, accurate, <span style='color:#FFAA7F'>differentiable</span> forward simulations!
-			</div>
-		</section> -->
-		<section>
-			<h3 class='slide-title'><p style="color:#FFAA7F" >A different approach: Bayesian forward-modelling</span> frameworks</p></h3>
-			<div class='container'>
-				<div class='col'>
-					<ul>
-						<li class="fragment" data-fragment-index="1">
-							Fully exploits the information content of the data (aka "full field inference").
-						</li>
-						<br>
-						<li class="fragment" data-fragment-index="1">
-							Easy to incorporate systematic effects and combine multiple cosmological probes by joint simulations.
-						</li>
-						<br>
-						<li class="fragment" data-fragment-index="1"> Each component of the model is now tractable, but at the
-							cost of a <b>large number of latent variables</b>.
-						</li>
-					</ul>
-					<br>
-					<br>
-					<br>
-					<ul class="fragment"> 
-						<div class="fragment" data-fragment-index="2">
-							$\Longrightarrow$ How to peform efficient inference in this <span style='color:#996699'>large number of dimensions</span>?
-						</div>
-						<ul>
-						<li> Hamiltonian Monte-Carlo, Variational Inference,  Dimensionality reduction by Fisher-Information Maximization, etc.
-						</li>
-						</ul>
-					</ul>
-					<br>
-					<br>
-					<div class="fragment">
-						What do they all have in common?<br>
-						-> They require fast, accurate, <b class="alert">differentiable</b> forward simulations
-					</div>
-				</div>
-
-				<div class='col'>
-					Consider simulations as large Hierarchical Bayesian Models:
-					<br>
-					<div style="position:relative; width:500px; height:500px; margin:0 auto;">
-						<img data-src="assets/por2.png" />
-						<div  style="float:right; font-size: 20px"><b>(Porqueres</b>, et al. 2021)</div>
-					</div>
-				</div>
-			</div>
-		</section>
-
+			<br>
+			<div>
+				<img
+				  data-src="/assets/TF_FullColor_Horizontal.png"
+				  style="height: 75px"
+				/>
+				<img
+				  style="height: 75px"
+				  data-src="https://raw.githubusercontent.com/google/jax/master/images/jax_logo_250px.png"
+				  class="plain"
+				/>
+			  </div>
+	</section>
 		<section class="inverted" data-background="#000">
 			<h2>How do we simulate the Universe in a fast and differentiable way?</h2>
 		</section>
@@ -356,6 +144,269 @@
 			</div>
 		</section>
 		<section>
+			<h3 class='slide-title'> <p style="color:#FFAA7F" >Automatic Differentiation and Gradients in TensorFlow and Jax</p></h3>  
+			<ul>
+			  <li class="fragment">
+				<b>Automatic differentiation</b> allows you to compute analytic
+				derivatives of arbitraty expressions:<br />
+				If I form the expression $y = a * x + b$, it is separated in
+				fundamental ops: $$ y = u + b \qquad u = a * x $$ then gradients
+				can be obtained by the chain rule: $$\frac{\partial y}{\partial x}
+				= \frac{\partial y}{\partial u} \frac{ \partial u}{\partial x} = 1
+				\times a = a$$
+			  </li>
+			  <br />
+			  <li class="fragment">
+				To differentiate automatically, TensorFlow and Jax remember what operations
+						happen in what order during the forward pass and traverses this list of operations in reverse order to compute gradients.
+			  </li>
+			</ul>
+			<br />
+			<br />
+			<div class="block fragment">
+			  <div class="block-title">Advantages</div>
+			  <div class="block-content">
+				<div class="container">
+				  <div class="col">
+					<ul>
+					  <li>
+						Derivative as functions!
+					  </li>
+					  <li>No numerical approximation</li>
+					  <li>Accelerated execution on GPU</li>
+					</ul>
+				  </div>
+				  <div class="col" align="center">
+					<img
+					data-src="/assets/TF_FullColor_Horizontal.png"
+					style="height: 35px"
+				  	/>
+					<img
+					 style="height: 35px"
+					  data-src="https://raw.githubusercontent.com/google/jax/master/images/jax_logo_250px.png"
+					  class="plain"
+					/>
+				  </div>
+				</div>
+			  </div>
+			</div>
+		  </section>
+	 
+		<section>
+			<h3  class='slide-title'><p style="color:#FFAA7F" >TensorFlow and Jax cosmological N-body solvers</p></h3>
+				<br>
+				<br>
+				<br>
+				<br>
+				<ul>
+					<ul>
+					<li class="fragment grow"> Analysis & Inference:
+					</li>
+					<ul>
+						<br>
+						<li>  Simulations in TensorFlow and Jax have a unique capability that cosmologists <br> did not have before $\Longrightarrow$  <span style='color:#996699'>differentiability</span> 
+						</li>
+					</ul>
+					<br>
+					<br>
+					<li > Hybrid Physical/Deep Learning Simulations
+					</li>
+					<ul>
+						<br>
+						<li> We can develop  <span style='color:#669900'> hybrid </span> forward models where we use deep learning components <br> as a part of the N-body simulations
+						</li>
+					</ul>
+					</ul>
+				</ul>
+				<br>
+				<br>
+		</section>
+		<section>
+			<h2> <b class="alert">Example use-case:</b> Forecasting the power of Higher Order Weak Lensing Statistics with automatically differentiable simulations</h2>
+			<hr>
+			<div class="container">
+				<div class="col">
+					<div align="left" style="margin-left: 20px;">
+						<h4>Work in collaboration with: <br>
+							F. Lanusse, C. Modi, B. Horowitz, J. Harnois-Déraps, J.L. Starck, <br>
+							The LSST Dark Energy Science Collaboration (LSST DESC)
+						</h4>
+						<img data-src="assets/desc-logo.png" style='width:300px; height:200px;'></img>
+
+						<br>
+
+						$\Longrightarrow$  Compare the constraining power of weak lensing statistics and <b class="alert"> investigate the degeneracy in high dimensional cosmological parameter space.</b>
+					</div>
+				</div>
+				<div class="col">
+					<img class="plain" data-src="assets/lensing.jpg" style="width:550px;" />
+				</div>
+			</div>
+			<br>
+		</section> 
+
+		<!-- <section>
+			<h3 class='slide-title'><p style="color:#FFAA7F">Introducing FlowPM: Particle-Mesh Simulations in TensorFlow</h3></p>
+			<div class="container">
+				<div class="col">
+					<div style="float:right; font-size: 20px"> Modi, Lanusse, Seljak (2020)
+						<a href="https://arxiv.org/abs/2010.11847"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2010.11847-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a></div>
+				</div>
+			</div>
+			<div class='container'>
+				<div class='col'>
+					<img data-src="assets/github.png" class="plain" style="height:70px" />
+
+
+					<div> <a href="https://github.com/DifferentiableUniverseInitiative/flowpm">https://github.com/DifferentiableUniverseInitiative/flowpm</a>
+					</div>
+					<pre class="brush:python"><code data-trim data-noescape>
+					import tensorflow as tf
+					import flowpm
+					# Defines integration steps
+					stages = np.linspace(0.1, 1.0, 10, endpoint=True)
+
+					initial_conds = flowpm.linear_field(32,       # size of the cube
+														100,       # Physical size
+														ipklin,    # Initial powerspectrum
+														batch_size=16)
+
+					# Sample particles and displace them by LPT
+					state = flowpm.lpt_init(initial_conds, a0=0.1)
+
+					# Evolve particles down to z=0
+					final_state = flowpm.nbody(state, stages, 32)
+
+					# Retrieve final density field
+					final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
+													final_state[0])
+					</code></pre>
+					<ul>
+						<li> Seamless interfacing with deep learning components
+						</li>
+					</ul>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+				</div>
+
+				<div class='col'>
+						  <img data-src="assets/flowpm_.gif"></img>
+					<br>
+					<br>
+					<br>
+					<br>
+				</div>
+			</div>
+		</section>	 -->
+		<!-- <section>
+			<h3 class='slide-title'><p style="color:#FFAA7F">Differentiable Lensing Lightcone:  TensorFlow-based weak gravitational lensing package </h3></p>
+			<div class="container">
+				<div class="col">
+					<img data-src="assets/kmap.png" style="width:550px;"/>
+				</div>
+
+				<div class="col">
+					<ul>
+						We extend the FlowPM approach:
+						<ul>
+							<br>
+							<li> Computing the time integration starting from a system of ODE.
+								<ul>
+								<br>
+									<li>Tune the accuracy-speed by defining a tolerance of the ODE Solver</li>
+									<li>Reduced memory usage: no need to store intermediate steps for backpropagation.</li>
+								</ul>
+							</li>
+							<br>
+							<br>
+							<li> Integrating the Hybrid Physical-Neural parameterisation to compensate for the small-scale approximations
+							<br>
+							<br>
+							<li> Implementing ray-tracing and simulating lensing lightcones in the Tensorflow framework<br>
+							</li>
+						</ul>
+					</ul>
+				</div>
+			</div>
+		</section> -->
+		<section >
+			<h2 class='slide-title'> <p style="color:#FFAA7F" >Compare the information content </h2> </p>
+			<div style="position:absolute;top:100;left:-10;">	
+				We tested the simulations to reproduce a LSST like setting 
+				<br>
+				(Results presented on behalf of LSST DESC)
+			</div>
+			<br>
+			<div class='container'>
+				<div class='col'>
+					\[\begin{equation}
+						F_{\alpha, \beta} =\sum_{i,j} \frac{d\mu_i}{d\theta_{\alpha}}
+						C_{i,j}^{-1} \frac{d\mu_j}{d\theta_{\beta}}
+					\end{equation} \]
+				</div>
+				<div class='col'>
+					<ul>
+					<br>
+					<br>
+						<li> Use Fisher matrix to estimate the information content extracted with a given statistic 
+						</li>
+						<br>
+						<li class="fragment" data-fragment-index="0" > Derivative of summary statistics respect to the cosmological parameters.
+						</li>
+						<br>
+						<li class="fragment"data-fragment-index="2"> Fisher matrices are notoriously unstable
+							<br>
+							$\Longrightarrow$ they rely on evaluating gradients by finite differences.
+						</li>
+						<br>
+						<li class="fragment"data-fragment-index="3"> They do not scale well to large number of parameters.
+						</li>
+					</ul>
+				</div>
+			</div>
+		</section>
+		<section >
+			<h3 class="slide-title"><p style="color:#FFAA7F" > Compare the information content </p></h3>
+				<ul>
+					<li style="font-size: 20px"; > 
+						Use Fisher matrix to investigate the degeneracy between the cosmological parameters in high dimensional space and when systematics are included in the analysis. 
+					</li>
+				</ul>
+				<div>
+					<img data-src="assets/Fisher_talk.png" class='plain' style="height: 620px; width:720px" />
+				</div>
+		</section>
+		<section>
+			<h3  class='slide-title'><p style="color:#FFAA7F" >TensorFlow and Jax cosmological N-body solvers</p></h3>
+				<br>
+				<br>
+				<br>
+				<br>
+				<ul>
+					<li> Analysis & Inference:
+					</li>
+					<ul>
+						<br>
+						<li>  Simulations in TensorFlow and Jax have a unique capability that cosmologists  <br> did not have before $\Longrightarrow$ <span style='color:#996699'>differentiability</span> 
+						</li>
+					</ul>
+					<br>
+					<br>
+					<li  class="fragment grow"> Hybrid Physical/Deep Learning Simulations
+					</li>
+					<ul>
+						<br>
+						<li> We can develop  <span style='color:#669900'> hybrid </span> forward models where we use deep learning components <br> as a part of the N-body simulations
+						</li>
+					</ul>
+				</ul>
+				<br>
+				<br>
+		</section>
+		<section>
 			<h2>Hybrid Physical-Neural ODEs for Fast N-body Simulations</h2>
 			<hr>
 			<div class="container">
@@ -388,7 +439,7 @@
 			</div>
 		</section> -->
 
-		<section>
+		<!-- <section>
 			<h3  class='slide-title'><p style="color:#FFAA7F" >Motivation</p></h3>
 				<br>
 				<br>
@@ -414,7 +465,7 @@
 				</ul>
 				<br>
 				<br>
-		</section>
+		</section> -->
 		<section>
 			<h3 class='slide-title'><p style="color:#FFAA7F" >	Fill the gap in the accuracy-speed space</p> </h3>
 				<div class='container'>
@@ -479,7 +530,7 @@
 							</p>
 							<br>
 							<p  class='fragment' data-fragment-index="1">
-								$$F_\theta(\mathbf{x}, a) = \frac{3 \Omega_m}{2}  \nabla \left[ \phi_{PM} (\mathbf{x}) \ast  \mathcal{F}^{-1} (1 + \color{#996699}{f_\theta(a,|\mathbf{k}|)}) \right] $$
+								$$F_\theta(\mathbf{x}, a) = \frac{3 \Omega_m}{2}  \nabla \left[ \phi_{PM} (\mathbf{x}) \ast \mathcal{F} ^{-1} (1 + \color{#996699}{f_\theta(a,|\mathbf{k}|)}) \right] $$
 							</p>
 							<br>
 							<div class="fragment" data-fragment-index="1" style="position:relative; top:0px; ">Correction integrated as a Fourier-based isotropic filter <span style='color:#996699'>$f_{\theta}$</span> $\to$ incorporates translation and rotation symmetries </div>
@@ -499,7 +550,7 @@
 					<div class="container">
 						<div class="col">
 								<div  >
-								$$\mathcal{L} =  \sum_{i}^{snapshots} \lambda_1||   \color{#6699CC}{\mathbf{x}^{ref}_i} -  \color{#6699CC}{\mathbf{x}_i}||_2^2  + \lambda_2 || \frac{\color{#996699}{p_i(k)}}{\color{#996699}{p_i^{ref}(k)}} -1 ||_2^2 $$
+								$$ L =  \sum_{i}^{snapshots} \lambda_1||   \color{#6699CC}{\mathbf{x}^{ref}_i} -  \color{#6699CC}{\mathbf{x}_i}||_2^2  + \lambda_2 || \frac{\color{#996699}{p_i(k)}}{\color{#996699}{p_i^{ref}(k)}} -1 ||_2^2 $$
 								</div>
 						</div>
 						<div class="col">
@@ -519,12 +570,10 @@
 						</div>
 					</div>
 				</section>
-				<section>
+				<!-- <section>
 					<h3 class="slide-title"><p style="color:#FFAA7F" >Backpropagation through the ODE solver</p></h3>
 						We are following the technique from Neural ODEs to <b>backpropagate through an ODE solver</b> (<a style="color:#FFAA7F; font-size: 20px" href="https://proceedings.neurips.cc/paper/2018/file/69386f6bb1dfed68692a24c8686939b9-Paper.pdf">Neural Ordinary Differential Equations, Chen et al. 2018</a>).
-						<br><br>
-						<!-- <li> $\to$ Treat the ODE solver as a black box and compute gradients using the adjoint sensitivity method (Pontryagin et al., 1962).
-						</li> -->
+						<br><br>	
 							<div class="block">
 							<div class="block-title" style='color:white'>
 							 How	optimize a <span style='color:#6699CC'>loss function</span> with input the result of an ODE solver:  <span style='color:#6699CC'>$\textbf{L}$</span>(ODESolve$(\color{#996699}{z}(t_0),f,t_0,t_1,\color{#ecad60}{\theta}))$?
@@ -548,7 +597,7 @@
 						  </ol>
 						  </ul>
 						</div>
-				</section>
+				</section> -->
 				<section >
 					<h3 class="slide-title"><p style="color:#FFAA7F" >Hybrid Physical-Neural ODE</p></h3>
 					<div class="container">
@@ -565,298 +614,6 @@
 					</div>
 				</section>
 			</section>
-				<section >
-					<h3 class='slide-title'><p style="color:#FFAA7F" >	Potential Gradient Descent (PGD)</p> </h3>
-				 		<div class='container'>
-							<div class='col'>
-								<ul>
-									<li>Additional displacements to sharpen the halos
-									</li>
-									<br>
-									<li>The direction of the displacements points towards the halo center (local potential minimum).</li>
-									<br>
-									<li>The gravitational force:
-											\begin{equation}
-												\mathbf{F}=-\nabla\Phi
-											\end{equation}
-									</li>
-									<li> The PGD correction displacement:
-										\begin{equation}
-											\mathbf{S}=-\alpha\nabla \hat{O}_{h}\hat{O}_{l}\Phi
-										\end{equation}
-										High pass filter prevents the large scale growth, low pass filter reduces the numerical effect
-									</li>
-								</ul>
-							</div>
-							<div class='col'>
-				 				<img data-src="assets/pot_pgd.png" class='plain' style="height: 450px; width:800px" />
-								<div style="float:right; font-size: 20px"><a style="color:#996699"; href=" https://iopscience.iop.org/article/10.1088/1475-7516/2018/11/009/pdf?casa_token=3b8_RUCo4uAAAAAA:aqUgqZUFV1jao2LlJSqI25p2GEh-2KmGTS_ab4p1F9TSK5d0SytTPG6rN_YRhKYdnd9lBiX32A:">(Biwei Dai et al. 2018)</a></div>
-							</div>
-						</div>
-				</section>
-
-				<section>
-						<section>
-							<h3 class="slide-title"><p style="color:#FFAA7F" >Results </h3></p>
-								<br>
-								<div >
-									<li>
-										Netural network trained using single CAMELS simulation of <span style='color:#996699'>$25^3$ ($h^{-1}$ Mpc)$^3$ volume</span> and <span style='color:#669900'>$64^3$ dark matter particles</span> at the fiducial cosmology of  <span style='color:#6699CC'>$\Omega_m = 0.3$</span>
-									</li>
-								</div>
-								<br><br>
-								<div class="container">
-									<div class="col">
-										<img data-src="assets/camels_residual_CV_0.png"/>
-									</div>
-									<div class="col" >
-										<img style=" position: relative;bottom: 21px;" data-src="assets/cross_corr_CV_0.png" />
-									</div>
-								</div>
-						</section>
-
-					<section>
-						<h3 class="slide-title"><p style="color:#FFAA7F" >Results: Robustness to changes in resolution and cosmological parameters </h3></p>
-							<br>
-							<div >
-								<li>
-									Netural network trained using single CAMELS simulation of <span style='color:#996699'>$25^3$ ($h^{-1}$ Mpc)$^3$ volume</span> and <span style='color:#669900'>$64^3$ dark matter particles</span> at the fiducial cosmology of  <span style='color:#6699CC'>$\Omega_m = 0.3$</span>
-								</li>
-							</div>
-							<br><br>
-							<div class="container">
-								<div class="col">
-									<img data-src="assets/camels_residual_diff_resolution_CV_0.png"/>
-									<br>
-									Higher resolution
-								</div>
-								<div class="col">
-									<img data-src="assets/halofit_residuals_wrong_boxsize_res.png"/>
-									<br>
-									Lower resolution
-								</div>
-								<div class="col">
-									<img data-src="assets/camels_residual_diffomega_1P_1_n5.png"/>
-									<br>
-									Different Cosmology
-								</div>
-							</div>
-					</section>
-				</section>
-				<section>
-					<h2> <b class="alert">Example use-case:</b> Forecasting the power of Higher Order Weak Lensing Statistics with automatically differentiable simulations</h2>
-					<hr>
-					<div class="container">
-						<div class="col">
-							<div align="left" style="margin-left: 20px;">
-								<h4>Work in collaboration with: <br>
-									F. Lanusse, C. Modi, B. Horowitz, J. Harnois-Déraps, J.L. Starck, <br>
-									The LSST Dark Energy Science Collaboration (LSST DESC)
-								</h4>
-								<img data-src="assets/desc-logo.png" style='width:300px; height:200px;'></img>
-	
-								<br>
-	
-								$\Longrightarrow$  Compare the constraining power of weak lensing statistics and <b class="alert"> investigate the degeneracy in high dimensional cosmological parameter space.</b>
-							</div>
-						</div>
-						<div class="col">
-							<img class="plain" data-src="assets/lensing.jpg" style="width:550px;" />
-						</div>
-					</div>
-					<br>
-				</section> 
-
-				<section>
-					<h3 class='slide-title'><p style="color:#FFAA7F">Introducing FlowPM: Particle-Mesh Simulations in TensorFlow</h3></p>
-					<div class="container">
-						<div class="col">
-							<div style="float:right; font-size: 20px"> Modi, Lanusse, Seljak (2020)
-								<a href="https://arxiv.org/abs/2010.11847"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2010.11847-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a></div>
-						</div>
-					</div>
-					<div class='container'>
-						<div class='col'>
-							<img data-src="assets/github.png" class="plain" style="height:70px" />
-							<img data-src="assets/TF_FullColor_Horizontal.png" class='plain' style="height: 70px;" />
-
-							<div> <a href="https://github.com/DifferentiableUniverseInitiative/flowpm">https://github.com/DifferentiableUniverseInitiative/flowpm</a>
-							</div>
-							<pre class="python"><code data-trim data-noescape>
-											import tensorflow as tf
-											import flowpm
-											# Defines integration steps
-											stages = np.linspace(0.1, 1.0, 10, endpoint=True)
-
-											initial_conds = flowpm.linear_field(32,       # size of the cube
-																			   100,       # Physical size
-																			   ipklin,    # Initial powerspectrum
-																			   batch_size=16)
-
-											# Sample particles and displace them by LPT
-											state = flowpm.lpt_init(initial_conds, a0=0.1)
-
-											# Evolve particles down to z=0
-											final_state = flowpm.nbody(state, stages, 32)
-
-											# Retrieve final density field
-											final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
-																		   final_state[0])
-										</code></pre>
-							<ul>
-								<li> Seamless interfacing with deep learning components
-								</li>
-								<li> <b class="alert">Mesh TensorFlow</b> implementation for distribution on supercomputers
-								</li>
-							</ul>
-							<br>
-							<br>
-							<br>
-							<br>
-							<br>
-						</div>
-
-						<div class='col'>
-								  <img data-src="assets/flowpm_.gif"></img>
-							<!-- <div class="fig-container" data-file="flowpm_16.html" data-style="height: 550px;"></div> -->
-							<br>
-							<br>
-							<br>
-							<br>
-						</div>
-					</div>
-				</section>
-
-				<section>
-					<h3 class='slide-title'><p style="color:#FFAA7F">Differentiable Lensing Lightcone:  TensorFlow-based weak gravitational lensing package </h3></p>
-					<div class="container">
-						<div class="col">
-							<img data-src="assets/kmap.png" style="width:550px;"/>
-						</div>
-
-						<div class="col">
-							<ul>
-								We extend the FlowPM approach:
-								<ul>
-									<br>
-									<li> Computing the time integration starting from a system of ODE.
-										<ul>
-										<br>
-											<li>Tune the accuracy-speed by defining a tolerance of the ODE Solver</li>
-											<li>Reduced memory usage: no need to store intermediate steps for backpropagation.</li>
-										</ul>
-									</li>
-									<br>
-									<br>
-									<li> Integrating the Hybrid Physical-Neural parameterisation to compensate for the small-scale approximations
-									<br>
-									<br>
-									<li> Implementing ray-tracing and simulating lensing lightcones in the Tensorflow framework<br>
-									</li>
-								</ul>
-							</ul>
-						</div>
-					</div>
-				</section>
-
-				<section >
-					<h3 class='slide-title'> <p style="color:#FFAA7F"> Mocking the weak lensing universe: The Born Approximation</h3></p>
-					<br>
-					<br>
-						<ul>
-							<li class="fragment" data-fragment-index="1"> Numerical simulation of WL features rely on ray-tracing through the output of N-body simulations​
-							</li>
-							<br>
-							<li class="fragment" data-fragment-index="2"> Knowledge of the Gravitational potential and accurate solvers for light ray trajectories is computationally expensive
-							</li>
-							<br>
-							<li class="fragment" data-fragment-index="3"> Born approximation , only requiring knowledge of the density field, can be implemented more efficiently and at a lower computational cost
-							</li>
-						</ul>
-					</br>
-					</br>
-					<p class="fragment">
-						\[\begin{equation}
-						\kappa_{born}(\boldsymbol{\theta},\chi_s)= \frac{3H_0^2 \Omega_m}{2c^2}
-						\int_0^{\chi_s}
-						d\chi \frac{\chi}{a(\chi)}
-						W(\chi,\chi_s)
-						\delta(\chi \boldsymbol{\theta},\chi).
-						\end{equation} \]
-					</p>
-				</section>
-				<section>
-					<h3 class="slide-title"><p style="color:#FFAA7F" > Validating simulations: Lensing $C_{\ell}$ </p></h3>
-					<div class="container">
-						<div class="col">
-							<img data-src="assets/cls_DLL_vs_ktng.png" class='plain' />
-							<br>
-							<ul>
-								<li>Predictions from <b class="alert">DLL</b> simulations (<span style='color:#6699CC'>$128^3$</span> particles, box size of 205 Mpc/h ) against $\kappa$TNG (<span style='color:#6699CC'>$2500^3$</span> particles, box size of 205 Mpc/h )
-								</li>
-							</ul>
-						</div>
-						<div class="col">
-							<div style="float:right; font-size: 15px">
-								(<b >Liu</b>, et al. 2017)
-							</div>
-							<img data-src="assets/massivenu_.png"  class='plain' style="height: 350px; width:920px"  />
-							<br>
-							<ul>
-								<li>Predictions from  <b class="alert">MassiveNus</b> simulations (<span style='color:#6699CC'>$1024^3$</span> particles, box size of 512 Mpc/h) against Halofit.  
-								</li>
-							</ul>
-						</div>
-					</div>
-				</section>
-				<section >
-					<h2 class='slide-title'> <p style="color:#FFAA7F" >Compare the information content </h2> </p>
-					<div style="position:absolute;top:100;left:-10;">	
-						We tested the simulations to reproduce a LSST like setting 
-						<br>
-						(Results presented on behalf of LSST DESC)
-					</div>
-					<br>
-					<div class='container'>
-						<div class='col'>
-							\[\begin{equation}
-								F_{\alpha, \beta} =\sum_{i,j} \frac{d\mu_i}{d\theta_{\alpha}}
-								C_{i,j}^{-1} \frac{d\mu_j}{d\theta_{\beta}}
-							\end{equation} \]
-						</div>
-						<div class='col'>
-							<ul>
-							<br>
-							<br>
-								<li> Use Fisher matrix to estimate the information content extracted with a given statistic 
-								</li>
-								<br>
-								<li class="fragment" data-fragment-index="0" > Derivative of summary statistics respect to the cosmological parameters.
-							    </li>
-								<br>
-								<li class="fragment"data-fragment-index="2"> Fisher matrices are notoriously unstable
-									<br>
-									$\Longrightarrow$ they rely on evaluating gradients by finite differences.
-								</li>
-								<br>
-								<li class="fragment"data-fragment-index="3"> They do not scale well to large number of parameters.
-								</li>
-							</ul>
-						</div>
-					</div>
-				</section>
-				<section >
-					<h3 class="slide-title"><p style="color:#FFAA7F" > Compare the information content </p></h3>
-						<ul>
-							<li style="font-size: 20px"; > 
-								Use Fisher matrix to investigate the degeneracy between the cosmological parameters in high dimensional space and when systematics are included in the analysis. 
-							</li>
-						</ul>
-						<div>
-							<img data-src="assets/Fisher_talk.png" class='plain' style="height: 620px; width:720px" />
-						</div>
-				</section>
-
 
 				<section>
 					<h3 class="slide-title"><p style="color:#FFAA7F" > Conclusion </p> </h3>
@@ -934,6 +691,35 @@
 						</div>
 					</div>
 				</section>
+				<section >
+					<h3 class='slide-title'><p style="color:#FFAA7F" >	Potential Gradient Descent (PGD)</p> </h3>
+				 		<div class='container'>
+							<div class='col'>
+								<ul>
+									<li>Additional displacements to sharpen the halos
+									</li>
+									<br>
+									<li>The direction of the displacements points towards the halo center (local potential minimum).</li>
+									<br>
+									<li>The gravitational force:
+											\begin{equation}
+												\mathbf{F}=-\nabla\Phi
+											\end{equation}
+									</li>
+									<li> The PGD correction displacement:
+										\begin{equation}
+											\mathbf{S}=-\alpha\nabla \hat{O}_{h}\hat{O}_{l}\Phi
+										\end{equation}
+										High pass filter prevents the large scale growth, low pass filter reduces the numerical effect
+									</li>
+								</ul>
+							</div>
+							<div class='col'>
+				 				<img data-src="assets/pot_pgd.png" class='plain' style="height: 450px; width:800px" />
+								<div style="float:right; font-size: 20px"><a style="color:#996699"; href=" https://iopscience.iop.org/article/10.1088/1475-7516/2018/11/009/pdf?casa_token=3b8_RUCo4uAAAAAA:aqUgqZUFV1jao2LlJSqI25p2GEh-2KmGTS_ab4p1F9TSK5d0SytTPG6rN_YRhKYdnd9lBiX32A:">(Biwei Dai et al. 2018)</a></div>
+							</div>
+						</div>
+				</section>
 				<section>
 					<h3 class="slide-title"> <p style="color:#FFAA7F" >Projections of final density field </p></h3>
 					<br>
@@ -967,8 +753,54 @@
 								</div>
 							</div>
 						</div>
-
 					</div>
+				</section>
+				<section>
+						<section>
+							<h3 class="slide-title"><p style="color:#FFAA7F" >Results </h3></p>
+								<br>
+								<div >
+									<li>
+										Netural network trained using single CAMELS simulation of <span style='color:#996699'>$25^3$ ($h^{-1}$ Mpc)$^3$ volume</span> and <span style='color:#669900'>$64^3$ dark matter particles</span> at the fiducial cosmology of  <span style='color:#6699CC'>$\Omega_m = 0.3$</span>
+									</li>
+								</div>
+								<br><br>
+								<div class="container">
+									<div class="col">
+										<img data-src="assets/camels_residual_CV_0.png"/>
+									</div>
+									<div class="col" >
+										<img style=" position: relative;bottom: 21px;" data-src="assets/cross_corr_CV_0.png" />
+									</div>
+								</div>
+						</section>
+					<section>
+						<h3 class="slide-title"><p style="color:#FFAA7F" >Results: Robustness to changes in resolution and cosmological parameters </h3></p>
+							<br>
+							<div >
+								<li>
+									Netural network trained using single CAMELS simulation of <span style='color:#996699'>$25^3$ ($h^{-1}$ Mpc)$^3$ volume</span> and <span style='color:#669900'>$64^3$ dark matter particles</span> at the fiducial cosmology of  <span style='color:#6699CC'>$\Omega_m = 0.3$</span>
+								</li>
+							</div>
+							<br><br>
+							<div class="container">
+								<div class="col">
+									<img data-src="assets/camels_residual_diff_resolution_CV_0.png"/>
+									<br>
+									Higher resolution
+								</div>
+								<div class="col">
+									<img data-src="assets/halofit_residuals_wrong_boxsize_res.png"/>
+									<br>
+									Lower resolution
+								</div>
+								<div class="col">
+									<img data-src="assets/camels_residual_diffomega_1P_1_n5.png"/>
+									<br>
+									Different Cosmology
+								</div>
+							</div>
+					</section>
 				</section>
 				<section>
 					<h3 class="slide-title"><p style="color:#FFAA7F">Results: Robustness to changes in resolution and cosmological parameters  </h3></p>
@@ -1078,7 +910,30 @@
 							<img data-src="assets/res_peak_DLL_vs_ktng.png" class='plain' style="height: 600px; width:500px" />
 						</div>
 				</section>
-
+				<section>
+					<h3 class="slide-title"><p style="color:#FFAA7F" > Validating simulations: Lensing $C_{\ell}$ </p></h3>
+					<div class="container">
+						<div class="col">
+							<img data-src="assets/cls_DLL_vs_ktng.png" class='plain' />
+							<br>
+							<ul>
+								<li>Predictions from <b class="alert">DLL</b> simulations (<span style='color:#6699CC'>$128^3$</span> particles, box size of 205 Mpc/h ) against $\kappa$TNG (<span style='color:#6699CC'>$2500^3$</span> particles, box size of 205 Mpc/h )
+								</li>
+							</ul>
+						</div>
+						<div class="col">
+							<div style="float:right; font-size: 15px">
+								(<b >Liu</b>, et al. 2017)
+							</div>
+							<img data-src="assets/massivenu_.png"  class='plain' style="height: 350px; width:920px"  />
+							<br>
+							<ul>
+								<li>Predictions from  <b class="alert">MassiveNus</b> simulations (<span style='color:#6699CC'>$1024^3$</span> particles, box size of 512 Mpc/h) against Halofit.  
+								</li>
+							</ul>
+						</div>
+					</div>
+				</section>
 			</div>
 		</div>
 
