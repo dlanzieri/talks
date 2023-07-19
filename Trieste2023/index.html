@@ -989,43 +989,6 @@
 
 
 
-		
-			
-			<section>
-				<h3 class="slide-title"><p style="color:#FFAA7F" >Deep Learning Approaches for Implicit Inference</p></h3>
-		
-				<div class="block fragment">
-					<div class="block-title">
-						A two-steps approach to Likelihood-Free Inference
-					</div>
-					<div class="block-content">
-						<ul>
-							<li><b>Step I </b>: Automatically learn an <b class="alert">optimal</b> <b>low-dimensional summary statistic</b>
-								$$y = f_\varphi(x) $$
-								typically $y$ will have the same dimensionality as $\theta$.
-							</li>
-							
-							<br>
-		
-							<li class="fragment"><b>Step II </b>: Use Neural Density Estimation in low dimension to either:
-								<ul>
-									<li>build an <b>estimate $p_\varphi$ of the likelihood function $p(y \ | \ \theta)$</b> (Neural Likelihood Estimation)
-		
-									</li>
-									<br>
-		
-									<li>build an <b>estimate $p_\varphi$ of the posterior distribution $p(\theta \ | \ y)$</b> (Neural Posterior Estimation)
-		
-									</li>
-								</ul>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</section> 
-
-
-
 			<section>
 				<h2><p style="color:#FFAA7F" >Optimal Neural Summarisation for Full-Field Implicit Inference by Density Estimation </p></h2>
 				<a href="https://github.com/DifferentiableUniverseInitiative/sbi_lens"><img src="https://badgen.net/badge/icon/SbiLens?icon=github&label" class="plain" style="height:25px;" /></a>
@@ -1102,6 +1065,40 @@
 
 
 			<section>
+				<h3 class="slide-title"><p style="color:#FFAA7F" >Deep Learning Approaches for Implicit Inference</p></h3>
+		
+				<div class="block fragment">
+					<div class="block-title">
+						A two-steps approach to Likelihood-Free Inference
+					</div>
+					<div class="block-content">
+						<ul>
+							<li><b>Step I </b>: Automatically learn an <b class="alert">optimal</b> <b>low-dimensional summary statistic</b>
+								$$y = f_\varphi(x) $$
+								typically $y$ will have the same dimensionality as $\theta$.
+							</li>
+							
+							<br>
+		
+							<li class="fragment"><b>Step II </b>: Use Neural Density Estimation in low dimension to either:
+								<ul>
+									<li>build an <b>estimate $p_\varphi$ of the likelihood function $p(y \ | \ \theta)$</b> (Neural Likelihood Estimation)
+		
+									</li>
+									<br>
+		
+									<li>build an <b>estimate $p_\varphi$ of the posterior distribution $p(\theta \ | \ y)$</b> (Neural Posterior Estimation)
+		
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</section> 
+			
+
+			<section>
 				<h3 class="slide-title"><p style="color:#FFAA7F" >Experiment: Benchmark compression scheme </p></h3>
 				<br>
 				<br>
@@ -1129,6 +1126,35 @@
 			</section>
 
 
+		
+			<section>
+				<h3 class="slide-title"><p style="color:#FFAA7F" >Experiment: Density Estimation</p></h3>
+				<ul>
+					<li>A black-box simulator <b class="alert">defines $p(x | \theta)$ as an implicit distribution</b>, you can <b>sample from it</b> but you cannot evaluate it.
+					</li>
+					<li class='fragment'> <b class="alert">Key Idea</b>: Use a <b>parametric distribution model $\mathbb{P}_{\varphi'}$ to approximate the implicit distribution $\mathbb{P}$</b>.
+					</li>
+					<li class="fragment fade-up"> We assume $\mathbb{P}_{\varphi'}=q_{\varphi'}(\theta | y)$ a <b> parametric conditional density</b>
+					</li>
+					<br>
+					<li class="fragment fade-up"> We use a conditional Normalizing Flows to optimize the parameters $\varphi'$ of $q_{\varphi'}$ according to
+						\begin{equation}
+						\min\limits_{\varphi'} \sum\limits_{i} - \log q_{\varphi'}(\theta_i | y_i) \nonumber
+						\end{equation}
+						In the limit of <b>large number of samples</b> and <b>sufficient flexibility</b>
+						\begin{equation}
+						\boxed{q_{\varphi'^\ast}(\theta | y) \approx p(\theta | y)} \nonumber
+						\end{equation}
+					</li>
+				</ul>
+				<div style="position:relative; height:30px; margin-left: 4em;">
+					<div class="fragment" style="position:absolute;top:0;"> $\Longrightarrow$ One can asymptotically recover the posterior by
+						optimizing a <b class="alert">Deep Neural Network</b> over<br> a <b class="alert">simulated training set</b>.
+					</div>
+				</div>
+			</section>
+			 
+			 
 
 			<section>
 				<h3 class="slide-title"><p style="color:#FFAA7F" >...Not all neural compression techniques are equivalent</p></h3>
@@ -1185,7 +1211,6 @@
 					</div>
 			</section>
 
-
 			<section>
 				<h3 class="slide-title"><p style="color:#FFAA7F" > Our Solution: Variational Mutual Information Maximization (VMIM) </p></h3>
 						<div class="block">
@@ -1213,36 +1238,6 @@
 						</ul>
 					</div>
 			</section>
-
-
-
-			<section>
-				<h3 class="slide-title"><p style="color:#FFAA7F" >Experiment: Density Estimation</p></h3>
-				<ul>
-					<li>A black-box simulator <b class="alert">defines $p(x | \theta)$ as an implicit distribution</b>, you can <b>sample from it</b> but you cannot evaluate it.
-					</li>
-					<li class='fragment'> <b class="alert">Key Idea</b>: Use a <b>parametric distribution model $\mathbb{P}_{\varphi'}$ to approximate the implicit distribution $\mathbb{P}$</b>.
-					</li>
-					<li class="fragment fade-up"> We assume $\mathbb{P}_{\varphi'}=q_{\varphi'}(\theta | y)$ a <b> parametric conditional density</b>
-					</li>
-					<br>
-					<li class="fragment fade-up"> We use a conditional Normalizing Flows to optimize the parameters $\varphi'$ of $q_{\varphi'}$ according to
-						\begin{equation}
-						\min\limits_{\varphi'} \sum\limits_{i} - \log q_{\varphi'}(\theta_i | y_i) \nonumber
-						\end{equation}
-						In the limit of <b>large number of samples</b> and <b>sufficient flexibility</b>
-						\begin{equation}
-						\boxed{q_{\varphi'^\ast}(\theta | y) \approx p(\theta | y)} \nonumber
-						\end{equation}
-					</li>
-				</ul>
-				<div style="position:relative; height:30px; margin-left: 4em;">
-					<div class="fragment" style="position:absolute;top:0;"> $\Longrightarrow$ One can asymptotically recover the posterior by
-						optimizing a <b class="alert">Deep Neural Network</b> over<br> a <b class="alert">simulated training set</b>.
-					</div>
-				</div>
-			 </section>
-
 
 			 <section>
 				<h3 class="slide-title"><p style="color:#FFAA7F" > Results</p></h3>
