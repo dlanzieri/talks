@@ -258,80 +258,6 @@
 		</div>
 	</section>
 
-	<!-- <section>
-		<h3 class="slide-title">...so why is this not mainstream?</h3>
-			<img class="plain" data-src="assets/lfi_sim.png" style="width:1000px;"/>
-	
-				<div class="r-stack">
-	
-	
-						<div class="block fragment">
-							<div class="block-title">
-								The Challenge of Full-Field Inference
-							</div>
-							<div class="block-content">
-								<ul>
-									<li>If we are interested in the likelihood $p(x | \theta)$ we need to 
-										marginalize over <b>stochastic latent variables</b>: 
-										$$ p(x|\theta) = \int p(x, z | \theta) dz = \int p(x | z, \theta) p(z | \theta) dz $$
-									</li>
-									
-									<li class="fragment">If $x$ is e.g. a full shear map, this <b>marginalization is analytically intractable</b>.
-										<br><div class="fragment"> $\Longrightarrow$ We <b class="alert">need to find a tractable way to compute the marginal likelihood $p(x|\theta)$</b>.</div>
-									</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-	</section> -->
-
-
-	<!-- <section>
-		<br>
-		<br>
-
-				<div class="block">
-					<div class="block-title">
-						How to perform inference over forward simulation models?
-					</div>
-					<div class="block-content">
-						<br>
-						<ul>
-							<li class="fragment"> <b class="alert">Implicit Inference</b>: Treat the simulator as a black-box with only the ability to sample from the joint distribution 
-								$$(x, \theta) \sim p(x, \theta)$$
-								a.k.a.<br><ul>
-									<li> <b>Simulation-Based Inference</b> (SBI)
-									</li>
-									<li> <b>Likelihood-free inference</b> (LFI)
-									</li>
-									<li> <b>Approximate Bayesian Computation</b> (ABC)
-									</li>
-								</ul>
-							</li>
-
-							<br>
-
-							<li class="fragment"> <b class="alert">Explicit Inference</b>: Treat the simulator as a probabilistic model and perform inference over the joint posterior 
-								$$p(\theta, z | x) \propto p(x | z, \theta) p(z, \theta) p(\theta) $$
-								a.k.a.<br><ul>
-									<li> <b>Bayesian Hierarchical Modeling</b> (BHM)
-									</li>
-								</ul>
-							</li>
-							<br>
-						</ul>
-
-					</div>
-				</div>
-				<div class="fragment">$\Longrightarrow$ For a given simulation model, both methods <b class="alert">should converge to the same posterior!</b></div>
-    </section>
-
-
-	<section>
-		<h1> Explicit Inference </h1>
-		<hr>
-	</section> -->
-  
 
 	<section>
 		<h3 class="slide-title"> <p style="color:#FFAA7F" >...so why is this not mainstream?</p></h3>
@@ -657,35 +583,6 @@
 				</div>
 			</section>
 		</section>
-			<!-- <section >
-				<h3 class='slide-title'><p style="color:#FFAA7F" >	Potential Gradient Descent (PGD)</p> </h3>
-					<div class='container'>
-						<div class='col'>
-							<ul>
-								<li>Additional displacements to sharpen the halos
-								</li>
-								<br>
-								<li>The direction of the displacements points towards the halo center (local potential minimum).</li>
-								<br>
-								<li>The gravitational force:
-										\begin{equation}
-											\mathbf{F}=-\nabla\Phi
-										\end{equation}
-								</li>
-								<li> The PGD correction displacement:
-									\begin{equation}
-										\mathbf{S}=-\alpha\nabla \hat{O}_{h}\hat{O}_{l}\Phi
-									\end{equation}
-									High pass filter prevents the large scale growth, low pass filter reduces the numerical effect
-								</li>
-							</ul>
-						</div>
-						<div class='col'>
-							<img data-src="assets/pot_pgd.png" class='plain' style="height: 450px; width:800px" />
-							<div style="float:right; font-size: 20px"><a style="color:#996699"; href=" https://iopscience.iop.org/article/10.1088/1475-7516/2018/11/009/pdf?casa_token=3b8_RUCo4uAAAAAA:aqUgqZUFV1jao2LlJSqI25p2GEh-2KmGTS_ab4p1F9TSK5d0SytTPG6rN_YRhKYdnd9lBiX32A:">(Biwei Dai et al. 2018)</a></div>
-						</div>
-					</div>
-			</section> -->
 
 			<section>
 					<section>
@@ -840,32 +737,6 @@
 				</div>
 			</section>
 
-			<!-- <section >
-				<h3 class='slide-title'> <p style="color:#FFAA7F"> Mocking the weak lensing universe: The Born Approximation</h3></p>
-				<br>
-				<br>
-					<ul>
-						<li class="fragment" data-fragment-index="1"> Numerical simulation of WL features rely on ray-tracing through the output of N-body simulations​
-						</li>
-						<br>
-						<li class="fragment" data-fragment-index="2"> Knowledge of the Gravitational potential and accurate solvers for light ray trajectories is computationally expensive
-						</li>
-						<br>
-						<li class="fragment" data-fragment-index="3"> Born approximation , only requiring knowledge of the density field, can be implemented more efficiently and at a lower computational cost
-						</li>
-					</ul>
-				</br>
-				</br>
-				<p class="fragment">
-					\[\begin{equation}
-					\kappa_{born}(\boldsymbol{\theta},\chi_s)= \frac{3H_0^2 \Omega_m}{2c^2}
-					\int_0^{\chi_s}
-					d\chi \frac{\chi}{a(\chi)}
-					W(\chi,\chi_s)
-					\delta(\chi \boldsymbol{\theta},\chi).
-					\end{equation} \]
-				</p>
-			</section> -->
 			<section>
 				<h3 class="slide-title"><p style="color:#FFAA7F" > Validating simulations: Lensing $C_{\ell}$ </p></h3>
 				<div class="container">
@@ -1197,14 +1068,17 @@
 						<div class="block-content">
 							<br>
 							Let's start by the definition of <span style='color:#669900'>Mutual Information</span>:
-							$$ I(\boldsymbol{y}, \boldsymbol {\theta}) = D_{KL}(p(\boldsymbol {y}, \boldsymbol {\theta})||p(\boldsymbol {y})p(\boldsymbol {\theta})) \quad \text{with} \quad y=f_{\varphi}(x)$$ 
+							\begin{align}
+							I(\boldsymbol{y}, \boldsymbol {\theta}) &= D_{KL}(p(\boldsymbol {y}, \boldsymbol {\theta})||p(\boldsymbol {y})p(\boldsymbol {\theta}))  \\
+							&= \mathbb{E}_{p(\boldsymbol{y}, \boldsymbol{\theta})} [\log{p(\boldsymbol{\theta} | \boldsymbol{y} )}]- \mathbb{E}_{p(\boldsymbol{\theta})} [\log{p(\boldsymbol{\theta})}] \quad \text{with} \quad y=f_{\varphi}(x)
+							\end{align}
 							<ul>
 							<ol>
 							<li class='fragment' data-fragment-index="0"> The goal is to find the parameters $\boldsymbol {\varphi}$ that maximize the mutual information between the summary and cosmological parameters:
 								$$   \boldsymbol {\varphi}^*= \operatorname*{argmax}_{\boldsymbol {\varphi}} I(f_{\boldsymbol {\varphi}}(\boldsymbol{x}), \boldsymbol {\theta}).$$
 							</li>
 							<li class='fragment' data-fragment-index="1"> The mutual information is not tractable $\Longrightarrow$ We enable the training of deep neural networks by introducing a variational lower bound:
-								$$ I(\boldsymbol{y}, \boldsymbol{\theta}) \ge \mathbb{E}_{p(\boldsymbol {y}, \boldsymbol {\theta})} [\log{q(\boldsymbol {\theta} |\boldsymbol{y} ; \boldsymbol{\varphi}')}]- H(\boldsymbol {\theta}).$$
+								$$ I(\boldsymbol{y}, \boldsymbol{\theta}) \ge \mathbb{E}_{p(\boldsymbol {y}, \boldsymbol {\theta})} [\log{q(\boldsymbol {\theta} |\boldsymbol{y} ; \boldsymbol{\varphi}')}]- \mathbb{E}_{p(\boldsymbol {\theta})} [\log{p(\boldsymbol{\theta})}].$$
 							</li>
 						</ol>
 						</ul>
@@ -1221,7 +1095,7 @@
 							<ul>
 							<ol> 
 								<li class='fragment' data-fragment-index="0"> The loss function bocomes:
-									$$ \operatorname*{argmax}_{\boldsymbol {\varphi}, \boldsymbol {\varphi}'}  \mathbb{E}_{p(\boldsymbol{d},\theta)}[\log{q(\boldsymbol {\theta} |\boldsymbol{y} ; \boldsymbol{\varphi}')}]$$
+									$$ \operatorname*{argmax}_{\boldsymbol {\varphi}, \boldsymbol {\varphi}'}  \mathbb{E}_{p(\boldsymbol{x},\theta)}[\log{q(\boldsymbol {\theta} |\boldsymbol{y} ; \boldsymbol{\varphi}')}]$$
 								</li>
 								<li class='fragment' data-fragment-index="1"> The Optimization problem can be solved by gradient descent over the weights of the neural network $f_{\varphi}$ and parameters of the variational distribution $q_{\varphi'}$
 								</li>
@@ -1307,17 +1181,81 @@
 						Thank you !
 					</p>
 			</section>
-				<section class="inverted" data-background="#000">
+
+
+			<section class="inverted" data-background="#000">
 				<h2>APPENDIX</h2>
 			</section>
 				
-	<section data-autoplay data-background-iframe="https://cdn.spacetelescope.org/archives/videos/hd_and_apple/heic1106a.m4v" data-background-interactive=false data-preload>
-	</section>
-	<section>
-		<h2 class='slide-title'><p style="color:#FFAA7F" >
-			Weak Gravitational lensing</h2></p>
-			<img class="plain" data-src="assets/lensing.jpg" style="width: 700px"   />
-	</section>
+			<section>
+				<h3 class="slide-title"><p style="color:#FFAA7F" >Automatic Differentiation and Gradients</p></h3>
+
+				<ul>
+					<li class="fragment"> <b>Automatic differentiation</b> allows you to compute analytic derivatives of arbitraty expressions:<br>
+						If I form the expression $y = a * x + b$, it is separated in fundamental ops:
+						$$ y = u + b \qquad u = a * x $$
+						then gradients can be obtained by the chain rule:
+						$$\frac{\partial y}{\partial x} = \frac{\partial y}{\partial u} \frac{ \partial u}{\partial x} = 1 \times a = a$$
+					</li>
+					<li class="fragment">
+					To differentiate automatically, TensorFlow remember what operations
+					happen in what order during the forward pass and traverses this list of operations in reverse order to compute gradients.
+					</li>
+				</ul>
+				<br>
+				<br>
+				<div class="block fragment">
+					<div class="block-title">
+						Autodiff frameworks include Jax, TensorFlow and PyTorch.
+					</div>
+					<div class="block-content">
+
+						<div class="container">
+							<div class="col">
+								<ul>
+									<li>Arbitrary order derivatives</li>
+									<li>Accelerated execution on GPU and TPU</li>
+
+								</ul>
+							</div>
+							<div class="col" align="center">
+								<img data-src="assets/TF_FullColor_Horizontal.png" class="plain" style="width: 200px" />
+								<img data-src="https://raw.githubusercontent.com/google/jax/master/images/jax_logo_250px.png" class="plain" style="width: 100px" />
+							</div>
+						</div>
+			</section>
+
+
+			<section >
+				<h3 class='slide-title'><p style="color:#FFAA7F" >	Potential Gradient Descent (PGD)</p> </h3>
+					<div class='container'>
+						<div class='col'>
+							<ul>
+								<li>Additional displacements to sharpen the halos
+								</li>
+								<br>
+								<li>The direction of the displacements points towards the halo center (local potential minimum).</li>
+								<br>
+								<li>The gravitational force:
+										\begin{equation}
+											\mathbf{F}=-\nabla\Phi
+										\end{equation}
+								</li>
+								<li> The PGD correction displacement:
+									\begin{equation}
+										\mathbf{S}=-\alpha\nabla \hat{O}_{h}\hat{O}_{l}\Phi
+									\end{equation}
+									High pass filter prevents the large scale growth, low pass filter reduces the numerical effect
+								</li>
+							</ul>
+						</div>
+						<div class='col'>
+							<img data-src="assets/pot_pgd.png" class='plain' style="height: 450px; width:800px" />
+							<div style="float:right; font-size: 20px"><a style="color:#996699"; href=" https://iopscience.iop.org/article/10.1088/1475-7516/2018/11/009/pdf?casa_token=3b8_RUCo4uAAAAAA:aqUgqZUFV1jao2LlJSqI25p2GEh-2KmGTS_ab4p1F9TSK5d0SytTPG6rN_YRhKYdnd9lBiX32A:">(Biwei Dai et al. 2018)</a></div>
+						</div>
+					</div>
+			</section>
+
 			<section>
 				<h3 class="slide-title"> <p style="color:#FFAA7F" >Projections of final density field </p></h3>
 				<br>
@@ -1354,6 +1292,8 @@
 
 				</div>
 			</section>
+
+
 			<section>
 				<h3 class="slide-title"><p style="color:#FFAA7F">Results: Robustness to changes in resolution and cosmological parameters  </h3></p>
 					<br>
@@ -1376,7 +1316,47 @@
 						</div>
 					</div>
 			</section>
-		</section>
+
+
+			<section data-autoplay data-background-iframe="https://cdn.spacetelescope.org/archives/videos/hd_and_apple/heic1106a.m4v" data-background-interactive=false data-preload>
+			</section>
+
+
+			<section>
+				<h2 class='slide-title'><p style="color:#FFAA7F" >
+					Weak Gravitational lensing</h2></p>
+					<img class="plain" data-src="assets/lensing.jpg" style="width: 700px"   />
+			</section>
+
+
+			 <section >
+				<h3 class='slide-title'> <p style="color:#FFAA7F"> Mocking the weak lensing universe: The Born Approximation</h3></p>
+				<br>
+				<br>
+					<ul>
+						<li class="fragment" data-fragment-index="1"> Numerical simulation of WL features rely on ray-tracing through the output of N-body simulations​
+						</li>
+						<br>
+						<li class="fragment" data-fragment-index="2"> Knowledge of the Gravitational potential and accurate solvers for light ray trajectories is computationally expensive
+						</li>
+						<br>
+						<li class="fragment" data-fragment-index="3"> Born approximation , only requiring knowledge of the density field, can be implemented more efficiently and at a lower computational cost
+						</li>
+					</ul>
+				</br>
+				</br>
+				<p class="fragment">
+					\[\begin{equation}
+					\kappa_{born}(\boldsymbol{\theta},\chi_s)= \frac{3H_0^2 \Omega_m}{2c^2}
+					\int_0^{\chi_s}
+					d\chi \frac{\chi}{a(\chi)}
+					W(\chi,\chi_s)
+					\delta(\chi \boldsymbol{\theta},\chi).
+					\end{equation} \]
+				</p>
+			</section> 
+
+
 			<section >
 				<h3 class='slide-title'><p style="color:#FFAA7F"> Proof of Concept</h3> </p>
 				<li style="font-size: 20px";> 
@@ -1388,6 +1368,8 @@
 						</div>
 				</div>
 			</section>
+
+
 			<section >
 				<h3 class="slide-title"><p style="color:#FFAA7F" > Validating simulations: HPN validation</p></h3>
 				Predictions of DLL simulations before and after using the Hybrid Physical-Neural against $\kappa$TNG
@@ -1404,6 +1386,8 @@
 					</div>
 				</div>
 			</section>
+
+
 			<section >
 				<h3 class='slide-title'> <p style="color:#FFAA7F" > Validating simulations: Peak counts </h3> </p>
 				<div class='container'>
@@ -1427,6 +1411,8 @@
 					</div>
 				</div>
 			</section>
+
+
 			<section >
 				<h3 class='slide-title'> <p style="color:#FFAA7F" > Validating simulations: Peak counts </h3> </p>
 				<div class='container'>
@@ -1451,6 +1437,8 @@
 				</div>
 				Peak counts are local point-like features and have a sparse representation in the wavelet domain
 			</section>
+
+
 			<section >
 				<h3 class="slide-title"><p style="color:#FFAA7F" > Validating simulations: Peak counts </p></h3>
 					<ul>
