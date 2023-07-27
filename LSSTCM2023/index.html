@@ -1,0 +1,643 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title>Automatically Differentiable Weak Lensing Simulations for Full-Field Cosmological Inference</title>
+    <meta name="description" content="LSST, July 2023">
+	<link rel="stylesheet" href="reveal.js/dist/reset.css">
+	<link rel="stylesheet" href="reveal.js/dist/reveal.css">
+	<link rel="stylesheet" href="reveal.js/dist/theme/darkenergy.css" id="theme">
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="reveal.js/plugin/highlight/monokai.css" id="highlight-theme">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+
+	<section data-background-image="assets/lsst_stills_0009_crop.jpg">
+		<div class="container">
+			<div class="title" style="border-radius: 20px; background-color:rgba(0, 0, 0, 0.4);">
+				<h2>Automatically Differentiable Weak Lensing Simulations for Full-Field Cosmological Inference</h2>
+			</div>
+		</div>
+		<hr>
+		<div style="border-radius: 20px; background-color:rgba(0, 0, 0, 0);">
+			<div class="container">
+				<div class="col">
+					<div align="left" style="margin-left: 20px;">
+						<h2>Denise Lanzieri</h2>
+						<br>
+						<img src="assets/CosmoStatDarkBK.png" class="plain"></img>
+						<br>
+					</div>
+				</div>
+
+				<div class="col">
+					<br>
+					<br>
+					<br>
+					<br>
+					<img src="assets/logo_UParis_id.png" class="plain" height="150"></img>
+				</div>
+
+				<div class="col">
+					<br>
+					<br>
+					<br>
+					<img src="assets/CEA_logo_nouveau.svg.png" class="plain" height="150"></img>
+				</div>
+			</div>
+			<div> slides at <a style="color:#FFAA7F"; href="https://dlanzieri.github.io/talks/LSST2023/">dlanzieri.github.io/LSST2023/</a> </div>
+		</div>
+	</section>
+
+	
+	<section>
+		<h3  class='slide-title'><p style="color:#FFAA7F" >Motivation</p></h3>
+			<br>
+			<br>
+			<br>
+			<br>
+			<ul>
+				<li> Many current cosmic shear analyses use methods that require <span style='color:#996699'>fast</span> and <span style='color:#996699'>differentiable </span> forward simulations to perform efficient inference in a large number of dimensions
+	
+				</li>
+				<ul>
+					<br>
+					<li>  $\Longrightarrow$ e.g., Hamiltonian Monte-Carlo, Variational Inference, dimensionality reduction by Fisher-Information Maximization
+					</li>
+				</ul>
+				<br>
+				<br>
+				<li > <span style='color:#996699'>Fast</span> and <span style='color:#996699'>differentiable </span> simulations can significantly enhance performance compared to conventional techniques
+				</li>
+				<ul>
+					<br>
+					<li> 	$\Longrightarrow$ having access to the gradients of the forward model is beneficial for LFI approaches.
+					</li>
+				</ul>
+			</ul>
+			<br>
+			<br>
+	</section>
+
+
+	<section class="inverted" data-background="#000">
+		<h2>How do we simulate the Universe in a fast and differentiable way?</h2>
+	</section>
+
+
+	<section>
+		<h3 class='slide-title'><p style="color:#FFAA7F" >The Particle-Mesh scheme for N-body simulations</p></h3>
+		<b>The idea</b>: approximate gravitational forces by estimating densities on a grid.
+		<div class='container'>
+				<div class='col'style=" position: relative;bottom: 60px;">
+				<ul>
+					<li>The numerical scheme:
+						<br>
+						<br>
+						<ul>
+							<li class="fragment" data-fragment-index="0">From the particle positions estimate the density of particles on a mesh
+							</li>
+							<br>
+							<li class="fragment" data-fragment-index="1"> Apply a Fourier transform to obtain the over-density field $\delta_k$ in Fourier space.
+							</li>
+							<br>
+								<ul>
+								<li class="fragment" data-fragment-index="1">  Compute gravitational forces 	$\to$ related to the density field via a transfer function ($\nabla \nabla^{-2}$)
+								</li>
+							</br>
+							</ul>
+							<li class='fragment'data-fragment-index="2"> Interpolate back the force at every particle position
+							</li>
+						</ul>
+					</li>
+				</ul>
+				</div>
+				<div style="position:relative; width:550px; height:550px; margin:0 auto;">
+					<img class="fragment current-visible plain" data-src="assets/particle_positions_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="0"  />
+					<img class="fragment current-visible plain"  data-src="assets/particle_density_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="1" />
+					<!-- <img class="fragment current-visible plain "  data-src="assets/particle_density_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="2" /> -->
+						<!-- <img  class="fragment current-visible plain"  data-src="assets/particle_density_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="3" /> -->
+					<img class="fragment  plain" data-src="assets/particle_positions_1.png" style="position:absolute;top:0;left:0;" data-fragment-index="2" />
+				</div>
+		</div >
+		<div class="fragment"data-fragment-index="5" style=" position: relative;bottom: 60px;" > $\to$ Only a series of FFTs and interpolations.
+		</div>
+	</section>
+
+
+
+	<section>
+		<h3 class='slide-title'><p style="color:#FFAA7F" >	Fill the gap in the accuracy-speed space</p> </h3>
+			<div class='container'>
+				<div class='col'style=" position: relative;bottom: 290px; ">
+					<ul>
+						N-body PM simulation:
+						<br>
+						<br>
+							<ul>
+								<li>Fast (we don't solve the full N-body problem)
+								</li>
+								<br>
+								<li> Not able to resolve structures with scales smaller than the mesh resolution
+									<ul>
+											<br>
+											<li  class="fragment" data-fragment-index="0">  $\to$  Overdensity structures less sharp than full N-body counterparts
+											</li>
+											<br>
+											<li class="fragment" data-fragment-index="1"> $\to$ Lack power on small scales
+											</li>
+									</ul>
+								</li>
+							</ul>
+							<br>
+						<div  class="fragment" data-fragment-index="2">
+						The correction idea : mimics the physics that is missing
+					</div>
+					</ul>
+				</div>
+				<div  class='col'>
+					<div class="plain fragment current-visible "  data-fragment-index="0">
+						<p style="position:relative; top:10px; left:0px;">Camels simulations</p>
+						<img  data-src="assets/cluster_2D_Camels.png" style="height:250px; position:relative; top:-30px; "></img>
+					</div>
+					<div class="plain fragment current-visible "  data-fragment-index="0">
+						<p style="position:relative; top:-50px; left:0px;">PM simulations</p>
+						<img  data-src='assets/cluster_2D_PM.png' style="height:250px; position:relative; top:-90px;" />
+					</div>
+					<img  class="fragment" data-fragment-index="1" data-src="assets/comparison_pk_intro.png" class='plain' style="height: 400px; width:700px; position: relative;bottom: 650px; " />
+				</div>
+			</div>
+	</section>
+	<section>
+		<h3  class='slide-title'><p style="color:#FFAA7F" >Hybrid Physical-Neural ODEs for Fast N-body Simulations</p></h3>
+			<br>
+			<br>
+			<br>
+			<br>
+			<ul>
+				<li class="fragment grow">Fast realization of complex processes
+				</li>
+				<ul>
+					<br>
+					<li>  $\Longrightarrow$ Take the effective <span style='color:#996699'>physics description</span> and combine it with a <span style='color:#996699'>ML approach</span>
+					</li>
+				</ul>
+				<br>
+				<br>
+				<li  class="fragment grow">Cosmological simulations are based on physical processes
+				</li>
+				<ul>
+					<br>
+					<li> 	$\Longrightarrow$ These impose <span style='color:#669900'>symmetries</span> and <span style='color:#669900'>constraints</span>
+					</li>
+				</ul>
+			</ul>
+			<br>
+			<br>
+	</section>
+	<section>
+			<section>
+					<h3 class="slide-title"><p style="color:#FFAA7F" > Augment the physical equations with a neural network</p></h3>
+					<br><br>
+						We compute the time integration from a system of ordinary differential equations (ODE)
+										$$\left\{ \begin{array}{ll}
+										\frac{d  \color{#6699CC}{\mathbf{x}} }{d a} & = \frac{1}{a^3 E(a)} \color{#6699CC}{\mathbf{v}} \\
+										\frac{d  \color{#6699CC}{\mathbf{v}}}{d a} & =  \frac{1}{a^2 E(a)} F_\theta( \color{#6699CC}{\mathbf{x}} , a), \\
+										F_\theta( \color{#6699CC}{\mathbf{x}}, a) &= \frac{3 \Omega_m}{2}  \nabla \left[ \color{#669900}{\phi_{PM}} (\color{#6699CC}{\mathbf{x}}) \right]
+
+										\end{array} \right. $$
+						<ul>
+							<li>   <span style='color:#6699CC'>$\mathbf{x}$</span> and <span style='color:#6699CC'>$\mathbf{v}$</span> define the position and the velocity of the particles
+							</li>
+							<li><span style='color:#669900'>$\phi_{PM}$</span> is the gravitational potential in the mesh
+							</li>
+						</ul>
+						<br>
+						<p  class='fragment' data-fragment-index="1"> $\to$ We can use this parametrisation to complement the physical ODE with neural networks.
+						</p>
+						<br>
+						<p  class='fragment' data-fragment-index="1">
+							$$F_\theta(\mathbf{x}, a) = \frac{3 \Omega_m}{2}  \nabla \left[ \phi_{PM} (\mathbf{x}) \ast  \mathcal{F}^{-1} (1 + \color{#996699}{f_\theta(a,|\mathbf{k}|)}) \right] $$
+						</p>
+						<br>
+						<div class="fragment" data-fragment-index="1" style="position:relative; top:0px; ">Correction integrated as a Fourier-based isotropic filter <span style='color:#996699'>$f_{\theta}$</span> $\to$ incorporates translation and rotation symmetries </div>
+			</section>
+			<section>
+						<h3 class="slide-title"><p style="color:#FFAA7F" > Learn the Neural Filter </p></h3>
+					<ul>
+						<li> <span style='color:#996699'>$f_{\theta}(a)$</span> is defined as B-spline functions whose coefficients are the output of the Neural Network of parameters $\theta$.
+						</li>
+					</ul>
+					<div>
+							<img data-src="assets/nn_manim.png" class='plain' style="height: 600px; width:950px" />
+					</div>
+			</section>
+			<section>
+				<h3 class="slide-title"><p style="color:#FFAA7F" >Train and validation loss</p></h3>
+				<div class="container">
+					<div class="col">
+							<div  >
+							$$\mathcal{L} =  \sum_{i}^{snapshots} \lambda_1||   \color{#6699CC}{\mathbf{x}^{ref}_i} -  \color{#6699CC}{\mathbf{x}_i}||_2^2  + \lambda_2 || \frac{\color{#996699}{p_i(k)}}{\color{#996699}{p_i^{ref}(k)}} -1 ||_2^2 $$
+							</div>
+					</div>
+					<div class="col">
+						<ul>
+							<li >We adopt a loss function penalizing both the <span style='color:#6699CC'>particle positions</span> and the overall <span style='color:#996699'>matter power spectrum</span> at different snapshot times
+							</li>
+							<br>
+							<li > We train and compare the model to the CAMELS simulations <a style="color:#GOLD"; href=" https://arxiv.org/pdf/2010.00619.pdf:">(Villaescusa-Navarro et al., 2021) </a>
+							</li>
+							<br>
+							<li> 	We use a single N-body simulation of $25^3$ ($h^{-1}$ Mpc)$^3$ volume, $64^3$ dark matter particles at the fiducial cosmology of $\Omega_m = 0.3$ and $\sigma_8 = 0.8$
+							</li>
+							<br>
+							<li> Whole code implemented in the Python package <span style='color:#669900'>Jax<span/>.
+							</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+
+			<section >
+				<h3 class="slide-title"><p style="color:#FFAA7F" >Hybrid Physical-Neural ODE</p></h3>
+				<div class="container">
+					<div class="col">
+						<img data-src="assets/comparison_pk_without.png"/>
+						<br>
+						Without neural correction
+					</div>
+					<div class="col">
+						<img data-src="assets/comparison_pk_with.png"/>
+						<br>
+						With neural correction
+					</div>
+				</div>
+			</section>
+		</section>
+
+			<section>
+					<section>
+						<h3 class="slide-title"><p style="color:#FFAA7F" >Results </h3></p>
+							<br>
+							<div >
+								<li>
+									Netural network trained using single CAMELS simulation of <span style='color:#996699'>$25^3$ ($h^{-1}$ Mpc)$^3$ volume</span> and <span style='color:#669900'>$64^3$ dark matter particles</span> at the fiducial cosmology of  <span style='color:#6699CC'>$\Omega_m = 0.3$</span>
+								</li>
+							</div>
+							<br><br>
+							<div class="container">
+								<div class="col">
+									<img data-src="assets/camels_residual_CV_0.png"/>
+								</div>
+								<div class="col" >
+									<img style=" position: relative;bottom: 21px;" data-src="assets/cross_corr_CV_0.png" />
+								</div>
+							</div>
+					</section>
+
+				<section>
+					<h3 class="slide-title"><p style="color:#FFAA7F" >Results: Robustness to changes in resolution and cosmological parameters </h3></p>
+						<br>
+						<div >
+							<li>
+								Netural network trained using single CAMELS simulation of <span style='color:#996699'>$25^3$ ($h^{-1}$ Mpc)$^3$ volume</span> and <span style='color:#669900'>$64^3$ dark matter particles</span> at the fiducial cosmology of  <span style='color:#6699CC'>$\Omega_m = 0.3$</span>
+							</li>
+						</div>
+						<br><br>
+						<div class="container">
+							<div class="col">
+								<img data-src="assets/camels_residual_diff_resolution_CV_0.png"/>
+								<br>
+								Higher resolution
+							</div>
+							<div class="col">
+								<img data-src="assets/halofit_residuals_wrong_boxsize_res.png"/>
+								<br>
+								Lower resolution
+							</div>
+							<div class="col">
+								<img data-src="assets/camels_residual_diffomega_1P_1_n5.png"/>
+								<br>
+								Different Cosmology
+							</div>
+						</div>
+				</section>
+			</section>
+			<section>
+				<h2> <b class="alert">Example use-case:</b> Forecasting the power of Higher Order Weak Lensing Statistics with automatically differentiable simulations</h2>
+				<hr>
+				<div class="container">
+					<div class="col">
+						<div align="left" style="margin-left: 20px;">
+							<h5>
+								<strong>D. Lanzieri </strong>, F. Lanusse, C. Modi, B. Horowitz, J. Harnois-Déraps, J.L. Starck,
+								and The LSST Dark Energy Science Collaboration (LSST DESC) <br>
+								<a href="https://arxiv.org/abs/2305.07531"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2305.07531-B31B1B.svg" class="plain" style="height:25px;" /></a>
+							</h5>
+							<img data-src="assets/desc-logo.png" style='width:300px; height:200px;'></img>
+
+							<br>
+
+							$\Longrightarrow$  Compare the constraining power of weak lensing statistics and <b class="alert"> investigate the degeneracy in high dimensional cosmological parameter space.</b>
+						</div>
+					</div>
+					<div class="col">
+						<img class="plain" data-src="assets/lensing.jpg" style="width:550px;" />
+					</div>
+				</div>
+				<br>
+			</section> 
+
+	
+
+			<section >
+				<h2 class='slide-title'> <p style="color:#FFAA7F" >Compare the information content </h2> </p>
+				<div style="position:absolute;top:100;left:-10;">	
+					We tested the simulations to reproduce a LSST like setting 
+					<br>
+				</div>
+				<br>
+				<div class='container'>
+					<div class='col'>
+						\[\begin{equation}
+							F_{\alpha, \beta} =\sum_{i,j} \frac{d\mu_i}{d\theta_{\alpha}}
+							C_{i,j}^{-1} \frac{d\mu_j}{d\theta_{\beta}}
+						\end{equation} \]
+					</div>
+					<div class='col'>
+						<ul>
+						<br>
+						<br>
+							<li> Use Fisher matrix to estimate the information content extracted with a given statistic 
+							</li>
+							<br>
+							<li class="fragment" data-fragment-index="0" > Derivative of summary statistics respect to the cosmological parameters.
+							</li>
+							<br>
+							<li class="fragment"data-fragment-index="2"> Fisher matrices are notoriously unstable
+								<br>
+								$\Longrightarrow$ they rely on evaluating gradients by finite differences.
+							</li>
+							<br>
+							<li class="fragment"data-fragment-index="3"> They do not scale well to large number of parameters.
+							</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+
+
+			<section >
+				<h3 class="slide-title"><p style="color:#FFAA7F" > Compare the information content </p></h3>
+					<ul>
+						<li style="font-size: 20px"; > 
+							Use Fisher matrix to investigate the degeneracy between the cosmological parameters in high dimensional space and when systematics are included in the analysis. 
+						</li>
+					</ul>
+					<div>
+						<img data-src="assets/Fisher_talk.png" class='plain' style="height: 620px;" />
+					</div>
+			</section>
+
+
+			<!-- <section class="inverted" data-background="#000">
+				<h2>... but we don't have an analytic expression for the likelihood...</h2>
+			</section> -->
+
+            <section>
+				<h3><b class="alert">Example use-case:</b> Simulation-Efficient Implicit Inference for Weak Lensing with Differentiable Simulators </h3>
+				<a href="https://github.com/DifferentiableUniverseInitiative/sbi_lens"><img src="https://badgen.net/badge/icon/SbiLens?icon=github&label" class="plain" style="height:25px;" /></a>
+				<a href="https://colab.research.google.com/drive/1pSjhrOJbVi80RQlsVz2oXhVAtxwBhSbn?usp=sharing" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" class="plain" style="height:25px;" /></a>
+				<hr>
+				<div class="container">
+					<div class="col">
+						<div align="left" style="margin-left: 20px;">
+							<h5>
+							<strong>  J.Zeghal </strong>,  D. Lanzieri, F. Lanusse, A. Boucaud, E. Augourg <br>
+							<h3> <p style="color:#6699CC" >How can we maximize the information gain from stage-IV surveys? </p>
+							</h3>
+							$\Longrightarrow$   <b class="alert"> Full-Field Inference</b>
+							<br>
+							<br>
+							<ul> 	
+								<li>
+								 Computationally expensive 
+							    </li>
+								<br>
+								<li>
+								Require a large number of simulations
+								</li>
+						</div>
+					</div>
+					<div class="col">
+						<img class="plain" data-src="assets/comparison_with&withoutscore_.png" style="width:400px;" />
+					</div>
+				</div>
+				<div class="container">
+					<p style="color:#996699" > Our goal:</p> Likelihood free inference with a minimum number of simulations.
+				</div>
+				<br>
+			</section>
+
+
+			<section>
+				<h3 class="slide-title"><p style="color:#FFAA7F" > Conclusion </p> </h3>
+					<br> <br> <br>
+						<div class="block ">
+							<div class="block-title" >
+							Takeaway message
+							</div>
+							<div class="block-content">
+								<ul>
+									<li class="fragment"> Powerful ways to simulate fast cosmological simulations
+									</il>
+									<br>
+									<br>
+									<li class="fragment"> Data driven way of complementing a <span style='color:#669900'>physical models</span>
+										<ul>
+											<li> correction scheme to compensate for the small-scales approximations preserving translation and rotation symmetries</li>
+										</ul>
+									</li>
+									<br>
+									<li class="fragment"> <span style='color:#996699'>Automatically differentiable</span> physical models for <span style='color:#6699CC'>fast inference</span>
+										<ul>
+											<li> Likelihood-free inference approach
+											</li>
+											<li> Inference of the full posterior distribution by using the Hamiltonian Monte Carlo (HMC) method </li>
+										</ul>
+									</li>
+								</ul>
+						</div>
+					</div>
+					<br>
+					<p class="fragment">
+						GitHub repo: 
+						<br>
+						<a href="https://github.com/LSSTDESC/DifferentiableHOS"> LSSTDESC/DifferentiableHOS </a>
+						<br>
+						<a href="https://github.com/DifferentiableUniverseInitiative/jaxpm-paper/tree/v_icml"> DifferentiableUniverseInitiative/jaxpm-paper </a>
+						<br>
+						<a href="https://github.com/DifferentiableUniverseInitiative/flowpm"> DifferentiableUniverseInitiative/flowpm</a>
+						<br>						
+						<a href="https://github.com/DifferentiableUniverseInitiative/sbi_lens"> DifferentiableUniverseInitiative/sbi_lens </a>
+						<br>	
+						Thank you !
+					</p>
+		  </section>
+
+
+
+
+	<!-- ###########################################################
+	HERE START THE APPENDIX
+	############################################################ -->
+		
+
+			</div>
+		</div>
+
+		<style>
+			/* .reveal .slides {
+				border: 5px solid red;
+				min-height: 100%;
+				width: 128mm;
+				height: 96mm;
+			}  */
+	
+			.reveal .block {
+				background-color: #191919;
+				margin-left: 20px;
+				margin-right: 20px;
+				text-align: left;
+				padding-bottom: 0.1em;
+			}
+	
+			.reveal .block-title {
+				background-color: #333333;
+				padding: 8px 35px 8px 14px;
+				color: #FFAA7F;
+				font-weight: bold;
+			}
+	
+			.reveal .block-content {
+				padding: 8px 35px 8px 14px;
+			}
+	
+			.reveal .slide-title {
+				border-left: 5px solid white;
+				text-align: left;
+				margin-left: 20px;
+				padding-left: 20px;
+			}
+	
+			.reveal .alert {
+				color: #FFAA7F;
+				font-weight: bold;
+			}
+	
+			.reveal .inverted {
+				filter: invert(100%);
+			}
+	
+			/*
+		/* .reveal .alert {
+		padding:8px 35px 8px 14px; margin-bottom:18px;
+		text-shadow:0 1px 0 rgba(255,255,255,1);
+		border:5px solid #FFAA7F;
+		-webkit-border-radius: 14px; -moz-border-radius: 14px;
+		border-radius:14px
+		background-position: 10px 10px;
+		background-repeat: no-repeat;
+		background-size: 38px;
+		padding-left: 30px; /* 55px; if icon
+		}
+		.reveal .alert-block {padding-top:14px; padding-bottom:14px}
+		.reveal .alert-block > p, .alert-block > ul {margin-bottom:1em}
+		/*.reveal .alert li {margin-top: 1em}
+		.reveal .alert-block p+p {margin-top:5px} */
+		</style>
+	
+	
+		<script src="reveal.js/dist/reveal.js"></script>
+		<script src="reveal.js/plugin/notes/notes.js"></script>
+		<script src="reveal.js/plugin/markdown/markdown.js"></script>
+		<script src="reveal.js/plugin/highlight/highlight.js"></script>
+		<script src="reveal.js/plugin/math/math.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				controls: true,
+	
+				//center: false,
+				hash: true,
+	
+				// Visibility rule for backwards navigation arrows; "faded", "hidden"
+				// or "visible"
+				controlsBackArrows: 'hidden',
+	
+				// Display a presentation progress bar
+				progress: true,
+	
+				// Display the page number of the current slide
+				slideNumber: true,
+	
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+	
+				// The "normal" size of the presentation, aspect ratio will be preserved
+				// when the presentation is scaled to fit different resolutions. Can be
+				// specified using percentage units.
+				width: 1280,
+				height: 720,
+	
+				// Factor of the display size that should remain empty around the content
+				margin: 0.1,
+	
+				// Bounds for smallest/largest possible scale to apply to content
+				minScale: 0.2,
+				maxScale: 1.5,
+	
+				autoPlayMedia: true,
+	
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath],
+	
+				dependencies: [{
+						src: 'reveal.js/plugin/markdown/marked.js'
+					},
+					{
+						src: 'reveal.js/plugin/markdown/markdown.js'
+					},
+					{
+						src: 'reveal.js/plugin/notes/notes.js',
+						async: true
+					},
+					{
+						src: 'reveal.js/plugin/math/math.js',
+						async: true
+					},
+					{
+						src: 'reveal.js/plugin/reveal.js-d3/reveald3.js'
+					},
+					{
+						src: 'reveal.js/plugin/reveal.js-plugins/chart/Chart.min.js'
+					},
+					{
+						src: 'reveal.js/plugin/reveal.js-plugins/chart/csv2chart.js'
+					},
+					{
+						src: 'reveal.js/plugin/highlight/highlight.js',
+						async: true
+					},
+				]
+	
+			});
+		</script>
+	</body>
+	
+	</html>
