@@ -34,6 +34,3 @@
 [submodule "DAp_GPU_Day/reveal.js"]
 	path = DAp_GPU_Day/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
-[submodule "LSST2023/reveal.js"]
-	path = LSST2023/reveal.js
-	url = https://github.com/EiffL/reveal.js.git
