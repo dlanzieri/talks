@@ -43,6 +43,3 @@
 [submodule "LSSTCM2023/reveal.js"]
 	path = LSSTCM2023/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
-[submodule "Sissa2023short/reveal.js"]
-	path = Sissa2023short/reveal.js
-	url = https://github.com/EiffL/reveal.js.git
