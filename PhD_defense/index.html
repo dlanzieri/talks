@@ -53,7 +53,7 @@
 		</div>
 	</section>
 <!-- ################################################################################################################################################### -->
-	<section data-background-image="assets/WMAP_timeline_large.jpg">
+	<section data-background="#000" data-background-image="assets/WMAP_timeline_large.jpg" data-background-size="1050px" >
 		<h3 class='slide-title' style="position:absolute;top:0;"> the $\Lambda$CDM view of the Universe </h3>
 		<br> <br>
 		<div class="container">
@@ -71,7 +71,7 @@
 	</section>
 <!-- ################################################################################################################################################### -->
 	<section>
-		<section data-background-video="assets/GravLens_H2641080p.mov" data-background-video-muted>
+		<section data-background-video="assets/GravLens_H2641080p.mov" data-background-size= "10px"  data-background-video-muted>
 		</section>	
 	</section>
 <!-- ################################################################################################################################################### -->
@@ -212,7 +212,7 @@
 									<li>The models take as input a vector parameter $\theta$
 									</li>
 									<br>
-									<li class="fragment">Internal states $z$, dubbed <em>latent variables</em>, are sampled from the distribution $p(z|\theta)$.	
+									<li class="fragment">The models introduce internal states $z$, dubbed <em>latent variables</em>.	
 									</li>
 									<br>
 									<li class="fragment"> The models generate as output the observations $x$ from the distribution $p(x|\theta,z)$
@@ -412,7 +412,7 @@
 				$$\frac{\partial y}{\partial x} = \frac{\partial y}{\partial u} \frac{ \partial u}{\partial x} = 1 \times a = a$$
 			</li>
 			<li class="fragment">
-			To differentiate automatically, TensorFlow remember what operations
+			To differentiate automatically, autodiff frameworks remember what operations
 			happen in what order during the forward pass and traverses this list of operations in reverse order to compute gradients.
 			</li>
 		</ul>
@@ -506,34 +506,6 @@
 			</div>
 	</section>
 <!-- ################################################################################################################################################### -->
-	<section>
-		<h3  class='slide-title'>Hybrid Physical-Neural ODEs for Fast N-body Simulations</h3>
-			<br>
-			<br>
-			<br>
-			<br>
-			<ul>
-				<li class="fragment grow">Fast realization of complex processes
-				</li>
-				<ul>
-					<br>
-					<li>  $\Longrightarrow$ Take the effective <span style='color:#996699'>physics description</span> and combine it with a <span style='color:#996699'>ML approach</span>
-					</li>
-				</ul>
-				<br>
-				<br>
-				<li  class="fragment grow">Cosmological simulations are based on physical processes
-				</li>
-				<ul>
-					<br>
-					<li> 	$\Longrightarrow$ These impose <span style='color:#669900'>symmetries</span> and <span style='color:#669900'>constraints</span>
-					</li>
-				</ul>
-			</ul>
-			<br>
-			<br>
-	</section>
-<!-- ################################################################################################################################################### -->
 <!-- HERE START A SUBSECTION -->
 <!-- ################################################################################################################################################### -->
 	<section>
@@ -573,32 +545,6 @@
 					<div>
 							<img data-src="assets/nn_manim.png" class='plain' style="height: 600px; width:950px" />
 					</div>
-			</section>
-<!-- ################################################################################################################################################### -->
-			<section>
-				<h3 class="slide-title">Train and validation loss</h3>
-				<div class="container">
-					<div class="col">
-							<div  >
-							$$\mathcal{L} =  \sum_{i}^{snapshots} \lambda_1||   \color{#6699CC}{\mathbf{x}^{ref}_i} -  \color{#6699CC}{\mathbf{x}_i}||_2^2  + \lambda_2 || \frac{\color{#996699}{p_i(k)}}{\color{#996699}{p_i^{ref}(k)}} -1 ||_2^2 $$
-							</div>
-					</div>
-					<div class="col">
-						<ul>
-							<li >We adopt a loss function penalizing both the <span style='color:#6699CC'>particle positions</span> and the overall <span style='color:#996699'>matter power spectrum</span> at different snapshot times
-							</li>
-							<br>
-							<li > We train and compare the model to the CAMELS simulations <a style="color:#GOLD"; href=" https://arxiv.org/pdf/2010.00619.pdf:">(Villaescusa-Navarro et al., 2021) </a>
-							</li>
-							<br>
-							<li> 	We use a single N-body simulation of $25^3$ ($h^{-1}$ Mpc)$^3$ volume, $64^3$ dark matter particles at the fiducial cosmology of $\Omega_m = 0.3$ and $\sigma_8 = 0.8$
-							</li>
-							<br>
-							<li> Whole code implemented in the Python package <span style='color:#669900'>Jax<span/>.
-							</li>
-						</ul>
-					</div>
-				</div>
 			</section>
 <!-- ################################################################################################################################################### -->
 		</section>
@@ -668,24 +614,24 @@
 							</div>
 							<div class="block-content">
 								<ul>
-									<li class="fragment"> We presented a Neural Network-based correction scheme for quasi N-body PM solvers
+									<li class="fragment"> Neural Network-based correction scheme for quasi N-body PM solvers
 									</li>
 									<br>
-									<li class="fragment"> We compared the results of a corrected PM simulations against the high resolution CAMELS simulations</span>
+									<li class="fragment"> Validation against the high resolution CAMELS simulations</span>
 									</li>
 									<br>
 	
-									<li class="fragment">  We benchmarked our model against the PGD scheme showing that the two methods :
+									<li class="fragment">  Benchmark against the PGD scheme:
 										<ul>
-											<li> give similar improvement for the power spectrum.
+											<li> Similar improvement for the power spectrum
 											</li>
-											<li> give significantly different improvement in the correlation coefficients.
+											<li> Significantly different improvement in the correlation coefficients
 											</li>
 										</ul>
 									</li>
 									<br>
 
-									<li class="fragment"> We presented the results to changes in resolution and cosmological parameters proving that is not sensitive to the setting of the simulations used for the trainings</span>
+									<li class="fragment"> Correction scheme not sensitive to the setting of the simulations used for the trainings</span>
 									</li>
  								</ul>
 						</div>
@@ -854,16 +800,15 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 <!-- ################################################################################################################################################### -->
 			<section >
 				<h3 class='slide-title'>  Implementation of Intrinsic alignment (IA) with NLA model	</h3> 
-				<br> 
-				<br> 
-				$$\underbrace{\epsilon}_{\tiny \mbox{observed ellipticity}} = \underbrace{\epsilon_i}_{\tiny \mbox{intrinsic ellipticity}} + \underbrace{\gamma}_{\tiny \mbox{lensing}}
-				\Longrightarrow \underbrace{\epsilon_i}_{\tiny \mbox{intrinsic ellipticity}} = \underbrace{\epsilon_{IA}}_{\tiny \mbox{intrinsic alignment}} +  \underbrace{\epsilon_{ran}}_{\tiny \mbox{random component}}$$
 				<div class='container'>
-					
 					<div class='col'>
 						<div>
 							<br>
 								<ul>
+							<li>
+								$\underbrace{\epsilon}_{\tiny \mbox{observed ellipticity}} = \underbrace{\gamma}_{\tiny \mbox{lensing}}+ \underbrace{\underbrace{\epsilon_{IA}}_{\tiny \mbox{intrinsic alignment}} +  \underbrace{\epsilon_{ran}}_{\tiny \mbox{random component}}}_{\tiny \mbox{intrinsic ellipticity}}$
+							</li>
+							<br>
 							<li>
 								IA effect modeled on the convergence map level following the model proposed by <em> Fluri et al. 2019 </em> 
 								<ul>
@@ -963,138 +908,6 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 				</div>
 			</section>
 <!-- ################################################################################################################################################### -->
-			<section>
-				<h3 class="slide-title">Forecast formalism and Analysis choices</h3>
-
-				<div class="container">
-					<div class="col">
-						<img  data-src="assets/kmap_nonoise.png" >
-					</div>
-					<div class="col" style="font-size: 2.5em;">
-						$+ \sigma^2_n= \frac{\sigma_e^2}{A_{pix}n_{gal}} =$
-					</div>
-					<div class="col">
-						<img data-src="assets/kmap_noise.png" >
-					</div>
-				</div>
-
-				<ul> 
-					<li><b class="alert">LSST-like survey</b>: 
-						<ul>
-							<li>n$_{gal}$=20 arcmin$^{-2}$</li>
-							<li> $\sigma_e=0.26$ </li>
-							<li> $c_{\ell}$ for $\ell=[300,3000]$ </li>
-							
-						</ul>
-					</li>
-					<br>
-					<li><b class="alert">Features $\kappa$map</b>: 
-						<ul>
-							<li>25 deg$^2$, 1024$^2$ pixels </li>
-							<li>Source redshift z=0.91  </li>
-						</ul>
-					</li>
-				</ul>
-			</section>
-<!-- ################################################################################################################################################### -->
-			<section>
-				<h3 class="slide-title">Weak-Lensing statistic: Multiscale Peak counts</h3>
-
-				<div class="container">
-					<img  data-src="assets/example_kmaps_decomposed_originale.png"  />
-				</div>
-
-				<ul> 
-					<li class="fragment"><b class="alert">Peak counts</b>: 
-						<ul>
-						<li>Local maxima in the map</li>
-						<li>Non-Gaussian information</li>
-						<li>Trace overdense regions </li>
-						</ul>
-					</li>
-					<br>
-					<li class="fragment"><b class="alert">Multi-scale approach</b>: 
-						<ul>
-							<li>Isotropic undecimated wavelet transform</li>
-							<li> $c_0=c_J+\sum_{j=1}^{J_{max}} w_j$ </li>
-							<li> $\theta= [9.33, 18.79, 37.38]$ arcmin</li>
-							<li> Peak counts as wavelet coefficients with values higher than their eight neighbors </li>
-							
-						</ul>
-					</li>
-				</ul>
-			</section>
-<!-- ################################################################################################################################################### -->
-			<section>
-				<h3 class="slide-title">Weak-Lensing statistic: Multiscale $C_{\ell}$</h3>				
-				<p>We want to focus on a fair comparison between the power spectrum and the peak counts method.
-
-				<div class="container">
-					<div class="col r-stack">
-						<div class="fragment current-visible" data-fragment-index="0">
-							<img data-src="assets/example_kmaps_decomposed_originale.png"/>
-							$$ \theta= [9.33, 18.79, 37.38]$$ 
-						</div>
-
-						<div class="fragment" data-fragment-index="1">
-							<img data-src="assets/window.png" />
-						</div>
-
-					</div>
-
-					<div class="col">
-						<ul> 
-							<li class="fragment"  data-fragment-index="0"><b class="alert"> Multi-scale approach:</b>
-								<br>
-								<ul>
-									<li>We decompose the noisy convergence map using the same scales used for the <b>Peak counts</b></li>
-								</ul>
-							</li>
-							<br>
-							<li class="fragment" data-fragment-index="1"><b class="alert">$C_{\ell}$: </b> 
-								<br>
-								<ul>
-									<li>We sum up the three maps corresponding to $\theta=[9.33, 18.79, 37.38]$ arcmin </li>
-									<br> $\Longrightarrow$ We compute the angular $C_{\ell}$ on the resulting image
-								</ul>
-							</li>
-							<br>
-						</ul>
-					</div>
-				</div>
-				<div class="fragment">$\Longrightarrow$ We
-					apply a wavelet pass-band filter to the maps to isolate particular scales before measuring the power spectrum </div>
-			</section>
-<!-- ################################################################################################################################################### -->
-			<section >
-				<h2 class='slide-title'> Compare the information content </h2> 
-				<div class='container'>
-					<div class='col'>
-						\[\begin{equation}
-							F_{\alpha, \beta} =\sum_{i,j} \frac{d\mu_i}{d\theta_{\alpha}}
-							C_{i,j}^{-1} \frac{d\mu_j}{d\theta_{\beta}}
-						\end{equation} \]
-					</div>
-					<div class='col'>
-						<ul>
-						<br>
-						<br>
-							<li> <b class="alert">Covariance matrix</b>: computed using 5000 independent map realizations
-							</li>
-							<br>
-							<li class="fragment" data-fragment-index="0" > <b class="alert">Peak counts results</b>: mean over 1500 independent map realizations 
-							</li>
-							<br>
-							<li class="fragment"data-fragment-index="0"> <b class="alert">$C_{\ell}$ results</b>: mean over 2600 independent map realizations
-							</li>
-							<br>
-							<li class="fragment"data-fragment-index="1"> Stability of the Fisher contours tested for different numbers of independent realizations used to compute the Covariance and to mean the Jacobian
-							</li>
-						</ul>
-					</div>
-				</div>
-			</section>
-<!-- ################################################################################################################################################### -->
 			<section >
 				<h3 class="slide-title"> Results: </h3>
 				<div class='container'>
@@ -1103,10 +916,10 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 						</div>
 						<div class='col'>
 							<ul>
-								<li>We confirm that the peak count statistics outperform the two-point statistic as found in prevous works (e.g. <em>Ajani et al. </em>)
+								<li>Peak count statistics outperform the two-point statistic as found in prevous works (e.g. <em>Ajani et al. </em>)
 								</li>
 								<br>
-								<li>We find the peak counts to provide the most stringent constraints on the galaxy intrinsic alignment amplitude $A_{IA}$.
+								<li>Peak counts provide the most stringent constraints on the galaxy intrinsic alignment amplitude $A_{IA}$.
 								</li>
 							</ul>
 						</div>
@@ -1122,19 +935,19 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 							</div>
 							<div class="block-content">
 								<ul>
-									<li class="fragment">We have presented the Differentiable Lensing Lightcone (DLL) model, a fast lensing lightcone simulator providing access to the gradient.
+									<li class="fragment">Differentiable Lensing Lightcone (DLL) model $\Longrightarrow$ fast lensing lightcone simulator providing access to the gradient.
 									</il>
 									<br>
 									<br>
-									<li class="fragment"> We validated the tool by comparing the angular power spectrum and peak counts statistics against predictions from kTNG simulations. 
+									<li class="fragment"> Validation against predictions from kTNG simulations: 
 										<ul>
 											<br>
-											<li> We show that, despite being generated at low computational costs (~ 0.6 particles per Mpc/h), we recover a good match for redshift equal or higher than z=0.91.
+											<li> Good match for redshift equal or higher than z=0.91, despite being generated at low computational costs (~ 0.6 particles per Mpc/h).
 											 </li>
 										</ul>
 									</li>
 									<br>
-									<li class="fragment">To demonstrate the potential of our tool we exploited the automatic differentiability of the simulations to do Fisher forecast. 
+									<li class="fragment">Potential of the tool demonstrated by exploiting the automatic differentiability of the simulations to do Fisher forecast. 
 									</il>
 								</ul>
 						</div>
@@ -1193,7 +1006,7 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 				<br>
 				<ul>
 					<div>		
-						<li> <span style='color:#6699CC'>Step I </span>: Reduce the dimensionality of the data space and extract summary statistics
+						<li class="plain fragment " data-fragment-index="0"> <span style='color:#6699CC'>Step I </span>: Reduce the dimensionality of the data space and extract summary statistics
 							$$y = f_\varphi(x) $$
 							$\Longrightarrow$ dimension of $y$ equal to the dimension of the unknown parameters $\theta$.
 						</li>
@@ -1264,7 +1077,7 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 							<li>$\kappa_{ln}=e^{\kappa_g}+\lambda$
 							</li>
 							<br>
-							<li>Log-normal shift parameter $\lambda$ conditioned on $(\Omega_m, \sigma_8, w_0)$
+							<li>Log-normal shift parameter $\lambda$ conditioned on $(\Omega_c, \sigma_8, w_0)$
 							</li>
 							<br>
 							<li>Sampling of convergence maps in a tomographic setting while considering the cross-correlation between different redshift bins
@@ -1319,25 +1132,6 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 			</section>
 <!-- ################################################################################################################################################### -->			
 			<section>
-				<h3 class="slide-title">Power spectrum analysis</h3>
-				<div class="container">
-					<div class="col">
-						<img class="plain" data-src="assets/contours_posterior_ps_hmc_.png" />
-					</div>
-					<div class="col">
-							<ul> 
-								<li>
-									log-normal fields offer the advantage of rapidly generating convergent fields while accounting for non-Gaussianities
-									<br>
-									<br>
-									$\Longrightarrow$ We include a power spectrum analysis to demonstrate that there is a gain of information when adopting a full-field approach
-								</li>
-
-					</div>
-				</div>
-			</section>
-<!-- ################################################################################################################################################### -->			
-			<section>
 				<h3 class="slide-title">Full field with Bayesian forward approachs</h3>
 				BHM uses a given physical model to predict observations and then comparing these predictions with observations to infer the parameters of the model:
 				<div class="container">
@@ -1349,7 +1143,7 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 								
 									<ul>
 										<li>
-											We built a likelihood based on the data model of SBILens  
+											Likelihood based on the data model of SBILens  
 											<br>
 											$\Longrightarrow$ the simulator serves as the physical model 
 										</li>
@@ -1357,9 +1151,7 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 										<br>
 										<br>
 										<li>
-											The measurement of convergence for each pixel and bin differ from real observations due to noise
-											<br>
-											$\Longrightarrow$ we assume the observation is characterized by Gaussian noise
+											 Observation characterized by Gaussian noise
 											\begin{equation}
 												\mathcal{L}(\theta)=
 												\sum_i^{N_{pix}} \sum_{j}^{N_{bins}} \log{P(\kappa^{obs}_{i,j}|\kappa_{i,j},\theta)}
@@ -1369,7 +1161,7 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 										<br>
 										<br>
 										<li>
-										We use a Hamiltonian Monte Carlo (HMC) algorithm to sample the posterior distribution for $\theta$
+									Hamiltonian Monte Carlo (HMC) algorithm to sample the posterior distribution for $\theta$
 										</li>
 									</ul>
 					</div>
@@ -1474,7 +1266,7 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 				</div>
 				<div class="block fragment">
 					<div class="block-title" style='color:white'>
-						How to introduce a parametric function <span style='color:#6699CC'>$f_{\varphi}(x)$</span>, to reduce the dimensionality of the data while <span style='color:#996699''> preserving</span> the information?
+						Variational Mutual Information Maximization (VMIM)
 					</div>
 					<div class="block-content">
 						<br> 
@@ -1502,10 +1294,10 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 					<li class='fragment'> <b class="alert">Key Idea</b>: Use a <b>parametric distribution model $\mathbb{P}_{\varphi'}$ to approximate the implicit distribution $\mathbb{P}$</b>.
 					</li>
 					<br>
-					<li class="fragment fade-up"> We assume $\mathbb{P}_{\varphi'}=q_{\varphi'}(\theta | y)$ a <b> parametric conditional density</b>
+					<li class="fragment fade-up"> Assume $\mathbb{P}_{\varphi'}=q_{\varphi'}(\theta | y)$ a <b> parametric conditional density</b>
 					</li>
 					<br>
-					<li class="fragment fade-up"> We optimize the parameters $\varphi'$ of $q_{\varphi'}$ according to
+					<li class="fragment fade-up"> Optimize the parameters $\varphi'$ of $q_{\varphi'}$ according to
 						\begin{equation}
 						\min\limits_{\varphi'} \sum\limits_{i} - \log q_{\varphi'}(\theta_i | y_i) \nonumber
 						\end{equation}
@@ -1558,10 +1350,69 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 					<div class="col">
 						<img data-src="assets/contours_posterior_summaries_.png" style="height: 680px;"/>
 					</div>
+					<div class="col">
+						<img data-src="assets/tab_summ.png"/>
+					</div>
+				</div>
 			</section>
 <!-- ################################################################################################################################################### -->
-			<section>
+			<!-- <section>
 				<h3 class="slide-title">Results</h3>
+				<div class="container">
+					<div class="col">
+					<table  >
+						<thead><tr>
+							<th><span > </span></th>
+							<th><span style='color:#6699CC'>VMIM</span></th>
+							<th><span style='color:#6699CC'>MSE</span></th>
+							<th><span style='color:#6699CC'>MAE</span></th>
+						</tr></thead>
+						<tr>
+							<td>$\Omega_c$</td>
+							<td>$0.274^{+0.026}_{-0.025}$</td>
+							<td>$0.283^{+0.031}_{-0.029}$</td>
+							<th>$0.279^{+0.030}_{-0.028}$</th>
+						</tr></tbody>
+						<tr>
+							<td>$\Omega_b$</td>
+							<td>$ \left( 49.9^{+6.0}_{-6.4} \right) \times 10^{-3}$</td>
+							<td>$\left( 49.2\pm 6.1 \right) \times 10^{-3}$</td>
+							<th> $\left( 50.1^{+5.9}_{-6.1} \right) \times 10^{-3}$</th>
+						</tr></tbody>
+						<tr> 
+							<td>$\sigma_8$</td>
+							<td> $0.819^{+0.031}_{-0.029}$</td>
+							<td>$0.808^{+0.034}_{-0.032}$ </td>
+							<th> $0.808^{+0.032}_{-0.030}$</th>
+						</tr></tbody>
+						<tbody><tr>
+							<td>$w_0$</td>
+							<td>$-1.00^{+0.20}_{-0.22}$ </td>
+							<td>$-1.13^{+0.23}_{-0.22}$ </td>
+							<th>$-1.16\pm 0.22$s</th>
+						</tr></tbody>
+						<tbody><tr>
+							<td>$h_0$</td>
+							<td><em>$0.666^{+0.061}_{-0.057}$</em></td>
+							<td>$0.662^{+0.056}_{-0.057}$</td>
+							<th>$0.664^{+0.056}_{-0.058}$</th>
+						</tr></tbody>
+						<tbody><tr>
+							<td>$n_s$</td>
+							<td>$0.963^{+0.041}_{-0.038}$</td>
+							<td>$0.956 \pm 0.041$</td>
+							<th>$0.955^{+0.039}_{-0.041}$ </th>
+						</tr></tbody>
+					</table>
+				</div>
+				<div class="col">
+					<img data-src="assets/contours_posterior_summaries_.png" style="height: 680px;"/>
+				</div>
+			</div>
+			</section> -->
+<!-- ################################################################################################################################################### -->
+			<section>
+				<h3 class="slide-title"> Results</h3>
 				<div class="container">
 					<div class="col">
 						<img data-src="assets/contours_posterior_imp_ex_ps.png" style="height: 680px;"/>
@@ -1576,28 +1427,29 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 							</div>
 							<div class="block-content">
 								<ul>
-									<li class="fragment">We have presented and compared two different map-based strategies for inferring cosmological parameters: 
+									<br>
+									<li class="fragment">Two different map-based strategies for inferring cosmological parameters: 
 										<ul>
-											<li>The explicit full-field strategy (BHMs), based on an HMC sampler 
+											<li>Explicit full-field strategy (BHMs)
 											</li>
-											<li>The implicit inference strategy (LFI), based on a neural density estimator.
+											<li>Implicit inference strategy (LFI)
 											</li> 
 										</ul>
 									</il>
 									<br>
 									<li class="fragment">
-									We developed the Jax-based weak-lensing simulator SBILens to construct the forward model for explicit inference and simulate the mock data required to train the implicit model.
+										<span style='color:#6699CC'>SBILens</span> $\Longrightarrow$ Jax-based weak-lensing simulator 
 									</li>
 									<br>
 									<li class="fragment"> We found the following results: 
 										<ul>
-											<li> The marginalized summary statistics indicate that VMIM produces better results for $\Omega_c$, $w_0$, and $\sigma_8$ in terms of agreement with the fiducial value.
+											<li> The marginalized summary statistics indicate that VMIM produces better results for $\Omega_c$, $w_0$, and $\sigma_8$
 											</li>
 											<br>
-											<li> We demonstrate that both map-based approaches lead to a significant improvement in constraining $\Omega_c, w_0, \sigma_8$ compared to the 2-point statistics.
+											<li> Map-based approaches lead to a significant improvement in constraining $\Omega_c, w_0, \sigma_8$ compared to the 2-point statistics
 											</li>
 											<br>
-											<li>The Bayesian hierarchical inference and the Likelihood-free inference lead to the same posterior distributions. 
+											<li>The Bayesian hierarchical inference and the Likelihood-free inference lead to the same posterior distributions
 											</li>
 											
 										</ul>
@@ -1619,28 +1471,22 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 									<li  class="fragment"> A change of paradigm  <span style='color:#669900'> from analytic likelihoods to simulators as physical model:</span>
 										<ul>		 
 											<br>
-											<li class="fragment"> Data driven way of complementing a physical models
-												<ul>
-													<li> correction scheme to compensate for the small-scales approximations preserving translation and rotation symmetries
-													</li>
-												</ul>
+											<li class="fragment">Correction scheme to compensate for the small-scales approximations in Quasi-N-body simulations
 											</li>
 											<br>
 											<li class="fragment"> Powerful ways to simulate fast and differentiable cosmological simulations
 												<ul>
 													<li>
-													Designed for use as a forward model in Bayesian inference algorithms that require access to derivatives
+													$\Longrightarrow$ Designed for use as a forward model in Bayesian inference algorithms that require access to derivatives
 													</li>
 												</ul>
 											</il>
 											<br>
-											<br>
-											<br>
-											<li class="fragment"> Inference in high dimension from numerical simulators:
+											<li class="fragment"> Likelihood Free Inference in high dimension:
 												<ul>
 													<li> Construction of summary statistics.
 													</li>
-													<li> Validation of Likelihood Free Inference model
+													<li> Validation of the model against BHMs
 													</li>
 												</ul>
 											</li>
@@ -1653,46 +1499,56 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 			</section>
 <!-- ################################################################################################################################################### -->	
 			<section>
-				<h3 class="slide-title"> Future prospects </h3>
-				Extensions for Stage IV surveys:
-				<li> Developing a distributed implementation of automatically differentiable simulations</li>
+				<h3 class="slide-title"> Future prospects: <b class="alert"> Extensions for Stage IV surveys </b> </h3>
 				<br>
-                <li>Implementation of a ray-tracing algorithm beyond the Born approximation</li>
 				<br>
-				<li>Extension the NLA model for IA </li>
 				<br>
-				<li>ODE Integrators for modeling baryons</li>
-				<br>
-				<li>3x2pt analyses with Simulation-Based Inference</li>	
+					<ul>
+						<li> Developing a distributed implementation of automatically differentiable simulations</li>
+						<br>
+						<li>Implementation of a ray-tracing algorithm beyond the Born approximation</li>
+						<br>
+						<li>Extension the NLA model for IA </li>
+						<br>
+						<li>ODE Integrators for modeling baryons</li>
+					</ul>
 			</section>
 <!-- ################################################################################################################################################### -->	
+		
+<!-- Publications during this thesis
+Open source contributions: -->
 			<section>
 				<h3 class="slide-title"> Publications and academic activities </h3>
-				<div class="block-content">
-					<li>
-					Publications during this thesis
+				<div class="container">
 						<ul>
-							<li> Hybrid Physical-Neural ODEs for Fast N-body Simulations. (ICML 2022 Workshop on Machine Learning for Astrophysics).</li>
-							<br>
-							<li>Forecasting the power of Higher Order Weak Lensing Statistics with automatically differentiable simulations.</li>
-							<br>
-							<li>JAX-COSMO: An End- to-End Differentiable and GPU Accelerated Cosmology Library. </li>
-							<br>
-							<li>Adaptable Deep Learning Models for Galaxy Morphology.</li>
+							<li>
+								<span style='color:#6699CC'>Publications during this thesis:</span>
+								<ul>
+									<li> Hybrid Physical-Neural ODEs for Fast N-body Simulations. 
+										<br><em> <span style='color:#996699'>Lanzieri, D.,</span> Lanusse, F., Starck, J. L. (2022)(ICML 2022 Workshop on Machine Learning for Astrophysics).</em></li>
+									<li>Forecasting the power of Higher Order Weak Lensing Statistics with automatically differentiable simulations. 
+										<br><em> <span style='color:#996699'>Lanzieri, D.,</span> ... LSST Dark Energy Science Collaboration (2023)</em></li>
+									<li>JAX-COSMO: An End- to-End Differentiable and GPU Accelerated Cosmology Library. 
+										<br> <em>Campagne, J. E.,.. <span style='color:#996699'>Lanzieri, D.,</span> ... Peel, A. (2023)</em> </li>
+									<li>Adaptable Deep Learning Models for Galaxy Morphology.
+										<br> <em>Walmsley, M., ... <span style='color:#996699'>Lanzieri, D.,</span> ... Renuka, V. (2023) </em></li>
+									<li>Optimal Neural Summarisation for Full-Field Implicit Inference by Density Estimation. 
+										<br> <em> <span style='color:#996699'>Lanzieri, D.,</span>, Zeghal, J., ... Starck,J.L. (in prep.) </em></li>
+								</ul>
+							</li>
+							<li>
+								<span style='color:#6699CC'>Open source contributions: </span>
+								<ul>
+									<li><a href="https://github.com/DifferentiableUniverseInitiative/jaxpm-paper/tree/v_icml"> JAX-PM </a></li>
+									<li><a href="https://github.com/DifferentiableUniverseInitiative/flowpm"> FlowPM</a></li>
+									<li><a href="https://github.com/LSSTDESC/DifferentiableHOS"> DifferentiableHOS </a></li>
+									<li><a href="https://github.com/DifferentiableUniverseInitiative/jax_cosmo"> JAX-COSMO</a></li>
+									<li><a href="https://github.com/DifferentiableUniverseInitiative/sbi_lens/tree/main"> SBILens</a></li>	
+								</ul>
+							</li>
 						</ul>
-					</li>
-					<li>
-					Open source contributions:
-						<ul>
-						<br>
-							<li><a href="https://github.com/DifferentiableUniverseInitiative/jaxpm-paper/tree/v_icml"> JAX-PM </a></li>
-							<li><a href="https://github.com/DifferentiableUniverseInitiative/flowpm"> FlowPM</a></li>
-							<li><a href="https://github.com/LSSTDESC/DifferentiableHOS"> DifferentiableHOS </a></li>
-							<li><a href="https://github.com/DifferentiableUniverseInitiative/jax_cosmo"> JAX-COSMO</a></li>
-							<li><a href="https://github.com/DifferentiableUniverseInitiative/sbi_lens/tree/main"> SBILens</a></li>	
-						</ul>
-					</li>
 				</div>
+				<h3>Thank you!</h3>
 			</section>
 <!-- ################################################################################################################################################### -->
 <!-- ################################################################################################################################################### -->
@@ -1759,6 +1615,32 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 						<img data-src="assets/comparison_pk_with.png"/>
 						<br>
 						With neural correction
+					</div>
+				</div>
+			</section>
+<!-- ################################################################################################################################################### -->
+			<section>
+				<h3 class="slide-title">Train and validation loss</h3>
+				<div class="container">
+					<div class="col">
+							<div  >
+							$$\mathcal{L} =  \sum_{i}^{snapshots} \lambda_1||   \color{#6699CC}{\mathbf{x}^{ref}_i} -  \color{#6699CC}{\mathbf{x}_i}||_2^2  + \lambda_2 || \frac{\color{#996699}{p_i(k)}}{\color{#996699}{p_i^{ref}(k)}} -1 ||_2^2 $$
+							</div>
+					</div>
+					<div class="col">
+						<ul>
+							<li >We adopt a loss function penalizing both the <span style='color:#6699CC'>particle positions</span> and the overall <span style='color:#996699'>matter power spectrum</span> at different snapshot times
+							</li>
+							<br>
+							<li > We train and compare the model to the CAMELS simulations <a style="color:#GOLD"; href=" https://arxiv.org/pdf/2010.00619.pdf:">(Villaescusa-Navarro et al., 2021) </a>
+							</li>
+							<br>
+							<li> 	We use a single N-body simulation of $25^3$ ($h^{-1}$ Mpc)$^3$ volume, $64^3$ dark matter particles at the fiducial cosmology of $\Omega_m = 0.3$ and $\sigma_8 = 0.8$
+							</li>
+							<br>
+							<li> Whole code implemented in the Python package <span style='color:#669900'>Jax<span/>.
+							</li>
+						</ul>
 					</div>
 				</div>
 			</section>
@@ -1937,6 +1819,33 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 			</section>
 <!-- ################################################################################################################################################### -->
 			<section >
+				<h3 class="slide-title"> Implementation of Intrinsic alignment (IA) with NLA model</h3> 
+				
+				<div class="container">
+					<div class="col">
+					<li>
+					The projected angular power spectra for the IA terms are defined as:
+						\begin{align}
+							C_{II}=& \int_0^{\chi_{lim}} \text{d}\chi 
+							\frac{n^2(\chi)}{a^2(\chi)}P_{II}(k,\chi), \\
+							C_{GI}= \frac{3\Omega_m H_0^2}{2c^2} & \int_0^{\chi_{lim}} \text{d}\chi 
+							\frac{g(\chi)n(\chi)}{a(\chi)}P_{GI}(k,\chi).
+						\end{align}
+					</div>
+					<div class="col">
+					with the matter power spectra defined as:
+						\begin{align}
+							P_{II}(k,z)=& \left ( \frac{A_{IA}\bar{C}_1\bar{\rho}(z)}{\bar{D}(z)} \right)^2 a^{4}(z)P_{\delta}(k,z), 
+							\\
+							P_{GI}(k,z)=&  \frac{A_{IA}\bar{C}_1\bar{\rho}(z)}{\bar{D}(z)} a^{2}(z)P_{\delta}(k,z)
+						\end{align}
+					</div>
+				</div>
+			</section>
+
+
+<!-- ################################################################################################################################################### -->
+			<section >
 				<h3 class='slide-title'> Validating simulations: Peak counts </h3> 
 				<div class='container'>
 					<div class='col'>
@@ -2009,8 +1918,159 @@ final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
 				</div>
 			</section>
 <!-- ################################################################################################################################################### -->
+			<section>
+				<h3 class="slide-title">Forecast formalism and Analysis choices</h3>
+
+				<div class="container">
+					<div class="col">
+						<img  data-src="assets/kmap_nonoise.png" >
+					</div>
+					<div class="col" style="font-size: 2.5em;">
+						$+ \sigma^2_n= \frac{\sigma_e^2}{A_{pix}n_{gal}} =$
+					</div>
+					<div class="col">
+						<img data-src="assets/kmap_noise.png" >
+					</div>
+				</div>
+
+				<ul> 
+					<li><b class="alert">LSST-like survey</b>: 
+						<ul>
+							<li>n$_{gal}$=20 arcmin$^{-2}$</li>
+							<li> $\sigma_e=0.26$ </li>
+							<li> $c_{\ell}$ for $\ell=[300,3000]$ </li>
+							
+						</ul>
+					</li>
+					<br>
+					<li><b class="alert">Features $\kappa$map</b>: 
+						<ul>
+							<li>25 deg$^2$, 1024$^2$ pixels </li>
+							<li>Source redshift z=0.91  </li>
+						</ul>
+					</li>
+				</ul>
+			</section>
+<!-- ################################################################################################################################################### -->
+			<section>
+				<h3 class="slide-title">Weak-Lensing statistic: Multiscale Peak counts</h3>
+
+				<div class="container">
+					<img  data-src="assets/example_kmaps_decomposed_originale.png"  />
+				</div>
+
+				<ul> 
+					<li class="fragment"><b class="alert">Peak counts</b>: 
+						<ul>
+						<li>Local maxima in the map</li>
+						<li>Non-Gaussian information</li>
+						<li>Trace overdense regions </li>
+						</ul>
+					</li>
+					<br>
+					<li class="fragment"><b class="alert">Multi-scale approach</b>: 
+						<ul>
+							<li>Isotropic undecimated wavelet transform</li>
+							<li> $c_0=c_J+\sum_{j=1}^{J_{max}} w_j$ </li>
+							<li> $\theta= [9.33, 18.79, 37.38]$ arcmin</li>
+							<li> Peak counts as wavelet coefficients with values higher than their eight neighbors </li>
+							
+						</ul>
+					</li>
+				</ul>
+			</section>
+<!-- ################################################################################################################################################### -->
+			<section>
+				<h3 class="slide-title">Weak-Lensing statistic: Multiscale $C_{\ell}$</h3>				
+				<p>We want to focus on a fair comparison between the power spectrum and the peak counts method.
+
+				<div class="container">
+					<div class="col r-stack">
+						<div class="fragment current-visible" data-fragment-index="0">
+							<img data-src="assets/example_kmaps_decomposed_originale.png"/>
+							$$ \theta= [9.33, 18.79, 37.38]$$ 
+						</div>
+
+						<div class="fragment" data-fragment-index="1">
+							<img data-src="assets/window.png" />
+						</div>
+
+					</div>
+
+					<div class="col">
+						<ul> 
+							<li class="fragment"  data-fragment-index="0"><b class="alert"> Multi-scale approach:</b>
+								<br>
+								<ul>
+									<li>We decompose the noisy convergence map using the same scales used for the <b>Peak counts</b></li>
+								</ul>
+							</li>
+							<br>
+							<li class="fragment" data-fragment-index="1"><b class="alert">$C_{\ell}$: </b> 
+								<br>
+								<ul>
+									<li>We sum up the three maps corresponding to $\theta=[9.33, 18.79, 37.38]$ arcmin </li>
+									<br> $\Longrightarrow$ We compute the angular $C_{\ell}$ on the resulting image
+								</ul>
+							</li>
+							<br>
+						</ul>
+					</div>
+				</div>
+				<div class="fragment">$\Longrightarrow$ We
+					apply a wavelet pass-band filter to the maps to isolate particular scales before measuring the power spectrum </div>
+			</section>
+<!-- ################################################################################################################################################### -->
+			<section >
+				<h2 class='slide-title'> Compare the information content </h2> 
+				<div class='container'>
+					<div class='col'>
+						\[\begin{equation}
+							F_{\alpha, \beta} =\sum_{i,j} \frac{d\mu_i}{d\theta_{\alpha}}
+							C_{i,j}^{-1} \frac{d\mu_j}{d\theta_{\beta}}
+						\end{equation} \]
+					</div>
+					<div class='col'>
+						<ul>
+						<br>
+						<br>
+							<li> <b class="alert">Covariance matrix</b>: computed using 5000 independent map realizations
+							</li>
+							<br>
+							<li class="fragment" data-fragment-index="0" > <b class="alert">Peak counts results</b>: mean over 1500 independent map realizations 
+							</li>
+							<br>
+							<li class="fragment"data-fragment-index="0"> <b class="alert">$C_{\ell}$ results</b>: mean over 2600 independent map realizations
+							</li>
+							<br>
+							<li class="fragment"data-fragment-index="1"> Stability of the Fisher contours tested for different numbers of independent realizations used to compute the Covariance and to mean the Jacobian
+							</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+<!-- ################################################################################################################################################### -->
 <!-- PART II-->
 <!-- ################################################################################################################################################### -->
+			<section>
+				<h3 class="slide-title">Power spectrum analysis</h3>
+				<div class="container">
+					<div class="col">
+						<img class="plain" data-src="assets/contours_posterior_ps_hmc_.png" />
+					</div>
+					<div class="col">
+							<ul> 
+								<li>
+									log-normal fields offer the advantage of rapidly generating convergent fields while accounting for non-Gaussianities
+									<br>
+									<br>
+									$\Longrightarrow$ We include a power spectrum analysis to demonstrate that there is a gain of information when adopting a full-field approach
+								</li>
+
+					</div>
+				</div>
+			</section>
+<!-- ################################################################################################################################################### -->			
 			<section>
 				<h3 class="slide-title">...Not all neural compression techniques are equivalent</h3>	
 				<div class="container">
