@@ -1,0 +1,2298 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title>Full-Field cosmological inference with weak lensing: from automatic differentiation to neural density estimation</title>
+    <meta name="description" content="Thesis defense">
+	<link rel="stylesheet" href="reveal.js/dist/reset.css">
+	<link rel="stylesheet" href="reveal.js/dist/reveal.css">
+	<link rel="stylesheet" href="reveal.js/dist/theme/darkenergy.css" id="theme">
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="reveal.js/plugin/highlight/monokai.css" id="highlight-theme">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+    <!-- ##################### -->
+	<section data-background-image="assets/lsst_stills_0009_crop.jpg">
+		<div class="container">
+			<div class="title" style="border-radius: 20px; background-color:rgba(0, 0, 0, 0.4);">
+				<h2>Full-Field cosmological inference with weak lensing: from automatic differentiation to neural density estimation</h2>
+			</div>
+		</div>
+		<hr>
+		<div style="border-radius: 20px; background-color:rgba(0, 0, 0, 0);">
+			<div class="container">
+				<div align="center" style="margin-left: 250px;">
+					<h2>Denise Lanzieri</h2>
+					<br>
+					<h4>Supervisors: Jean-Luc Starck, François Lanusse</h4>
+					<br>
+					<div class="title" style="border-radius: 20px; background-color:rgba(0, 0, 0, 0.2);">
+						Thesis defense, 6 October 2023
+						<br>
+						CosmoStat, CEA Paris-Saclay, IRFU/DAp-AIM 
+						<br>
+						Universtité Paris Cité, ED Astronomie et Astrophysique d’Ile de France 
+					</div>
+				<br>
+				</div>
+			</div>
+			<div class="container">
+				<div class="col">
+					<img src="assets/CosmoStatDarkBK.png" class="plain"></img>
+				</div>
+				<div class="col">
+					<img src="assets/logo_UParis_id_white.png" class="plain" height="150"></img>
+				</div>
+				<div class="col">
+					<img src="assets/CEA_logo_nouveau.svg.png" class="plain" height="150"></img>
+				</div>
+			</div>
+		</div>
+	</section>
+<!-- ################################################################################################################################################### -->
+	<section data-background="#000" data-background-image="assets/WMAP_timeline_large.jpg" data-background-size="1050px" >
+		<h3 class='slide-title' style="position:absolute;top:0;"> the $\Lambda$CDM view of the Universe </h3>
+		<br> <br>
+		<div class="container">
+			<div class="col" style="flex: 0 0 40em;">
+			</div>
+			<div class="col">
+				<img class="plain" data-src="assets/Euclid.png" style="width: 300px" />
+
+				<img class="plain" data-src="assets/wfirstlogo.png" style="width: 300px" />
+
+				<img class="plain" data-src="assets/vrro.png" style="width: 300px" />
+			</div>
+		</div>
+		<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
+	</section>
+<!-- ################################################################################################################################################### -->
+	<section>
+		<section data-background-video="assets/GravLens_H2641080p.mov" data-background-size= "10px"  data-background-video-muted>
+		</section>	
+	</section>
+<!-- ################################################################################################################################################### -->
+<section>
+	<h3  class='slide-title'>Aim of this thesis</h3>
+	<span style='color:#996699'> </span> Investigate unsolved questions of modern cosmology using upcoming surveys data
+		<br>
+		<br>
+		<div class="container">
+			<div class="col">
+			<div class="block fragment"  data-fragment-index="0" >
+					<div class="block-title">
+						
+					</div>
+					<div class="block-content">
+						<ul>
+							<li> Modern surveys will provide <b>large volumes</b> of <b>high quality</b> data
+							</li>
+							<br>
+							$\Longrightarrow$ Existing analysis methods are reaching their limits at every
+							step of the science analysis
+							<br>
+							<br>
+							$\Longrightarrow$  New analysis techniques to fully realize their potential 
+							
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<br>
+		<div class="fragment">
+
+			<ul>
+				<br>
+				<span style='color:#996699'>My personal contributions: </span>
+				<br>
+				<br>
+				<li> Making fast approximated cosmological simulations suitable for the data analysis
+				pipeline of upcoming cosmological surveys.
+				</li>
+				<br>
+				<li> Investigating forward modeling techniques to exploit the potential of next-generation data.
+				</li>
+			</ul>
+		</div>
+	</section>
+<!-- ################################################################################################################################################### -->
+	<section>
+		<h3 class='slide-title'> The limits of traditional cosmological inference </h3>
+		<div class='container'>
+			<div class='col'>
+				<ul>
+					<li > We need to develop a statistical strategy to extract cosmological information from weak lensing observations.
+						 </li>
+					<br>
+					<li  class="fragment" data-fragment-index="0"> Traditional cosmological analyses rely on: 
+						<ol>
+						<br>
+						<li> Measurements of the 2-point statistics
+							<br> $\Longrightarrow$  shear two-point correlation functions; <b>power spectrum</b> </li>
+						<br>
+						<li class="fragment" data-fragment-index="1"> Run an MCMC to recover a posterior on model parameters, using an <b class="alert">analytic likelihood</b>
+							$$ p(\theta | x ) \propto \underbrace{p(x | \theta)}_{\mathrm{likelihood}} \ \underbrace{p(\theta)}_{\mathrm{prior}}$$
+						</li>
+						</ol>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="block fragment">
+			<div class="block-title">
+				Main limitation:
+			</div>
+			<div class="block-content">
+				<ul>
+					<li>The two-point statistics are only optimal for Gaussian field and do not fully capture the <b class="alert">non-Gaussian</b> information imprinted at the scales accessible by future surveys </li>
+					<br>
+					<div class="fragment"> $\Longrightarrow$ We are dismissing a significant fraction of the information! </div>
+				</ul>
+			</div>
+		</div>
+	</section>
+<!-- ################################################################################################################################################### -->
+	<section >
+		<h2 class='slide-title'>  How to maximize the information gain?  </h2> 
+		<div class='container'>
+			<div class='col'>
+
+				<div style="position:relative; width:680px; height:480px; margin:0 auto;">
+					<img class="fragment plain" data-src="assets/Virg1_.png" style="position:absolute;top:0;left:0;" data-fragment-index="0" />
+				</div>
+				<div class="fragment" data-fragment-index="0" style="float:right; font-size: 16px">(<b>Ajani</b>, et al. 2020)
+				</div>
+			</div>
+			<div class='col'>
+				<ul><li class="fragment" data-fragment-index="0">	Approaches based on measuring high-order correlations to access the non-Gaussian information:
+						<ul>
+							<br>
+							<li>
+								Lensing peaks counts, Minkowski functionals, 3 point statistics, wavelet and scattering transform 
+							</li>
+							<br>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="block fragment">
+			<div class="block-title">
+				Main limitation: 
+			</div>
+			<div class="block-content">
+				Absence of an analytical model to that would describe the observed signal:
+				<ul>
+					<br>
+					<li>
+						We need to resort to <b class="alert">simplifying assumptions</b> that are not always justified. 
+					</li>
+				<div class="fragment"> $\Longrightarrow$ Making incorrect assumptions can result in inaccurate and misleading conclusions!</div>
+				</ul>
+			</div>
+		</div>
+	</section>
+<!-- ################################################################################################################################################### -->
+	<section>
+		<h3 class="slide-title"> An alternative approach: Forward modeling for map-based analysis</h3>
+			<img class="plain" data-src="assets/lfi_sim.png" style="width:1000px;"/>
+
+				<div class="r-stack">
+
+						<div class="block fragment">
+							<div class="block-title">
+								Probabilistic model
+							</div>
+							<div class="block-content">
+								<ol>
+									<li>The models take as input a vector parameter $\theta$
+									</li>
+									<br>
+									<li class="fragment">The models introduce internal states $z$, dubbed <em>latent variables</em>.	
+									</li>
+									<br>
+									<li class="fragment"> The models generate as output the observations $x$ from the distribution $p(x|\theta,z)$
+									</li>
+									<br><div class="fragment"> $\Longrightarrow$ The simulator of the observables serves as our <b class="alert">physical model </b></div>
+								</ol>
+							</div>
+						</div>
+					</div>
+	</section>
+<!-- ################################################################################################################################################### -->
+	<section>
+		<h3 class='slide-title'> An alternative approach: Forward modeling for map-based analysis</h3> 
+		<br>
+		<div class='container'>
+			<div class='col'>
+				<div class="block fragment" data-fragment-index="0">
+					<div class="block-title">
+						Benefits of a forward modeling approach
+					</div>
+					<div class="block-content">
+						<ul>
+							<li> Directly extracts information from the convergence map
+							</li>
+							<br>
+							<li> Facilitates the incorporation of systematic effects
+							</li>
+							<br>
+							<li> Facilitates the combination of multiple cosmological probes by joint simulations.
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class='col'>
+				<div class="block fragment" data-fragment-index="1">
+					<div class="block-title">
+						The Challenge of forward modeling approach
+					</div>
+					<div class="block-content">
+						<ul>
+							<li>To compute the likelihood $p(x | \theta)$ we need to 
+								marginalize over <b>stochastic latent variables</b>: 
+								$$ p(x|\theta) = \int p(x, z | \theta) dz = \int p(x | z, \theta) p(z | \theta) dz $$
+							</li>
+							<li> <b>Marginalization analytically intractable</b>
+								<br>
+								<div> $\Longrightarrow$ <b class="alert">need for a tractable way to compute the marginal likelihood $p(x|\theta)$</b>.</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<br>
+		<div class="fragment" data-fragment-index="2">
+			<ul>
+				<h3>How to perform inference over forward simulation models? </h3>
+				<li>Methods designed to directly reconstruct the likelihood from synthetic data as part of the inference pipeline. 
+					<br>a.k.a. <b> <span style='color:#6699CC'>Likelihood Free Inference</span></b> (LFI)
+				</li>
+				<br>
+				<li>Methods that integrate observations into a forward model allowing the exact reconstruction of the likelihood
+					<br>a.k.a. <b> <span style='color:#6699CC'> Bayesian Hierarchical Modeling</span></b> (BHM)
+				</li>
+			</ul>
+		</div>
+	</section>
+<!-- ################################################################################################################################################### -->
+	<section>
+		<h3 class="slide-title"> How to perform inference over forward simulation models? </h3>
+		<div class="block fragment">
+			<div class="block-title">
+				Bayesian Hierarchical Modeling
+			</div>
+			<div class="block-content">
+				<ul>
+					<li>We have access to all latent variables $z$ of the simulator $\Longrightarrow$ the joint log likelihood $p(x | z, \theta)$ is explicit.
+					</li>
+					<br>
+					<li> 
+						Perform inference over the joint posterior  $p(\theta, z | x)$  
+						$\Longrightarrow$ Extremely difficult problem as <b>$z$ is typically very high-dimensional</b>.
+					</li>
+
+					<br>
+
+					<li> How to peform efficient inference in this large number of dimensions?
+						<ul>
+							<li>
+							e.g. Hamiltonian Monte-Carlo, Variational Inference, Dimensionality reduction by Fisher-Information Maximization, etc.
+							</li>
+							<br>
+							What do they all have in common?
+							$\Longrightarrow$   They require fast, accurate, differentiable forward simulations
+						</ul>
+					</li>
+					<br>
+				</ul>
+			</div>
+	   </div>
+	   <br>
+	   <div class="fragment">$\Longrightarrow$ The only hope for explicit cosmological inference is to have <b class="alert">fully-differentiable cosmological simulations</b>!</div>
+	</section>
+<!-- ################################################################################################################################################### -->
+	<!-- <section>
+		<h3 class='slide-title'> Structure of the work </h3>
+		<ol>
+			<li>Development of the Hybrid Physical-Neural ODEs for Fast N-body Simulations
+			</li>
+			<ul>
+				$\rightarrow$ Development of a minimally-parametric neural network correction scheme to enhance the performance of quasi-N-body simulations
+			</ul>
+			<br>
+			<li>Development of Automatically Differentiable Weak-Lensing Simulations for cosmological inference
+			</li>
+			<ul>
+				$\rightarrow$ Differentiable Lensing Lightcone  (DLL) model
+				<br>
+				$\rightarrow$ Example use-case: Forecasting the constraining power of weak lensing statistics and their sensitivity to systematics 
+			</ul>
+			<br>
+			<li>
+				Optimal Neural Summarisation for Full-Field Implicit Inference by Density Estimation
+			</li>
+			<ul>
+				$\rightarrow$ Explore new methodology for inference over simulators
+				<ul>
+					<li>
+						Inference of the full posterior distribution by using the Hamiltonian Monte Carlo (HMC) method
+					</li>
+					<li>
+						Likelihood-free inference approach
+					</li>
+				</ul>
+				$\rightarrow$ of ways of using neural network-based techniques to derive informative summary statistics approach.
+			</ul>
+		</ol>
+	</section> -->
+<!-- ################################################################################################################################################### -->
+	<section class="inverted" data-background="#000">
+		<h2>How do we simulate the Universe in a <span style='color:#996699'> fast </span> and  <span style='color:#996699'>differentiable</span> way?</h2>
+	</section>
+<!-- ################################################################################################################################################### -->
+	<section>
+		<h3 class='slide-title'>Cosmological N-Body Simulations</h3>
+		<img data-src="assets/evolvingLSS.jpg" class="plain" /><br>
+	</section>
+<!-- ################################################################################################################################################### -->
+	<section>
+		<h3 class='slide-title'><span style='color:#996699' class="inverted" > Fast: </span>  The Particle-Mesh scheme for N-body simulations</h3>
+		<b>The idea</b>: approximate gravitational forces by estimating densities on a grid.
+		<div class='container'>
+				<div class='col'style=" position: relative;bottom: 60px;">
+				<ul>
+					<li>The numerical scheme:
+						<br>
+						<br>
+						<ul>
+							<li class="fragment" data-fragment-index="0">From the particle positions estimate the density of particles on a mesh
+							</li>
+							<br>
+							<li class="fragment" data-fragment-index="1"> Apply a Fourier transform to obtain the over-density field $\delta_k$ in Fourier space.
+							</li>
+							<br>
+								<ul>
+								<li class="fragment" data-fragment-index="1">  Compute gravitational forces 	$\to$ related to the density field via a transfer function ($\nabla \nabla^{-2}$)
+								</li>
+							</br>
+							</ul>
+							<li class='fragment'data-fragment-index="2"> Interpolate back the force at every particle position
+							</li>
+						</ul>
+					</li>
+				</ul>
+				</div>
+				<div style="position:relative; width:550px; height:550px; margin:0 auto;">
+					<img class="fragment current-visible plain" data-src="assets/particle_positions_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="0"  />
+					<img class="fragment current-visible plain"  data-src="assets/particle_density_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="1" />
+					<!-- <img class="fragment current-visible plain "  data-src="assets/particle_density_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="2" /> -->
+						<!-- <img  class="fragment current-visible plain"  data-src="assets/particle_density_0.png" style="position:absolute;top:0;left:0;" data-fragment-index="3" /> -->
+					<img class="fragment  plain" data-src="assets/particle_positions_1.png" style="position:absolute;top:0;left:0;" data-fragment-index="2" />
+				</div>
+		</div >
+		<div class="fragment"data-fragment-index="5" style=" position: relative;bottom: 60px;" > $\to$ Only a series of FFTs and interpolations.
+		</div>
+	</section>
+<!-- ################################################################################################################################################### -->
+	<section>
+		<h3 class="slide-title"><span style='color:#996699' class="inverted" > Differentiable:</span> Automatic Differentiation and Gradients</h3>
+
+		<ul>
+			<li class="fragment"> <b>Automatic differentiation</b> allows you to compute analytic derivatives of arbitraty expressions:<br>
+				If I form the expression $y = a * x + b$, it is separated in fundamental ops:
+				$$ y = u + b \qquad u = a * x $$
+				then gradients can be obtained by the chain rule:
+				$$\frac{\partial y}{\partial x} = \frac{\partial y}{\partial u} \frac{ \partial u}{\partial x} = 1 \times a = a$$
+			</li>
+			<li class="fragment">
+			To differentiate automatically, autodiff frameworks remember what operations
+			happen in what order during the forward pass and traverses this list of operations in reverse order to compute gradients.
+			</li>
+		</ul>
+		<br>
+		<br>
+		<div class="block fragment">
+			<div class="block-title">
+				Autodiff frameworks include Jax, TensorFlow and PyTorch.
+			</div>
+			<div class="block-content">
+
+				<div class="container">
+					<div class="col">
+						<ul>
+							<li>Arbitrary order derivatives</li>
+							<li>Accelerated execution on GPU and TPU</li>
+
+						</ul>
+					</div>
+					<div class="col" align="center">
+						<img data-src="assets/TF_FullColor_Horizontal.png" class="plain" style="width: 200px" />
+						<img data-src="https://raw.githubusercontent.com/google/jax/master/images/jax_logo_250px.png" class="plain" style="width: 100px" />
+					</div>
+				</div>
+	</section>
+<!-- ################################################################################################################################################### -->
+	<section>
+		<h2> <b class="alert">Part I: </b> Hybrid Physical-Neural ODEs for Fast N-body Simulations</h2>
+		<hr>
+		<div class="container">
+			<div class="col">
+				<div align="left" style="margin-left: 20px;">
+					<div style="height:20px;" >
+						<span style='color:#996699'> D. Lanzieri </span>, F. Lanusse, J.L. Starck (2022)
+					</div>
+						<a href="https://arxiv.org/abs/2207.05509"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2207.05509-B31B1B.svg" class="plain" style="height:25px;" /></a>
+					
+						<br>
+					<br>
+					<br>
+					$\Longrightarrow$ <b class="alert">Learn residuals to known physical equations</b> to improve accuracy of fast PM simulations.
+				</div>
+			</div>
+			<div class="col">
+				<img class="plain" data-src="assets/cluster_2D_PM_NN.png" style="width:450px;" />
+			</div>
+		</div>
+		<br>
+	</section>  
+<!-- ################################################################################################################################################### -->
+	<section>
+		<h3 class='slide-title'>	Fill the gap in the accuracy-speed space </h3>
+			<div class='container'>
+				<div class='col'style=" position: relative;bottom: 290px; ">
+					<ul>
+						N-body PM simulation:
+						<br>
+						<br>
+							<ul>
+								<li>Fast (we don't solve the full N-body problem)
+								</li>
+								<br>
+								<li> Not able to resolve structures with scales smaller than the mesh resolution
+									<ul>
+											<br>
+											<li  class="fragment" data-fragment-index="0">  $\to$  Overdensity structures less sharp than full N-body counterparts
+											</li>
+											<br>
+											<li class="fragment" data-fragment-index="1"> $\to$ Lack power on small scales
+											</li>
+									</ul>
+								</li>
+							</ul>
+							<br>
+						<div  class="fragment" data-fragment-index="2">
+						The correction idea : mimics the physics that is missing
+					</div>
+					</ul>
+				</div>
+				<div  class='col'>
+					<div class="plain fragment current-visible "  data-fragment-index="0">
+						<p style="position:relative; top:10px; left:0px;">Camels simulations</p>
+						<img  data-src="assets/cluster_2D_Camels.png" style="height:250px; position:relative; top:-30px; "></img>
+					</div>
+					<div class="plain fragment current-visible "  data-fragment-index="0">
+						<p style="position:relative; top:-50px; left:0px;">PM simulations</p>
+						<img  data-src='assets/cluster_2D_PM.png' style="height:250px; position:relative; top:-90px;" />
+					</div>
+					<img  class="fragment" data-fragment-index="1" data-src="assets/comparison_pk_intro.png" class='plain' style="height: 400px; width:700px; position: relative;bottom: 650px; " />
+				</div>
+			</div>
+	</section>
+<!-- ################################################################################################################################################### -->
+<!-- HERE START A SUBSECTION -->
+<!-- ################################################################################################################################################### -->
+	<section>
+			<section>
+					<h3 class="slide-title"> Augment the physical equations with a neural network</h3>
+					<br><br>
+						We compute the time integration from a system of ordinary differential equations (ODE)
+										$$\left\{ \begin{array}{ll}
+										\frac{d  \color{#6699CC}{\mathbf{x}} }{d a} & = \frac{1}{a^3 E(a)} \color{#6699CC}{\mathbf{v}} \\
+										\frac{d  \color{#6699CC}{\mathbf{v}}}{d a} & =  \frac{1}{a^2 E(a)} F_\theta( \color{#6699CC}{\mathbf{x}} , a), \\
+										F_\theta( \color{#6699CC}{\mathbf{x}}, a) &= \frac{3 \Omega_m}{2}  \nabla \left[ \color{#669900}{\phi_{PM}} (\color{#6699CC}{\mathbf{x}}) \right]
+
+										\end{array} \right. $$
+						<ul>
+							<li>   <span style='color:#6699CC'>$\mathbf{x}$</span> and <span style='color:#6699CC'>$\mathbf{v}$</span> define the position and the velocity of the particles
+							</li>
+							<li><span style='color:#669900'>$\phi_{PM}$</span> is the gravitational potential in the mesh
+							</li>
+						</ul>
+						<br>
+						<p  class='fragment' data-fragment-index="1"> $\to$ We can use this parametrisation to complement the physical ODE with neural networks.
+						</p>
+						<br>
+						<p  class='fragment' data-fragment-index="1">
+							$$F_\theta(\mathbf{x}, a) = \frac{3 \Omega_m}{2}  \nabla \left[ \phi_{PM} (\mathbf{x}) \ast  \mathcal{F}^{-1} (1 + \color{#996699}{f_\theta(a,|\mathbf{k}|)}) \right] $$
+						</p>
+						<br>
+						<div class="fragment" data-fragment-index="1" style="position:relative; top:0px; ">Correction integrated as a Fourier-based isotropic filter <span style='color:#996699'>$f_{\theta}$</span> $\to$ incorporates translation and rotation symmetries </div>
+			</section>
+<!-- ################################################################################################################################################### -->
+			<section>
+						<h3 class="slide-title"> Learn the Neural Filter </h3>
+					<ul>
+						<li> <span style='color:#996699'>$f_{\theta}(a)$</span> is defined as B-spline functions whose coefficients are the output of the Neural Network of parameters $\theta$.
+						</li>
+					</ul>
+					<div>
+							<img data-src="assets/nn_manim.png" class='plain' style="height: 600px; width:950px" />
+					</div>
+			</section>
+<!-- ################################################################################################################################################### -->
+		</section>
+<!-- ################################################################################################################################################### -->
+<!-- HERE ENDS A SUBSECTION -->
+<!-- ################################################################################################################################################### -->
+<!-- ################################################################################################################################################### -->
+<!-- HERE STARTS A NEW SUBSECTION -->
+<!-- ################################################################################################################################################### -->
+			<section>
+					<section>
+						<h3 class="slide-title">Results </h3>
+							<br>
+							<div >
+								<li>
+									Netural network trained using single CAMELS simulation of <span style='color:#996699'>$25^3$ ($h^{-1}$ Mpc)$^3$ volume</span> and <span style='color:#669900'>$64^3$ dark matter particles</span> at the fiducial cosmology of  <span style='color:#6699CC'>$\Omega_m = 0.3$</span>
+								</li>
+							</div>
+							<br><br>
+							<div class="container">
+								<div class="col">
+									<img data-src="assets/camels_residual_CV_0.png"/>
+								</div>
+								<div class="col" >
+									<img style=" position: relative;bottom: 21px;" data-src="assets/cross_corr_CV_0.png" />
+								</div>
+							</div>
+					</section>
+<!-- ################################################################################################################################################### -->
+				<section>
+					<h3 class="slide-title">Results: Robustness to changes in resolution and cosmological parameters </h3>
+						<br>
+						<div >
+							<li>
+								Netural network trained using single CAMELS simulation of <span style='color:#996699'>$25^3$ ($h^{-1}$ Mpc)$^3$ volume</span> and <span style='color:#669900'>$64^3$ dark matter particles</span> at the fiducial cosmology of  <span style='color:#6699CC'>$\Omega_m = 0.3$</span>
+							</li>
+						</div>
+						<br><br>
+						<div class="container">
+							<div class="col">
+								<img data-src="assets/camels_residual_diff_resolution_CV_0.png"/>
+								<br>
+								Higher resolution
+							</div>
+							<div class="col">
+								<img data-src="assets/halofit_residuals_wrong_boxsize_res.png"/>
+								<br>
+								Lower resolution
+							</div>
+							<div class="col">
+								<img data-src="assets/camels_residual_diffomega_1P_1_n5.png"/>
+								<br>
+								Different Cosmology
+							</div>
+						</div>
+				</section>
+			</section>
+<!-- ################################################################################################################################################### -->
+<!-- HERE ENDS A SUBSECTION -->
+<!-- ################################################################################################################################################### -->
+			<section>
+				<h3 class="slide-title"> Takeaway message Part I </h3>
+					<br> <br> <br>
+						<div class="block ">
+							<div class="block-title" >
+								Hybrid Physical-Neural ODEs for Fast N-body Simulations:
+							</div>
+							<div class="block-content">
+								<ul>
+									<li class="fragment"> Neural Network-based correction scheme for quasi N-body PM solvers
+									</li>
+									<br>
+									<li class="fragment"> Validation against the high resolution CAMELS simulations</span>
+									</li>
+									<br>
+	
+									<li class="fragment">  Benchmark against the PGD scheme:
+										<ul>
+											<li> Similar improvement for the power spectrum
+											</li>
+											<li> Significantly different improvement in the correlation coefficients
+											</li>
+										</ul>
+									</li>
+									<br>
+
+									<li class="fragment"> Correction scheme not sensitive to the setting of the simulations used for the trainings</span>
+									</li>
+ 								</ul>
+						</div>
+					</div>
+			</section>
+<!-- ################################################################################################################################################### -->
+<!-- ################################################################################################################################################### -->
+<!-- ################################################################################################################################################### -->
+<!-- PART II-->
+<!-- ################################################################################################################################################### -->
+<!-- ################################################################################################################################################### -->
+<!-- ################################################################################################################################################### -->
+			<section>
+				<h2> <b class="alert">Part II: </b> Automatically Differentiable Weak-Lensing Simulations for cosmological inference</h2>
+				<hr>
+				<div class="container">
+					<div class="col">
+						<div align="left" style="margin-left: 20px;">
+							<h6>
+								<span style='color:#996699'> D. Lanzieri </span>, F. Lanusse, C. Modi, B. Horowitz, J. Harnois-Déraps, J.L. Starck,
+								and The LSST Dark Energy Science Collaboration (LSST DESC) <br>
+								<a href="https://arxiv.org/abs/2305.07531"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2305.07531-B31B1B.svg" class="plain" style="height:25px;" /></a>
+							</h6>
+							<img data-src="assets/desc-logo.png" style='width:250px; height:150px;'></img>
+							<br>
+							$\Longrightarrow$  Introduction and validation of the numerical simulations
+							<br>
+							<br>
+							$\Longrightarrow$ First use case: comparison of the constraining power of two weak-lensing statistics exploiting the differentiability of the simulations
+						</div>
+					</div>
+					<div class="col">
+						<img class="plain" data-src="assets/lensing.jpg" style="width:550px;" />
+					</div>
+				</div>
+				<br>
+			</section> 
+<!-- ################################################################################################################################################### -->
+			<section>
+				<h3 class='slide-title'>FlowPM: Particle-Mesh Simulations in TensorFlow</h3>
+				<div class="container">
+					<div class="col">
+						<div style="float:right; font-size: 20px"> Modi, Lanusse, Seljak (2020)
+							<a href="https://arxiv.org/abs/2010.11847"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2010.11847-B31B1B.svg" class="plain" style="height:25px;vertical-align:middle;" /></a></div>
+					</div>
+				</div>
+				<div class='container'>
+					<div class='col'>
+						<img data-src="assets/github.png" class="plain" style="height:70px" />
+						<img data-src="assets/TF_FullColor_Horizontal.png" class='plain' style="height: 70px;" />
+
+						<div> <a href="https://github.com/DifferentiableUniverseInitiative/flowpm">https://github.com/DifferentiableUniverseInitiative/flowpm</a>
+						</div>
+						<pre class="python"><code data-line-numbers>import tensorflow as tf
+import flowpm
+# Defines integration steps
+stages = np.linspace(0.1, 1.0, 10, endpoint=True)
+
+initial_conds = flowpm.linear_field(32,       # size of the cube
+									100,       # Physical size
+									ipklin,    # Initial powerspectrum
+									batch_size=16)
+
+# Sample particles and displace them by LPT
+state = flowpm.lpt_init(initial_conds, a0=0.1)
+
+# Evolve particles down to z=0
+final_state = flowpm.nbody(state, stages, 32)
+
+# Retrieve final density field
+final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
+								final_state[0])
+									</code></pre>
+					</div>
+
+					<div class='col'>
+								<img data-src="assets/flowpm_.gif"></img>
+						<br>
+						<br>
+						<br>
+						<br>
+					</div>
+				</div>
+			</section>
+			<section>
+				<h3 class='slide-title'>Differentiable Particle-Mesh N-body simulations</h3>
+				<div class="container">
+					<div class="col">
+						<pre class="python">
+							<code data-line-numbers="|15-17|" data-fragment-index="0">import tensorflow as tf
+import flowpm
+# Defines integration steps
+stages = np.linspace(0.1, 1.0, 10, endpoint=True)
+
+initial_conds = flowpm.linear_field(32,       # size of the cube
+									100,       # Physical size
+									ipklin,    # Initial powerspectrum
+									batch_size=16)
+
+# Sample particles and displace them by LPT
+state = flowpm.lpt_init(initial_conds, a0=0.1)
+
+# Evolve particles down to z=0
+final_state = tfp.math.ode.DormandPrince(rtol=1e-5,
+atol=1e-5).solve(ode_function,0.14, state, stage)
+
+# Retrieve final density field
+final_field = flowpm.cic_paint(tf.zeros_like(initial_conditions),
+								final_state[0])
+						</code></pre>
+					<div class="fragment" data-fragment-index="0"> <b class="alert">Same user-interface of FlowPM!</b></a>
+					</div>
+					</div>
+
+					<div class="col">
+						<ul>
+							Starting from FlowPM as baseline code I:
+							<ol>
+								<br>
+								<li> Computed the time integration starting from a system of ODE.
+									<ul>
+									<br>
+										<li>Tune the accuracy-speed by defining a tolerance of the ODE Solver</li>
+										<li>Reduced memory usage: no need to store intermediate steps for backpropagation.</li>
+									</ul>
+								</li>
+								<br>
+								<br>
+								<li> Integrated the Hybrid Physical-Neural parameterisation to compensate for the small-scale approximations
+								<br>
+								<br>
+								<li> Implemented the cosmological function and the differetiability respect the cosmological paramaters in the Tensorflow framework
+								</li>
+							</ol>
+						</ul>
+					</div>
+				</div>
+			</section>
+<!-- ################################################################################################################################################### -->
+			<section >
+				<h3 class='slide-title'>Differentiable Lensing Lightcone (DLL): The Born Approximation</h3>
+				<br>
+				<br>
+					<ul>
+						<li class="fragment" data-fragment-index="1"> Numerical simulation of WL features rely on ray-tracing through the output of N-body simulations​
+						</li>
+						<br>
+						<li class="fragment" data-fragment-index="2"> Knowledge of the Gravitational potential and accurate solvers for light ray trajectories is computationally expensive
+						</li>
+						<br>
+						<li class="fragment" data-fragment-index="3"> Born approximation , only requiring knowledge of the density field, can be implemented more efficiently and at a lower computational cost
+						</li>
+					</ul>
+				</br>
+				</br>
+				<p class="fragment">
+					\[\begin{equation}
+					\kappa_{born}(\boldsymbol{\theta},\chi_s)= \frac{3H_0^2 \Omega_m}{2c^2}
+					\int_0^{\chi_s}
+					d\chi \frac{\chi}{a(\chi)}
+					W(\chi,\chi_s)
+					\delta(\chi \boldsymbol{\theta},\chi).
+					\end{equation} \]
+				</p>
+			</section> 
+<!-- ################################################################################################################################################### -->
+			<section >
+				<h3 class='slide-title'>  Implementation of Intrinsic alignment (IA) with NLA model	</h3> 
+				<div class='container'>
+					<div class='col'>
+						<div>
+							<br>
+								<ul>
+							<li>
+								$\underbrace{\epsilon}_{\tiny \mbox{observed ellipticity}} = \underbrace{\gamma}_{\tiny \mbox{lensing}}+ \underbrace{\underbrace{\epsilon_{IA}}_{\tiny \mbox{intrinsic alignment}} +  \underbrace{\epsilon_{ran}}_{\tiny \mbox{random component}}}_{\tiny \mbox{intrinsic ellipticity}}$
+							</li>
+							<br>
+							<li>
+								IA effect modeled on the convergence map level following the model proposed by <em> Fluri et al. 2019 </em> 
+								<ul>
+								<br> 
+								\begin{equation}
+									\kappa_{IA_{i}}= 
+									- A_{IA}\bar{C}_1\rho_c \Omega_m
+									\int_{z_{min}}^{z_{max}} 
+									n_{i}(z) \delta_{s_{i}}
+									\frac{ dz}{D(z)}
+								\end{equation}
+								</ul>
+							</li>
+							<br>
+							<li>
+								IA validation against the theoretical Halofit predictions (<em>Smith et al. 2003</em>) 
+							</li>
+							<br>
+							</ul>
+						</div>
+					</div>
+					<div class='col'>
+						<img  data-src="assets/IA_validation_res_talk.png"  class='plain' />
+					</div>
+				</div>
+			</section>
+<!-- ################################################################################################################################################### -->
+			<section>
+				<h3 class="slide-title"> Validating simulations for LSST </h3>
+				<div class="container">
+					<div class="col">
+						<div class="r-stack">
+								<div  class="fragment current-visible" data-fragment-index="0">
+									<li>Results from our simulation compared to other works $\Longrightarrow$ <em>Halofit</em>, $\kappa$TNG</li>
+									<br>
+									<li>Validation for the HPN model for peak counts and $C_{\ell}$ </li>
+									<br>
+									<li>Validation with higher resolutions
+										simulations for peak counts and $C_{\ell}$ </li>
+									<br>
+									<li>Validation for <b class="alert">different source redshift</b> for peak counts and  <b class="alert">$C_{\ell}$</b></li>
+								</div>
+								<div class="plain fragment " data-fragment-index="2">
+									<div style="float:right; font-size: 15px">
+										(<b >Liu</b>, et al. 2017)
+									</div>
+								<img data-src="assets/massivenu_.png"  class='plain' style="height: 350px; width:920px" />
+								<li>Predictions from  <b class="alert">MassiveNus</b> simulations (<span style='color:#6699CC'>$1024^3$</span> particles, box size of 512 Mpc/h) against Halofit.  
+								</li>
+								</div>
+						</div>
+					</div>
+					<div class="col">
+						<div class="plain fragment " data-fragment-index="1">
+							<img data-src="assets/cls_DLL_vs_ktng.png" class='plain' />
+							<br>
+							<ul>
+								<li>Predictions from <b class="alert">DLL</b> simulations (<span style='color:#6699CC'>$128^3$</span> particles, box size of 205 Mpc/h ) against $\kappa$TNG (<span style='color:#6699CC'>$2500^3$</span> particles, box size of 205 Mpc/h )
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</section>
+<!-- ################################################################################################################################################### -->
+			<section >
+				<h2 class='slide-title'> Compare the information content </h2> 
+				<div style="position:absolute;top:100;left:-10;">	
+				</div>
+				<br>
+				<div class='container'>
+					<div class='col'>
+						\[\begin{equation}
+							F_{\alpha, \beta} =\sum_{i,j} \frac{d\mu_i}{d\theta_{\alpha}}
+							C_{i,j}^{-1} \frac{d\mu_j}{d\theta_{\beta}}
+						\end{equation} \]
+					</div>
+					<div class='col'>
+						<ul>
+						<br>
+						<br>
+							<li> Use Fisher matrix to estimate the information content extracted with a given statistic 
+							</li>
+							<br>
+							<li class="fragment" data-fragment-index="0" > Derivative of summary statistics respect to the cosmological parameters.
+							</li>
+							<br>
+							<li class="fragment"data-fragment-index="2"> Fisher matrices are notoriously unstable
+								<br>
+								$\Longrightarrow$ they rely on evaluating gradients by finite differences.
+							</li>
+							<br>
+							<li class="fragment"data-fragment-index="3"> They do not scale appropriately with an increasing number of cosmological parameters.
+							</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+<!-- ################################################################################################################################################### -->
+			<section >
+				<h3 class="slide-title"> Results: </h3>
+				<div class='container'>
+						<div class='col'>
+							<img data-src="assets/Fisher_talk.png" class='plain' style="height: 620px;" />
+						</div>
+						<div class='col'>
+							<ul>
+								<li>Peak count statistics outperform the two-point statistic as found in prevous works (e.g. <em>Ajani et al. </em>)
+								</li>
+								<br>
+								<li>Peak counts provide the most stringent constraints on the galaxy intrinsic alignment amplitude $A_{IA}$.
+								</li>
+							</ul>
+						</div>
+				</div>
+			</section>		
+<!-- ################################################################################################################################################### -->
+			<section>
+				<h3 class="slide-title"> Takeaway message Part II </h3>
+					<br> <br> <br>
+						<div class="block ">
+							<div class="block-title" >
+								Automatically Differentiable Weak-Lensing Simulations for cosmological inference:
+							</div>
+							<div class="block-content">
+								<ul>
+									<li class="fragment">Differentiable Lensing Lightcone (DLL) model $\Longrightarrow$ fast lensing lightcone simulator providing access to the gradient.
+									</il>
+									<br>
+									<br>
+									<li class="fragment"> Validation against predictions from kTNG simulations: 
+										<ul>
+											<br>
+											<li> Good match for redshift equal or higher than z=0.91, despite being generated at low computational costs (~ 0.6 particles per Mpc/h).
+											 </li>
+										</ul>
+									</li>
+									<br>
+									<li class="fragment">Potential of the tool demonstrated by exploiting the automatic differentiability of the simulations to do Fisher forecast. 
+									</il>
+								</ul>
+						</div>
+					</div>
+			</section>
+<!-- ################################################################################################################################################### -->
+<!-- ################################################################################################################################################### -->
+<!-- ################################################################################################################################################### -->
+<!-- PART III-->
+<!-- ################################################################################################################################################### -->
+<!-- ################################################################################################################################################### -->
+<!-- ################################################################################################################################################### -->
+<!-- ################################################################################################################################################### -->
+			<section>
+				<br>
+				<br>
+						<div class="block">
+							<div class="block-title">
+								How to perform inference over forward simulation models?
+							</div>
+							<div class="block-content">
+								<br>
+								<ul>
+									<li class="fragment"> <b class="alert">Explicit Inference</b>: Treat the simulator as a probabilistic model and perform inference over the joint posterior 
+										$$p(\theta, z | x) \propto p(x | z, \theta) p(z, \theta) p(\theta) $$
+										a.k.a.<br><ul>
+											<li> <b>Bayesian Hierarchical Modeling</b> (BHM)
+											</li>
+										</ul>
+									</li>
+
+									<br>
+
+									<li class="fragment"> <b class="alert">Implicit Inference</b>: Treat the simulator as a black-box with only the ability to sample from the joint distribution 
+										$$(x, \theta) \sim p(x, \theta)$$
+										a.k.a.<br><ul>
+											<li> <b>Simulation-Based Inference</b> (SBI)
+											</li>
+											<li> <b>Likelihood-free inference</b> (LFI)
+											</li>
+											<li> <b>Approximate Bayesian Computation</b> (ABC)
+											</li>
+										</ul>
+									</li>
+
+									<br>
+								</ul>
+
+							</div>
+						</div>
+						<div class="fragment">$\Longrightarrow$ For a given simulation model, both methods <b class="alert">should converge to the same posterior!</b></div>
+			</section>
+<!-- ################################################################################################################################################### -->
+			<section>
+				<h3 class="slide-title">Two-steps approach to Likelihood-Free Inference</h3>
+				<br>
+				<ul>
+					<div>		
+						<li class="plain fragment " data-fragment-index="0"> <span style='color:#6699CC'>Step I </span>: Reduce the dimensionality of the data space and extract summary statistics
+							$$y = f_\varphi(x) $$
+							$\Longrightarrow$ dimension of $y$ equal to the dimension of the unknown parameters $\theta$.
+						</li>
+					</div>
+					<br>
+					<div class="r-stack">
+						<div  class="fragment current-visible" data-fragment-index="0">
+						<img data-src="assets/lfi_sim_sum.png"  />
+						</div>
+						<li class="plain fragment " data-fragment-index="1">
+							<span style='color:#6699CC'>Step II </span>: Use <b class="alert"> Neural Density Estimation </b> in low dimension to either:
+							<ul>
+								<li>build an <b>estimate $p_\varphi$ of the likelihood function $p(y \ | \ \theta)$</b> (Neural Likelihood Estimation)
+								</li>
+								<br>
+								<li>build an <b>estimate $p_\varphi$ of the posterior distribution $p(\theta \ | \ y)$</b> (Neural Posterior Estimation)
+								</li>
+							</ul>
+						</li>
+					</div>
+				</ul>
+			</section> 
+<!-- ################################################################################################################################################### -->
+			<section>
+				<h2> <b class="alert">Part III:</b> Optimal Neural Summarisation for Full-Field Implicit Inference by Density Estimation </h2>
+				<a href="https://github.com/DifferentiableUniverseInitiative/sbi_lens"><img src="https://badgen.net/badge/icon/SbiLens?icon=github&label" class="plain" style="height:25px;" /></a>
+				<a href="https://colab.research.google.com/drive/1pSjhrOJbVi80RQlsVz2oXhVAtxwBhSbn?usp=sharing" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" class="plain" style="height:25px;" /></a>
+				<hr>
+				<div class="container">
+					<div class="col">
+						<div align="left" style="margin-left: 20px;">
+							<h5>
+								<span style='color:#996699'> D. Lanzieri </span>,  J.Zeghal, T. L. Makinen, F. Lanusse, A. Boucaud, J.L. Starck
+								(in prep.)  <br>
+							</h5>
+							<ul> 
+								<br>
+								<br>
+								 $\Longrightarrow$ Investigate the performance of several neural-compression strategies for full field Likelihood free inference by density estimation.
+								<br>
+								<br>
+								 $\Longrightarrow$ Demonstrate that by using the optimal compression strategy the posterior distribution by density estimation is comparable to those derived from a Bayesian forward modeling approach
+							<br>
+							<br>
+						</div>
+					</div>
+					<div class="col">
+						<img class="plain" data-src="assets/compare_contour_plot_multi_tomo_bins.png" style="width:350px;" />
+					</div>
+				</div>
+				<br>
+			</section>
+<!-- ################################################################################################################################################### -->
+			<section>
+				<h3 class="slide-title"> An easy-to-use validation test: SBILens</h3>
+
+				<div class="container">
+					<div class="col"> 
+								<img data-src="assets/github.png" class="plain" style="height:70px" />
+								<br>
+								<a href="https://github.com/DifferentiableUniverseInitiative/sbi_lens">DifferentiableUniverseInitiative/SbiLens</a>
+								<br>
+								<br>
+						<ul>							
+							<li> <span style='color:#6699CC'>SBILens</span> $\Longrightarrow$ JAX-based weak lensing differentiable simulator based on a log-normal model.
+							</li>
+							<br>
+							<li>$\kappa_{ln}=e^{\kappa_g}+\lambda$
+							</li>
+							<br>
+							<li>Log-normal shift parameter $\lambda$ conditioned on $(\Omega_c, \sigma_8, w_0)$
+							</li>
+							<br>
+							<li>Sampling of convergence maps in a tomographic setting while considering the cross-correlation between different redshift bins
+							</li>
+						</ul>
+						
+					</div>
+					<div class="col r-stack">
+						<img data-src="assets/psconvergencemaps.png"/>
+					</div>
+				</div>
+			</section>
+<!-- ################################################################################################################################################### -->
+			<section>
+				<h3 class="slide-title"> An easy-to-use validation test: SBILens</h3>
+
+				<div class="container">
+					<div class="col r-stack">
+						<img data-src="assets/redshift_distribution_light.png"/>
+					</div>
+					<div class="col"> 
+						<img data-src="assets/example_kmaps.png" />
+						<table>
+							<tr>
+								<td>10x10 deg$^2$ maps</td>
+								<td>LSST Y10-like surveys</td>
+							
+							</tr>
+							<tr>
+								<td>Redshift binning</td>
+								<td>5 bins</td>
+							</tr>
+							<tr>
+								<td>Number density $n_s$</td>
+								<td>27/arcmin$^2$</td>
+							</tr>
+
+							<tr>
+								<td>Shape noise $\sigma_e$</td>
+								<td>0.26</td>
+							</tr>
+
+							<tr>
+								<td>Redshift error $\sigma_z$</td>
+								<td>0.05(1+z)</td>
+							</tr>
+							
+
+						</table>
+					</div>
+				</div>
+			</section>
+<!-- ################################################################################################################################################### -->			
+			<section>
+				<h3 class="slide-title">Full field with Bayesian forward approachs</h3>
+				BHM uses a given physical model to predict observations and then comparing these predictions with observations to infer the parameters of the model:
+				<div class="container">
+					<div class="col">
+						<img class="plain" data-src="assets/hbm_image.png" style="width:450px;" />
+					</div>
+					<div class="col">
+							<ul> 
+								
+									<ul>
+										<li>
+											Likelihood based on the data model of SBILens  
+											<br>
+											$\Longrightarrow$ the simulator serves as the physical model 
+										</li>
+	
+										<br>
+										<br>
+										<li>
+											 Observation characterized by Gaussian noise
+											\begin{equation}
+												\mathcal{L}(\theta)=
+												\sum_i^{N_{pix}} \sum_{j}^{N_{bins}} \log{P(\kappa^{obs}_{i,j}|\kappa_{i,j},\theta)}
+												=-\sum_i^{N_{pix}} \sum_{j}^{N_{bins}}\frac{[\kappa_{i,j}-\kappa^{obs}_{i,j}]^2}{2\sigma_n^2}
+											\end{equation}
+										</li>
+										<br>
+										<br>
+										<li>
+									Hamiltonian Monte Carlo (HMC) algorithm to sample the posterior distribution for $\theta$
+										</li>
+									</ul>
+					</div>
+				</div>
+
+			</section>
+<!-- ################################################################################################################################################### -->			
+			<section>
+				<h3 class="slide-title">Full field with LFI: Step I </h3>
+					<ul>
+						<br>
+						<li> Introduce a parametric function $f_\varphi$ to <b class="alert"> reduce the dimensionality of the
+							data while preserving information</b>.
+						</li>
+						<br>
+						<li>
+							Introduce a loss function to optimize the paramaters $\varphi$ of the neural network $f_{\varphi}$
+						</li>
+					</ul>	
+					<br>
+					<br>
+					<table class='fragment'>
+
+						<thead><tr>
+							<th><span style='color:#6699CC'>Reference</span></th>
+							<th><span style='color:#6699CC'>Loss function</span></th>
+							<th><span style='color:#6699CC'>Inference strategy</span></th>
+						</tr></thead>
+						<tr>
+							<td><em>Gupta et al.</em></td>
+							<td>MAE</td>
+							<th>Likelihood-based analysis</th>
+						</tr></tbody>
+						<tr>
+							<td><em>Fluri et al. (2018b)</em></td>
+							<td>GNLL</td>
+							<th>Likelihood-based analysis</th>
+						</tr></tbody>
+						<tr>
+							<td><em>Fluri et al. (2019)</em></td>
+							<td>GNLL</td>
+							<th>Likelihood-based analysis</th>
+						</tr></tbody>
+						<tbody><tr>
+							<td><em>Ribli et al. (2019)</em></td>
+							<td>MAE</td>
+							<th>Likelihood-based analysis</th>
+						</tr></tbody>
+						<tbody><tr>
+							<td><em>Matilla et al. (2020</em>)</td>
+							<td>MAE</td>
+							<th>Likelihood-based analysis</th>
+						</tr></tbody>
+						<tbody><tr>
+							<td><em>Jeffrey et al. (2021)</em></td>
+							<td>VMIM</td>
+							<th>Likelihood Free Inference</th>
+						</tr></tbody>
+						<tbody><tr>
+							<td><em>Fluri et al. (2021)</em></td>
+							<td>IMNN</td>
+							<th>Likelihood Free Inference</th>
+						</tr></tbody>
+						<tbody><tr>
+							<td><em>Fluri et al. (2022)</em></td>
+							<td>IMNN</td>
+							<th>Likelihood Free Inference</th>
+						</tr></tbody>
+						<tbody><tr>
+							<td><em>Lu et al. (2022)</em></td>
+							<td>MSE</td>
+							<th>Likelihood-based analysis</th>
+						</tr></tbody>
+						<tbody><tr>
+							<td><em>Kacprzak and Fluri (2022)</em></td>
+							<td>GNLL</td>
+							<th>Likelihood-based analysis</th>
+						</tr></tbody>
+						<tbody><tr>
+							<td><em>Lu et al. (2023)</em></td>
+							<td>MSE</td>
+							<th>Likelihood-based analysis</th>
+						</tr></tbody>
+
+					</table>
+			</section>
+<!-- ################################################################################################################################################### -->			 			 
+			<section>
+				<h3 class="slide-title">...Not all neural compression techniques are equivalent</h3>	
+				<div class="container">
+					<div class="col"> 
+						<br>
+						<ul>
+							<li>Most papers applying neural techniques for inference have used sub-optimal compression techniques, e.g. Mean Square Error
+								$$ \mathcal{L} = || f_\varphi(x) - \theta ||_2^2 $$
+	
+								or Maximum Absolute Error
+								$$ \mathcal{L} = | f_\varphi(x) - \theta | $$
+							</li>	
+						</ul>
+					</div>
+				</div>
+				<div class="block fragment">
+					<div class="block-title" style='color:white'>
+						Variational Mutual Information Maximization (VMIM)
+					</div>
+					<div class="block-content">
+						<br> 
+						Let's start by the definition of <span style='color:#669900'>Mutual Information</span>:
+						\begin{align}
+						I(\boldsymbol{y}, \boldsymbol {\theta}) &= D_{KL}(p(\boldsymbol {y}, \boldsymbol {\theta})||p(\boldsymbol {y})p(\boldsymbol {\theta}))  \\
+						&= \mathbb{E}_{p(\boldsymbol{y}, \boldsymbol{\theta})} [\log{p(\boldsymbol{\theta} | \boldsymbol{y} )}]- \mathbb{E}_{p(\boldsymbol{\theta})} [\log{p(\boldsymbol{\theta})}] \quad \text{with} \quad y=f_{\varphi}(x)
+						\end{align}
+						
+						<ul>
+							<li class='fragment' data-fragment-index="0"> The goal is to find the parameters $\boldsymbol {\varphi}$ that maximize the mutual information between the summary and cosmological parameters:
+								$$   \boldsymbol {\varphi}^*= \operatorname*{argmax}_{\boldsymbol {\varphi}} I(f_{\boldsymbol {\varphi}}(\boldsymbol{x}), \boldsymbol {\theta}).$$
+							</li>
+						</ul>	
+					</div>
+				</div>
+			</section>
+<!-- ################################################################################################################################################### -->		
+			<section>
+				<h3 class="slide-title">Full field with LFI: Step II </h3>
+				<ul>
+					<li>A black-box simulator <b class="alert">defines $p(x | \theta)$ as an implicit distribution</b>, you can <b>sample from it</b> but you cannot evaluate it.
+					</li>
+					<br>
+					<li class='fragment'> <b class="alert">Key Idea</b>: Use a <b>parametric distribution model $\mathbb{P}_{\varphi'}$ to approximate the implicit distribution $\mathbb{P}$</b>.
+					</li>
+					<br>
+					<li class="fragment fade-up"> Assume $\mathbb{P}_{\varphi'}=q_{\varphi'}(\theta | y)$ a <b> parametric conditional density</b>
+					</li>
+					<br>
+					<li class="fragment fade-up"> Optimize the parameters $\varphi'$ of $q_{\varphi'}$ according to
+						\begin{equation}
+						\min\limits_{\varphi'} \sum\limits_{i} - \log q_{\varphi'}(\theta_i | y_i) \nonumber
+						\end{equation}
+						In the limit of <b>large number of samples</b> and <b>sufficient flexibility</b>
+						\begin{equation}
+						\boxed{q_{\varphi'^\ast}(\theta | y) \approx p(\theta | y)} \nonumber
+						\end{equation}
+					</li>
+				</ul>
+				<div style="position:relative; height:30px; margin-left: 4em;">
+					<div class="fragment" style="position:absolute;top:0;"> $\Longrightarrow$ One can asymptotically recover the posterior by
+						optimizing a <b class="alert">Deep Neural Network</b> over<br> a <b class="alert">simulated training set</b>.
+					</div>
+				</div>
+			</section>
+<!-- ################################################################################################################################################### -->
+			<section>
+				<h3 class="slide-title">Full field with LFI: Wrapping up</h3>
+				<ul>
+					<div>		
+						<li> <span style='color:#6699CC'>Step I </span>: Reduce the dimensionality of the data space introducing a parametric function
+							$$y = f_\varphi(x) $$
+							$\Longrightarrow$  parametric function parametrized by a ResNet-18 trained using a given loss function
+						</li>
+					</div>
+					<br>
+					<div class="r-stack">
+						<li class="plain fragment " data-fragment-index="1">
+							<span style='color:#6699CC'>Step II </span>: Use a <b class="alert"> Normalizing Flows (NFs) </b> as Neural Density Estimator
+							<ul>
+								$\Longrightarrow$ Nfs trained by minimizing the negative log likelihood loss:
+									\begin{equation}
+									\min\limits_{\varphi'} \sum\limits_{i} - \log q_{\varphi'}(\theta_i | y_i) \nonumber
+									\end{equation}
+									<li> In the limit of <b>large number of samples</b> and <b>sufficient flexibility</b>
+									\begin{equation}
+									\boxed{q_{\varphi'^\ast}(\theta | y) \approx p(\theta | y)} \nonumber
+									\end{equation}
+									</li>
+								
+							</ul>
+						</li>
+					</div>
+				</ul>	
+			</section>
+<!-- ################################################################################################################################################### -->
+			 <section>
+				<h3 class="slide-title"> Results</h3>
+				<div class="container">
+					<div class="col">
+						<img data-src="assets/contours_posterior_summaries_.png" style="height: 680px;"/>
+					</div>
+					<div class="col">
+						<img data-src="assets/tab_summ.png"/>
+					</div>
+				</div>
+			</section>
+<!-- ################################################################################################################################################### -->
+			<!-- <section>
+				<h3 class="slide-title">Results</h3>
+				<div class="container">
+					<div class="col">
+					<table  >
+						<thead><tr>
+							<th><span > </span></th>
+							<th><span style='color:#6699CC'>VMIM</span></th>
+							<th><span style='color:#6699CC'>MSE</span></th>
+							<th><span style='color:#6699CC'>MAE</span></th>
+						</tr></thead>
+						<tr>
+							<td>$\Omega_c$</td>
+							<td>$0.274^{+0.026}_{-0.025}$</td>
+							<td>$0.283^{+0.031}_{-0.029}$</td>
+							<th>$0.279^{+0.030}_{-0.028}$</th>
+						</tr></tbody>
+						<tr>
+							<td>$\Omega_b$</td>
+							<td>$ \left( 49.9^{+6.0}_{-6.4} \right) \times 10^{-3}$</td>
+							<td>$\left( 49.2\pm 6.1 \right) \times 10^{-3}$</td>
+							<th> $\left( 50.1^{+5.9}_{-6.1} \right) \times 10^{-3}$</th>
+						</tr></tbody>
+						<tr> 
+							<td>$\sigma_8$</td>
+							<td> $0.819^{+0.031}_{-0.029}$</td>
+							<td>$0.808^{+0.034}_{-0.032}$ </td>
+							<th> $0.808^{+0.032}_{-0.030}$</th>
+						</tr></tbody>
+						<tbody><tr>
+							<td>$w_0$</td>
+							<td>$-1.00^{+0.20}_{-0.22}$ </td>
+							<td>$-1.13^{+0.23}_{-0.22}$ </td>
+							<th>$-1.16\pm 0.22$s</th>
+						</tr></tbody>
+						<tbody><tr>
+							<td>$h_0$</td>
+							<td><em>$0.666^{+0.061}_{-0.057}$</em></td>
+							<td>$0.662^{+0.056}_{-0.057}$</td>
+							<th>$0.664^{+0.056}_{-0.058}$</th>
+						</tr></tbody>
+						<tbody><tr>
+							<td>$n_s$</td>
+							<td>$0.963^{+0.041}_{-0.038}$</td>
+							<td>$0.956 \pm 0.041$</td>
+							<th>$0.955^{+0.039}_{-0.041}$ </th>
+						</tr></tbody>
+					</table>
+				</div>
+				<div class="col">
+					<img data-src="assets/contours_posterior_summaries_.png" style="height: 680px;"/>
+				</div>
+			</div>
+			</section> -->
+<!-- ################################################################################################################################################### -->
+			<section>
+				<h3 class="slide-title"> Results</h3>
+				<div class="container">
+					<div class="col">
+						<img data-src="assets/contours_posterior_imp_ex_ps.png" style="height: 680px;"/>
+					</div>
+			</section>
+<!-- ################################################################################################################################################### -->	
+			<section>
+				<h3 class="slide-title"> Takeaway message Part III </h3>
+						<div class="block ">
+							<div class="block-title" >
+								Optimal Neural Summarisation for Full-Field Implicit Inference by Density Estimation:
+							</div>
+							<div class="block-content">
+								<ul>
+									<br>
+									<li class="fragment">Two different map-based strategies for inferring cosmological parameters: 
+										<ul>
+											<li>Explicit full-field strategy (BHMs)
+											</li>
+											<li>Implicit inference strategy (LFI)
+											</li> 
+										</ul>
+									</il>
+									<br>
+									<li class="fragment">
+										<span style='color:#6699CC'>SBILens</span> $\Longrightarrow$ Jax-based weak-lensing simulator 
+									</li>
+									<br>
+									<li class="fragment"> We found the following results: 
+										<ul>
+											<li> The marginalized summary statistics indicate that VMIM produces better results for $\Omega_c$, $w_0$, and $\sigma_8$
+											</li>
+											<br>
+											<li> Map-based approaches lead to a significant improvement in constraining $\Omega_c, w_0, \sigma_8$ compared to the 2-point statistics
+											</li>
+											<br>
+											<li>The Bayesian hierarchical inference and the Likelihood-free inference lead to the same posterior distributions
+											</li>
+											
+										</ul>
+									</li>
+								</ul>
+						</div>
+					</div>
+			</section>
+<!-- ################################################################################################################################################### -->	
+			<section>
+				<h3 class="slide-title"> General Conclusion</p> </h3>
+					<br> <br> 
+						<div class="block ">
+							<div class="block-title" >
+							Takeaway message: New methodology for inference over simulators
+							</div>
+							<div class="block-content">
+								<ul>
+									<li  class="fragment"> A change of paradigm  <span style='color:#669900'> from analytic likelihoods to simulators as physical model:</span>
+										<ul>		 
+											<br>
+											<li class="fragment">Correction scheme to compensate for the small-scales approximations in Quasi-N-body simulations
+											</li>
+											<br>
+											<li class="fragment"> Powerful ways to simulate fast and differentiable cosmological simulations
+												<ul>
+													<li>
+													$\Longrightarrow$ Designed for use as a forward model in Bayesian inference algorithms that require access to derivatives
+													</li>
+												</ul>
+											</il>
+											<br>
+											<li class="fragment"> Likelihood Free Inference in high dimension:
+												<ul>
+													<li> Construction of summary statistics.
+													</li>
+													<li> Validation of the model against BHMs
+													</li>
+												</ul>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</div>
+						</div>
+					<br>
+			</section>
+<!-- ################################################################################################################################################### -->	
+			<section>
+				<h3 class="slide-title"> Future prospects: <b class="alert"> Extensions for Stage IV surveys </b> </h3>
+				<br>
+				<br>
+				<br>
+					<ul>
+						<li> Developing a distributed implementation of automatically differentiable simulations</li>
+						<br>
+						<li>Implementation of a ray-tracing algorithm beyond the Born approximation</li>
+						<br>
+						<li>Extension the NLA model for IA </li>
+						<br>
+						<li>ODE Integrators for modeling baryons</li>
+					</ul>
+			</section>
+<!-- ################################################################################################################################################### -->	
+		
+<!-- Publications during this thesis
+Open source contributions: -->
+			<section>
+				<h3 class="slide-title"> Publications and academic activities </h3>
+				<div class="container">
+						<ul>
+							<li>
+								<span style='color:#6699CC'>Publications during this thesis:</span>
+								<ul>
+									<li> Hybrid Physical-Neural ODEs for Fast N-body Simulations. 
+										<br><em> <span style='color:#996699'>Lanzieri, D.,</span> Lanusse, F., Starck, J. L. (2022)(ICML 2022 Workshop on Machine Learning for Astrophysics).</em></li>
+									<li>Forecasting the power of Higher Order Weak Lensing Statistics with automatically differentiable simulations. 
+										<br><em> <span style='color:#996699'>Lanzieri, D.,</span> ... LSST Dark Energy Science Collaboration (2023)</em></li>
+									<li>JAX-COSMO: An End- to-End Differentiable and GPU Accelerated Cosmology Library. 
+										<br> <em>Campagne, J. E.,.. <span style='color:#996699'>Lanzieri, D.,</span> ... Peel, A. (2023)</em> </li>
+									<li>Adaptable Deep Learning Models for Galaxy Morphology.
+										<br> <em>Walmsley, M., ... <span style='color:#996699'>Lanzieri, D.,</span> ... Renuka, V. (2023) </em></li>
+									<li>Optimal Neural Summarisation for Full-Field Implicit Inference by Density Estimation. 
+										<br> <em> <span style='color:#996699'>Lanzieri, D.,</span>, Zeghal, J., ... Starck,J.L. (in prep.) </em></li>
+								</ul>
+							</li>
+							<li>
+								<span style='color:#6699CC'>Open source contributions: </span>
+								<ul>
+									<li><a href="https://github.com/DifferentiableUniverseInitiative/jaxpm-paper/tree/v_icml"> JAX-PM </a></li>
+									<li><a href="https://github.com/DifferentiableUniverseInitiative/flowpm"> FlowPM</a></li>
+									<li><a href="https://github.com/LSSTDESC/DifferentiableHOS"> DifferentiableHOS </a></li>
+									<li><a href="https://github.com/DifferentiableUniverseInitiative/jax_cosmo"> JAX-COSMO</a></li>
+									<li><a href="https://github.com/DifferentiableUniverseInitiative/sbi_lens/tree/main"> SBILens</a></li>	
+								</ul>
+							</li>
+						</ul>
+				</div>
+				<h3>Thank you!</h3>
+			</section>
+<!-- ################################################################################################################################################### -->
+<!-- ################################################################################################################################################### -->
+<!-- ################################################################################################################################################### -->
+<!-- ################################################################################################################################################### -->
+<!-- ################################################################################################################################################### -->
+<!-- ################################################################################################################################################### -->
+<!-- ################################################################################################################################################### -->
+<!-- ################################################################################################################################################### -->
+<!-- ################################################################################################################################################### -->
+<!-- APPENDIX-->
+<!-- ################################################################################################################################################### -->
+<!-- ################################################################################################################################################### -->
+<!-- ################################################################################################################################################### -->
+<!-- ################################################################################################################################################### -->
+<!-- ################################################################################################################################################### -->
+<!-- ################################################################################################################################################### -->
+<!-- ################################################################################################################################################### -->
+<!-- ################################################################################################################################################### -->
+<!-- ################################################################################################################################################### -->
+<!-- ################################################################################################################################################### -->
+			<section class="inverted" data-background="#000">
+				<h2>APPENDIX</h2>
+			</section>
+<!-- ################################################################################################################################################### -->
+			<section>
+				<h3 class="slide-title">Backpropagation through the ODE solver</h3>
+					We are following the technique from Neural ODEs to <b>backpropagate through an ODE solver</b> (<a style="color:#FFAA7F; font-size: 20px" href="https://proceedings.neurips.cc/paper/2018/file/69386f6bb1dfed68692a24c8686939b9-Paper.pdf">Neural Ordinary Differential Equations, Chen et al. 2018</a>).
+					<br><br>
+						<div class="block">
+						<div class="block-title" style='color:white'>
+							How	optimize a <span style='color:#6699CC'>loss function</span> with input the result of an ODE solver:  <span style='color:#6699CC'>$\textbf{L}$</span>(ODESolve$(\color{#996699}{z}(t_0),f,t_0,t_1,\color{#ecad60}{\theta}))$?
+						</div>
+						<div class="block-content">
+							<br>
+								To optimize  <span style='color:#6699CC'>$\textbf{L}$</span>, we require gradients with respect to <span style='color:#ecad60'>$\theta$</span>:
+							<ul>
+							<ol>
+							<br>
+							<li class='fragment' data-fragment-index="0"> Determine how the gradient of the loss (the <span style='color:#669900'>adjoint</span>)  depends on the hidden state <span style='color:#996699'>$z$</span>(t) at each instant:
+								$$\color{#669900}{\textbf{a}}(t)=\frac{\partial \color{#6699CC}{L}}{\partial \color{#996699}{\textbf{z}}(t)}$$
+							</li>
+							<li class='fragment' data-fragment-index="1"> Compute the <span style='color:#669900'>adjoint</span> dynamics by solving a another ODE:
+								$$ \frac{d\color{#669900}{\textbf{a}}(t)}{dt}=\color{#669900}{\textbf{a}}(t)^{T}\frac{\partial f(\color{#996699}{\textbf{z}}(t),t,\color{#ecad60}{\theta})}{\partial \color{#996699}{\textbf{z}}}
+										$$
+							</li>
+							<li class='fragment' data-fragment-index="2"> Compute the gradients with respect to the parameters $\theta$ evaluating a third integral:
+							$$ \frac{d\color{#6699CC}{L}}{d\color{#ecad60}{\theta}}=\int_{t_1}^{t_0}\color{#669900}{\textbf{a}}(t)^T \frac{\partial f (\color{#996699}{\textbf{z}}(t),t,\theta)}{\partial \color{#ecad60}{\theta}}dt $$
+							</li>
+						</ol>
+						</ul>
+					</div>
+			</section>
+<!-- ################################################################################################################################################### -->
+			<section >
+				<h3 class="slide-title">Hybrid Physical-Neural ODE</h3>
+				<div class="container">
+					<div class="col">
+						<img data-src="assets/comparison_pk_without.png"/>
+						<br>
+						Without neural correction
+					</div>
+					<div class="col">
+						<img data-src="assets/comparison_pk_with.png"/>
+						<br>
+						With neural correction
+					</div>
+				</div>
+			</section>
+<!-- ################################################################################################################################################### -->
+			<section>
+				<h3 class="slide-title">Train and validation loss</h3>
+				<div class="container">
+					<div class="col">
+							<div  >
+							$$\mathcal{L} =  \sum_{i}^{snapshots} \lambda_1||   \color{#6699CC}{\mathbf{x}^{ref}_i} -  \color{#6699CC}{\mathbf{x}_i}||_2^2  + \lambda_2 || \frac{\color{#996699}{p_i(k)}}{\color{#996699}{p_i^{ref}(k)}} -1 ||_2^2 $$
+							</div>
+					</div>
+					<div class="col">
+						<ul>
+							<li >We adopt a loss function penalizing both the <span style='color:#6699CC'>particle positions</span> and the overall <span style='color:#996699'>matter power spectrum</span> at different snapshot times
+							</li>
+							<br>
+							<li > We train and compare the model to the CAMELS simulations <a style="color:#GOLD"; href=" https://arxiv.org/pdf/2010.00619.pdf:">(Villaescusa-Navarro et al., 2021) </a>
+							</li>
+							<br>
+							<li> 	We use a single N-body simulation of $25^3$ ($h^{-1}$ Mpc)$^3$ volume, $64^3$ dark matter particles at the fiducial cosmology of $\Omega_m = 0.3$ and $\sigma_8 = 0.8$
+							</li>
+							<br>
+							<li> Whole code implemented in the Python package <span style='color:#669900'>Jax<span/>.
+							</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+<!-- ################################################################################################################################################### -->
+			<section >
+				<h3 class='slide-title'>	Potential Gradient Descent (PGD)</p> </h3>
+					<div class='container'>
+						<div class='col'>
+							<ul>
+								<li>Additional displacements to sharpen the halos
+								</li>
+								<br>
+								<li>The direction of the displacements points towards the halo center (local potential minimum).</li>
+								<br>
+								<li>The gravitational force:
+										\begin{equation}
+											\mathbf{F}=-\nabla\Phi
+										\end{equation}
+								</li>
+								<li> The PGD correction displacement:
+									\begin{equation}
+										\mathbf{S}=-\alpha\nabla \hat{O}_{h}\hat{O}_{l}\Phi
+									\end{equation}
+									High pass filter prevents the large scale growth, low pass filter reduces the numerical effect
+								</li>
+							</ul>
+						</div>
+						<div class='col'>
+							<img data-src="assets/pot_pgd.png" class='plain' style="height: 450px; width:800px" />
+							<div style="float:right; font-size: 20px"><a style="color:#996699"; href=" https://iopscience.iop.org/article/10.1088/1475-7516/2018/11/009/pdf?casa_token=3b8_RUCo4uAAAAAA:aqUgqZUFV1jao2LlJSqI25p2GEh-2KmGTS_ab4p1F9TSK5d0SytTPG6rN_YRhKYdnd9lBiX32A:">(Biwei Dai et al. 2018)</a></div>
+						</div>
+					</div>
+			</section>
+<!-- ################################################################################################################################################### -->
+			<section>
+				<h3 class="slide-title"> Projections of final density field </h3>
+				<br>
+				<br>
+				<div class="container">
+					<div class="col">
+						<div class="block-content">
+							<div style="position:relative; height:570px; width:700px top:0px; left:0px;">
+								Camels simulations
+								<img data-src="assets/cluster_2D_Camels.png" style="height:400px;width:1500px"></img>
+							</div>
+						</div>
+					</div>
+					<div class="col">
+						<div class="block-content">
+							<div style="position:relative; height:570px; top:0px; left:0px;">
+								<div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="0">
+									PM simulations
+									<img data-src='assets/cluster_2D_PM.png' style="height:400px;" />
+								</div>
+
+								<div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="1">
+									PM+NN correction
+									<img data-src='assets/cluster_2D_PM_NN.png' style="height:400px;" />
+								</div>
+
+								<div class="plain fragment current-visible " style="position:absolute;top:0;left:0;width:600px;" data-fragment-index="2">
+									PM+PGD correction
+									<img data-src='assets/cluster_2D_PM_PGD.png' style="height:400px;" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+<!-- ################################################################################################################################################### -->
+			<section>
+				<h3 class="slide-title">Results: Robustness to changes in resolution and cosmological parameters  </h3>
+					<br>
+					<div>
+						<li>
+							Netural network trained using single CAMELS simulation of <span style='color:#996699'>$25^3$ ($h^{-1}$ Mpc)$^3$ volume</span> and <span style='color:#669900'>$64^3$ dark matter particles</span> at the fiducial cosmology of  <span style='color:#6699CC'>$\Omega_m = 0.3$</span>
+						</li>
+					</div>
+					<br>
+					<div class="container">
+						<div class="col">
+							<img data-src="assets/cross_corr_diffresolution_CV_0.png"/>
+							<br>
+							Higher resolution
+						</div>
+						<div class="col">
+							<img data-src="assets/cross_corr_diffomega_1P_1_n5.png"/>
+							<br>
+							Different Cosmology!
+						</div>
+					</div>
+			</section>
+<!-- ################################################################################################################################################### -->
+<!-- PART II-->
+<!-- ################################################################################################################################################### -->
+			<section>
+				<h2 class='slide-title'>
+					Weak Gravitational lensing</h2>
+					<img class="plain" data-src="assets/lensing.jpg" style="width: 700px"   />
+			</section>
+<!-- ################################################################################################################################################### -->
+			<section >
+				<h3 class='slide-title'>Differentiable Lensing Lightcone (DLL): The Born Approximation</h3>
+				<br>
+				<ul>
+				To extract the lens planes and construct the lightcone we:
+					<ol>
+						<br>
+						<li class="fragment" data-fragment-index="1">Export 11 intermediate states from the N-body simulation of a fixed interval of 
+							205 Mpc/h in a redshift range between z=0.03-0.91
+						</li>
+						<br>
+						<li class="fragment" data-fragment-index="2">
+							Replicate one unit box using periodic boundary conditions to recover the redshift range of the lightcone
+						</li>
+						<br>
+						<li class="fragment" data-fragment-index="3">
+							Project each snapshot in a 2D plane by estimating its density 
+						</li>
+						<br>
+						<li class="fragment" data-fragment-index="4">
+							Interpolate each slice onto sky coordinates
+						</li>
+						<br>
+						<li class="fragment" data-fragment-index="5"> Generate the convergence map by applying the <span style='color:#6699CC'>Born approximation</span> :
+						</li>
+					</ol>
+				</ul>
+				</br>
+				</br>
+				<p class="fragment" data-fragment-index="5">
+					\[\begin{equation}
+					\kappa_{born}(\boldsymbol{\theta},\chi_s)= \frac{3H_0^2 \Omega_m}{2c^2}
+					\int_0^{\chi_s}
+					d\chi \frac{\chi}{a(\chi)}
+					W(\chi,\chi_s)
+					\delta(\chi \boldsymbol{\theta},\chi).
+					\end{equation} \]
+				</p>
+			</section> 
+<!-- ################################################################################################################################################### -->
+			<section>
+				<h2 class='slide-title'>
+					The construction of the light cone</h2>
+					<img class="plain" data-src="assets/light_cone.png"   />
+					<div style="float:right; font-size: 35px"> <em>Osato et al. </em></div>
+			</section>
+<!-- ################################################################################################################################################### -->
+			<section >
+				<h3 class='slide-title'> Proof of Concept</h3>   
+				<li style="font-size: 20px";> 
+					Convergence map at source redshift z = 0.91 from DLL, PM only. Right panel: Same convergence map when the HPN correction is applied. 
+				</li>
+				<div class='container'>
+						<div >
+							<img data-src="assets/kmap_dll_vs_hpn.png" />
+						</div>
+				</div>
+			</section>
+<!-- ################################################################################################################################################### -->
+			<section >
+				<h3 class="slide-title"> Validating simulations: HPN validation</h3> 
+				Predictions of DLL simulations before and after using the Hybrid Physical-Neural against $\kappa$TNG
+				<div class="container">
+					<div class="col">
+						<img data-src="assets/cls_DLL_vs_ktng_hpn.png"/>
+						<br>
+						$C_{\ell}$ 
+					</div>
+					<div class="col">
+						<img data-src="assets/res_cls_DLL_vs_ktng_hpn.png"/>
+						<br>
+						Fractional $C_{\ell}$ 
+					</div>
+				</div>
+			</section>
+<!-- ################################################################################################################################################### -->
+			<section >
+				<h3 class="slide-title"> Implementation of Intrinsic alignment (IA) with NLA model</h3> 
+				
+				<div class="container">
+					<div class="col">
+					<li>
+					The projected angular power spectra for the IA terms are defined as:
+						\begin{align}
+							C_{II}=& \int_0^{\chi_{lim}} \text{d}\chi 
+							\frac{n^2(\chi)}{a^2(\chi)}P_{II}(k,\chi), \\
+							C_{GI}= \frac{3\Omega_m H_0^2}{2c^2} & \int_0^{\chi_{lim}} \text{d}\chi 
+							\frac{g(\chi)n(\chi)}{a(\chi)}P_{GI}(k,\chi).
+						\end{align}
+					</div>
+					<div class="col">
+					with the matter power spectra defined as:
+						\begin{align}
+							P_{II}(k,z)=& \left ( \frac{A_{IA}\bar{C}_1\bar{\rho}(z)}{\bar{D}(z)} \right)^2 a^{4}(z)P_{\delta}(k,z), 
+							\\
+							P_{GI}(k,z)=&  \frac{A_{IA}\bar{C}_1\bar{\rho}(z)}{\bar{D}(z)} a^{2}(z)P_{\delta}(k,z)
+						\end{align}
+					</div>
+				</div>
+			</section>
+
+
+<!-- ################################################################################################################################################### -->
+			<section >
+				<h3 class='slide-title'> Validating simulations: Peak counts </h3> 
+				<div class='container'>
+					<div class='col'>
+						<img  data-src="assets/filterw.png"  class='plain' style="height: 450px; width:750px"/>
+					</div>
+					<div class='col'>
+						<div >
+							<li  >
+								Istrotropic undecimated wavelet transform
+							</li>
+							<br>
+							<li>
+								$c_0=c_J+\sum_{j=1}^{J_{max}} w_j$
+							</li>
+							<br>
+							<li>
+								Multi-scale approach
+							</li>
+						</div>
+					</div>
+				</div>
+				Peak counts are local point-like features and have a sparse representation in the wavelet domain
+			</section>
+<!-- ################################################################################################################################################### -->
+			<section >
+				<h3 class="slide-title"> Validating simulations: Peak counts </h3>
+					<ul>
+						<li style="font-size: 20px"; > 
+							Fractional number of peaks of DLL simulations and $\kappa$TNG simulations for different sources redshift. 
+						</li>
+					</ul>
+					<div>
+						<img data-src="assets/res_peak_DLL_vs_ktng.png" class='plain' style="height: 600px; width:500px" />
+					</div>
+			</section>
+ <!-- ################################################################################################################################################### -->
+			<section>
+				<img data-src="assets/tab_ode.png " class="plain" /><br>
+			</section>
+ <!-- ################################################################################################################################################### -->
+			<section>
+				<h3 class='slide-title'> <p style="color:#FFAA7F" > Mesh FlowPM: distributed, GPU-accelerated, and automatically differentiable simulations</p></h3>
+				<div class="container">
+					<div class="col">
+						<img data-src="assets/mfpm_demo_1024.png" />
+					</div>
+
+					<div class="col">
+						<ul>
+							<li> We developed a <b class="alert">Mesh TensorFlow</b> implementation that can scale on GPU clusters (horovod+NCCL).
+							</li>
+							<br>
+							<br>
+							<li> For a $2048^3$ simulation:
+								<ul>
+									<li>Distributed on <b>256</b> NVIDIA V100 GPUs</li>
+									<li>Runtime: 3 mins</li>
+								</ul>
+							</li>
+							<br>
+							<br>
+							<li> 
+								<img data-src="assets/github.png" class="plain" style="height:70px" /><br>
+
+								<div> <a href="https://github.com/DifferentiableUniverseInitiative/mesh">https://github.com/DifferentiableUniverseInitiative/mesh</a>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+<!-- ################################################################################################################################################### -->
+			<section>
+				<h3 class="slide-title">Forecast formalism and Analysis choices</h3>
+
+				<div class="container">
+					<div class="col">
+						<img  data-src="assets/kmap_nonoise.png" >
+					</div>
+					<div class="col" style="font-size: 2.5em;">
+						$+ \sigma^2_n= \frac{\sigma_e^2}{A_{pix}n_{gal}} =$
+					</div>
+					<div class="col">
+						<img data-src="assets/kmap_noise.png" >
+					</div>
+				</div>
+
+				<ul> 
+					<li><b class="alert">LSST-like survey</b>: 
+						<ul>
+							<li>n$_{gal}$=20 arcmin$^{-2}$</li>
+							<li> $\sigma_e=0.26$ </li>
+							<li> $c_{\ell}$ for $\ell=[300,3000]$ </li>
+							
+						</ul>
+					</li>
+					<br>
+					<li><b class="alert">Features $\kappa$map</b>: 
+						<ul>
+							<li>25 deg$^2$, 1024$^2$ pixels </li>
+							<li>Source redshift z=0.91  </li>
+						</ul>
+					</li>
+				</ul>
+			</section>
+<!-- ################################################################################################################################################### -->
+			<section>
+				<h3 class="slide-title">Weak-Lensing statistic: Multiscale Peak counts</h3>
+
+				<div class="container">
+					<img  data-src="assets/example_kmaps_decomposed_originale.png"  />
+				</div>
+
+				<ul> 
+					<li class="fragment"><b class="alert">Peak counts</b>: 
+						<ul>
+						<li>Local maxima in the map</li>
+						<li>Non-Gaussian information</li>
+						<li>Trace overdense regions </li>
+						</ul>
+					</li>
+					<br>
+					<li class="fragment"><b class="alert">Multi-scale approach</b>: 
+						<ul>
+							<li>Isotropic undecimated wavelet transform</li>
+							<li> $c_0=c_J+\sum_{j=1}^{J_{max}} w_j$ </li>
+							<li> $\theta= [9.33, 18.79, 37.38]$ arcmin</li>
+							<li> Peak counts as wavelet coefficients with values higher than their eight neighbors </li>
+							
+						</ul>
+					</li>
+				</ul>
+			</section>
+<!-- ################################################################################################################################################### -->
+			<section>
+				<h3 class="slide-title">Weak-Lensing statistic: Multiscale $C_{\ell}$</h3>				
+				<p>We want to focus on a fair comparison between the power spectrum and the peak counts method.
+
+				<div class="container">
+					<div class="col r-stack">
+						<div class="fragment current-visible" data-fragment-index="0">
+							<img data-src="assets/example_kmaps_decomposed_originale.png"/>
+							$$ \theta= [9.33, 18.79, 37.38]$$ 
+						</div>
+
+						<div class="fragment" data-fragment-index="1">
+							<img data-src="assets/window.png" />
+						</div>
+
+					</div>
+
+					<div class="col">
+						<ul> 
+							<li class="fragment"  data-fragment-index="0"><b class="alert"> Multi-scale approach:</b>
+								<br>
+								<ul>
+									<li>We decompose the noisy convergence map using the same scales used for the <b>Peak counts</b></li>
+								</ul>
+							</li>
+							<br>
+							<li class="fragment" data-fragment-index="1"><b class="alert">$C_{\ell}$: </b> 
+								<br>
+								<ul>
+									<li>We sum up the three maps corresponding to $\theta=[9.33, 18.79, 37.38]$ arcmin </li>
+									<br> $\Longrightarrow$ We compute the angular $C_{\ell}$ on the resulting image
+								</ul>
+							</li>
+							<br>
+						</ul>
+					</div>
+				</div>
+				<div class="fragment">$\Longrightarrow$ We
+					apply a wavelet pass-band filter to the maps to isolate particular scales before measuring the power spectrum </div>
+			</section>
+<!-- ################################################################################################################################################### -->
+			<section >
+				<h2 class='slide-title'> Compare the information content </h2> 
+				<div class='container'>
+					<div class='col'>
+						\[\begin{equation}
+							F_{\alpha, \beta} =\sum_{i,j} \frac{d\mu_i}{d\theta_{\alpha}}
+							C_{i,j}^{-1} \frac{d\mu_j}{d\theta_{\beta}}
+						\end{equation} \]
+					</div>
+					<div class='col'>
+						<ul>
+						<br>
+						<br>
+							<li> <b class="alert">Covariance matrix</b>: computed using 5000 independent map realizations
+							</li>
+							<br>
+							<li class="fragment" data-fragment-index="0" > <b class="alert">Peak counts results</b>: mean over 1500 independent map realizations 
+							</li>
+							<br>
+							<li class="fragment"data-fragment-index="0"> <b class="alert">$C_{\ell}$ results</b>: mean over 2600 independent map realizations
+							</li>
+							<br>
+							<li class="fragment"data-fragment-index="1"> Stability of the Fisher contours tested for different numbers of independent realizations used to compute the Covariance and to mean the Jacobian
+							</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+<!-- ################################################################################################################################################### -->
+<!-- PART II-->
+<!-- ################################################################################################################################################### -->
+			<section>
+				<h3 class="slide-title">Power spectrum analysis</h3>
+				<div class="container">
+					<div class="col">
+						<img class="plain" data-src="assets/contours_posterior_ps_hmc_.png" />
+					</div>
+					<div class="col">
+							<ul> 
+								<li>
+									log-normal fields offer the advantage of rapidly generating convergent fields while accounting for non-Gaussianities
+									<br>
+									<br>
+									$\Longrightarrow$ We include a power spectrum analysis to demonstrate that there is a gain of information when adopting a full-field approach
+								</li>
+
+					</div>
+				</div>
+			</section>
+<!-- ################################################################################################################################################### -->			
+			<section>
+				<h3 class="slide-title">...Not all neural compression techniques are equivalent</h3>	
+				<div class="container">
+					<div class="col"> 
+						<br>
+						<ul>
+							<li>Most papers applying neural techniques for inference have used sub-optimal compression techniques, e.g. Mean Square Error
+								$$ \mathcal{L} = || f_\varphi(x) - \theta ||_2^2 $$
+	
+								or Maximum Absolute Error
+								$$ \mathcal{L} = | f_\varphi(x) - \theta | $$
+							</li>
+							<br>
+							<br>
+							
+							<li class="fragment">Other papers are still relying on assuming a proxy Gaussian likelihoods, i.e. estimating a mean and covariance from 
+								simulations.
+								$$  \mathcal{L} = \frac{1}{2} \log(|\Sigma|) + \frac{1}{2}( f_\varphi(x) - \theta)^t \Sigma^{-1} ( f_\varphi(x) - \theta)  $$
+							</li>
+	
+						</ul>
+	
+					</div>
+			</section>
+<!-- ################################################################################################################################################### -->
+			<section>
+				<h3 class="slide-title"> Our Solution: Variational Mutual Information Maximization (VMIM) </h3>
+				<!-- We are following the approach from Jeffrey, Alsing, <b>Lanusse</b> (2021) <div style="float:right; font-size: 15px"> <a href="https://arxiv.org/abs/2009.08459"><img src="https://img.shields.io/badge/astro--ph.CO-arXiv%3A2009.08459-B31B1B.svg" class="plain"
+						style="height:20px;vertical-align:middle;" /></a></div> -->
+						<div class="block">
+						<div class="block-title" style='color:white'>
+							How to introduce a parametric function <span style='color:#6699CC'>$f_{\varphi}(x)$</span>, to reduce the dimensionality of the data while <span style='color:#996699''> preserving</span> the information?
+						</div>
+						<div class="block-content">
+							<br>
+							Let's start by the definition of <span style='color:#669900'>Mutual Information</span>:
+							\begin{align}
+							I(\boldsymbol{y}, \boldsymbol {\theta}) &= D_{KL}(p(\boldsymbol {y}, \boldsymbol {\theta})||p(\boldsymbol {y})p(\boldsymbol {\theta}))  \\
+							&= \mathbb{E}_{p(\boldsymbol{y}, \boldsymbol{\theta})} [\log{p(\boldsymbol{\theta} | \boldsymbol{y} )}]- \mathbb{E}_{p(\boldsymbol{\theta})} [\log{p(\boldsymbol{\theta})}] \quad \text{with} \quad y=f_{\varphi}(x)
+							\end{align}
+							<ul>
+							<ol>
+							<li class='fragment' data-fragment-index="0"> The goal is to find the parameters $\boldsymbol {\varphi}$ that maximize the mutual information between the summary and cosmological parameters:
+								$$   \boldsymbol {\varphi}^*= \operatorname*{argmax}_{\boldsymbol {\varphi}} I(f_{\boldsymbol {\varphi}}(\boldsymbol{x}), \boldsymbol {\theta}).$$
+							</li>
+							<li class='fragment' data-fragment-index="1"> The mutual information is not tractable $\Longrightarrow$ We enable the training of deep neural networks by introducing a variational lower bound:
+								$$ I(\boldsymbol{y}, \boldsymbol{\theta}) \ge \mathbb{E}_{p(\boldsymbol {y}, \boldsymbol {\theta})} [\log{q(\boldsymbol {\theta} |\boldsymbol{y} ; \boldsymbol{\varphi}')}]- \mathbb{E}_{p(\boldsymbol {\theta})} [\log{p(\boldsymbol{\theta})}].$$
+							</li>
+						</ol>
+						</ul>
+					</div>
+			</section>
+<!-- ################################################################################################################################################### -->
+			<section>
+				<h3 class="slide-title"> Our Solution: Variational Mutual Information Maximization (VMIM) </h3>
+						<div class="block">
+						<div class="block-title" style='color:white'>
+							How to introduce a parametric function <span style='color:#6699CC'>$f_{\varphi}(x)$</span>, to reduce the dimensionality of the data while <span style='color:#996699''> preserving</span> the information?
+						</div>
+						<div class="block-content">
+							<ul>
+							<ol> 
+								<li class='fragment' data-fragment-index="0"> The loss function bocomes:
+									$$ \operatorname*{argmax}_{\boldsymbol {\varphi}, \boldsymbol {\varphi}'}  \mathbb{E}_{p(\boldsymbol{x},\theta)}[\log{q(\boldsymbol {\theta} |\boldsymbol{y} ; \boldsymbol{\varphi}')}]$$
+								</li>
+								<li class='fragment' data-fragment-index="1"> The Optimization problem can be solved by gradient descent over the weights of the neural network $f_{\varphi}$ and parameters of the variational distribution $q_{\varphi'}$
+								</li>
+							<br>
+							<li class='fragment' data-fragment-index="2"> We use a conditional Normalizing Flow to model the variational conditional distribution $q_{\varphi'}(\theta | y)$
+							</li>
+							<br>
+							<li class='fragment' data-fragment-index="3"> We train jointly the concatenation of the ResNet-18 and the Normalizing Flow model.
+							</li>
+							<br>
+							<li class='fragment' data-fragment-index="4"> After training, we export the neural compressor $f_{\varphi}$ and discard the density estimator $q_{\varphi'}$
+							</li>
+						</ol>
+						</ul>
+					</div>
+			</section>
+
+			</div>
+		</div>
+
+		<style>
+			/* .reveal .slides {
+				border: 5px solid red;
+				min-height: 100%;
+				width: 128mm;
+				height: 96mm;
+			}  */
+	
+			.reveal .block {
+				background-color: #191919;
+				margin-left: 20px;
+				margin-right: 20px;
+				text-align: left;
+				padding-bottom: 0.1em;
+			}
+	
+			.reveal .block-title {
+				background-color: #333333;
+				padding: 8px 35px 8px 14px;
+				color: #FFAA7F;
+				font-weight: bold;
+			}
+	
+			.reveal .block-content {
+				padding: 8px 35px 8px 14px;
+			}
+	
+			.reveal .slide-title {
+				border-left: 5px solid white;
+				text-align: left;
+				margin-left: 20px;
+				padding-left: 20px;
+			}
+	
+			.reveal .alert {
+				color: #FFAA7F;
+				font-weight: bold;
+			}
+	
+			.reveal .inverted {
+				filter: invert(100%);
+			}
+	
+			/*
+		/* .reveal .alert {
+		padding:8px 35px 8px 14px; margin-bottom:18px;
+		text-shadow:0 1px 0 rgba(255,255,255,1);
+		border:5px solid #FFAA7F;
+		-webkit-border-radius: 14px; -moz-border-radius: 14px;
+		border-radius:14px
+		background-position: 10px 10px;
+		background-repeat: no-repeat;
+		background-size: 38px;
+		padding-left: 30px; /* 55px; if icon
+		}
+		.reveal .alert-block {padding-top:14px; padding-bottom:14px}
+		.reveal .alert-block > p, .alert-block > ul {margin-bottom:1em}
+		/*.reveal .alert li {margin-top: 1em}
+		.reveal .alert-block p+p {margin-top:5px} */
+		</style>
+	
+	
+		<script src="reveal.js/dist/reveal.js"></script>
+		<script src="reveal.js/plugin/notes/notes.js"></script>
+		<script src="reveal.js/plugin/markdown/markdown.js"></script>
+		<script src="reveal.js/plugin/highlight/highlight.js"></script>
+		<script src="reveal.js/plugin/math/math.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				controls: true,
+	
+				//center: false,
+				hash: true,
+	
+				// Visibility rule for backwards navigation arrows; "faded", "hidden"
+				// or "visible"
+				controlsBackArrows: 'hidden',
+	
+				// Display a presentation progress bar
+				progress: true,
+	
+				// Display the page number of the current slide
+				slideNumber: true,
+	
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+	
+				// The "normal" size of the presentation, aspect ratio will be preserved
+				// when the presentation is scaled to fit different resolutions. Can be
+				// specified using percentage units.
+				width: 1280,
+				height: 720,
+	
+				// Factor of the display size that should remain empty around the content
+				margin: 0.1,
+	
+				// Bounds for smallest/largest possible scale to apply to content
+				minScale: 0.2,
+				maxScale: 1.5,
+	
+				autoPlayMedia: true,
+	
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath],
+	
+				dependencies: [{
+						src: 'reveal.js/plugin/markdown/marked.js'
+					},
+					{
+						src: 'reveal.js/plugin/markdown/markdown.js'
+					},
+					{
+						src: 'reveal.js/plugin/notes/notes.js',
+						async: true
+					},
+					{
+						src: 'reveal.js/plugin/math/math.js',
+						async: true
+					},
+					{
+						src: 'reveal.js/plugin/reveal.js-d3/reveald3.js'
+					},
+					{
+						src: 'reveal.js/plugin/reveal.js-plugins/chart/Chart.min.js'
+					},
+					{
+						src: 'reveal.js/plugin/reveal.js-plugins/chart/csv2chart.js'
+					},
+					{
+						src: 'reveal.js/plugin/highlight/highlight.js',
+						async: true
+					},
+				]
+	
+			});
+		</script>
+	</body>
+	
+	</html>
