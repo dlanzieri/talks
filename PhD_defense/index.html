@@ -34,7 +34,7 @@
 						<br>
 						CosmoStat, CEA Paris-Saclay, IRFU/DAp-AIM 
 						<br>
-						Universtité Paris Cité, ED Astronomie et Astrophysique d’Ile de France 
+						Université Paris Cité, ED Astronomie et Astrophysique d’Ile de France 
 					</div>
 				<br>
 				</div>
@@ -1820,30 +1820,60 @@ Open source contributions: -->
 <!-- ################################################################################################################################################### -->
 			<section >
 				<h3 class="slide-title"> Implementation of Intrinsic alignment (IA) with NLA model</h3> 
-				
+				<br>
+				<br>
 				<div class="container">
 					<div class="col">
-					<li>
-					The projected angular power spectra for the IA terms are defined as:
-						\begin{align}
-							C_{II}=& \int_0^{\chi_{lim}} \text{d}\chi 
-							\frac{n^2(\chi)}{a^2(\chi)}P_{II}(k,\chi), \\
-							C_{GI}= \frac{3\Omega_m H_0^2}{2c^2} & \int_0^{\chi_{lim}} \text{d}\chi 
-							\frac{g(\chi)n(\chi)}{a(\chi)}P_{GI}(k,\chi).
-						\end{align}
+						<ul>
+							<li>
+								Intrinsic alignment based on the projected tidal field:
+							</li> 
+							<img data-src="assets/ia_tid.png"/>
+						</ul>
 					</div>
 					<div class="col">
-					with the matter power spectra defined as:
-						\begin{align}
-							P_{II}(k,z)=& \left ( \frac{A_{IA}\bar{C}_1\bar{\rho}(z)}{\bar{D}(z)} \right)^2 a^{4}(z)P_{\delta}(k,z), 
-							\\
-							P_{GI}(k,z)=&  \frac{A_{IA}\bar{C}_1\bar{\rho}(z)}{\bar{D}(z)} a^{2}(z)P_{\delta}(k,z)
-						\end{align}
+						<ul>
+							<li>
+							Same filters used for converting convergence maps to shear maps under the <em>Kaiser & Squires </em> inversion:
+							</li>
+							<img data-src="assets/ks.png"/>
+						</ul>
 					</div>
 				</div>
 			</section>
-
-
+<!-- ################################################################################################################################################### -->
+			<section >
+				<h3 class="slide-title"> Implementation of Intrinsic alignment (IA) with NLA model</h3> 
+				<br>
+				<br>
+				<div class="container">
+					<div class="col">
+						<ul>
+							<li>
+								The projected angular power spectra for the IA terms are defined as:
+							</li>
+							\begin{align}
+								C_{II}=& \int_0^{\chi_{lim}} \text{d}\chi 
+								\frac{n^2(\chi)}{a^2(\chi)}P_{II}(k,\chi), \\
+								C_{GI}= \frac{3\Omega_m H_0^2}{2c^2} & \int_0^{\chi_{lim}} \text{d}\chi 
+								\frac{g(\chi)n(\chi)}{a(\chi)}P_{GI}(k,\chi).
+							\end{align}
+						</ul>
+					</div>
+					<div class="col">
+						<ul>
+							<li>
+								with the matter power spectra defined as:
+							</li>
+							\begin{align}
+								P_{II}(k,z)=& \left ( \frac{A_{IA}\bar{C}_1\bar{\rho}(z)}{\bar{D}(z)} \right)^2 a^{4}(z)P_{\delta}(k,z), 
+								\\
+								P_{GI}(k,z)=&  \frac{A_{IA}\bar{C}_1\bar{\rho}(z)}{\bar{D}(z)} a^{2}(z)P_{\delta}(k,z)
+							\end{align}
+						</ul>
+					</div>
+				</div>
+			</section>
 <!-- ################################################################################################################################################### -->
 			<section >
 				<h3 class='slide-title'> Validating simulations: Peak counts </h3> 
@@ -2050,7 +2080,21 @@ Open source contributions: -->
 				</div>
 			</section>
 <!-- ################################################################################################################################################### -->
-<!-- PART II-->
+<!-- PART III-->
+<!-- ################################################################################################################################################### -->
+			<section>
+				<h3 class="slide-title">SBILens</h3>
+				<div class="container">
+
+					<ul> 
+						<li>
+							log-normal fields offer the advantage of rapidly generating convergent fields while accounting for non-Gaussianities
+							<br>
+							<br>
+							$\Longrightarrow$ We include a power spectrum analysis to demonstrate that there is a gain of information when adopting a full-field approach
+						</li>
+				</div>
+			</section>
 <!-- ################################################################################################################################################### -->
 			<section>
 				<h3 class="slide-title">Power spectrum analysis</h3>
@@ -2151,7 +2195,14 @@ Open source contributions: -->
 						</ul>
 					</div>
 			</section>
-
+<!-- ################################################################################################################################################### -->
+			<section>
+				<h3 class="slide-title"> Figure of Merit (FoM) for different inference strategies: </h3>
+				<img data-src="assets/fov.png" class="plain" />
+			</section>
+<!-- ################################################################################################################################################### -->
+<!-- END SLIDES -->
+<!-- ################################################################################################################################################### -->
 			</div>
 		</div>
 
