@@ -49,3 +49,6 @@
 [submodule "PhD_defense/reveal.js"]
 	path = PhD_defense/reveal.js
 	url = https://github.com/EiffL/reveal.js.git
+[submodule "INAF_interview/reveal.js"]
+	path = INAF_interview/reveal.js
+	url = https://github.com/EiffL/reveal.js.git
